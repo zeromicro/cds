@@ -1,4 +1,17 @@
-## 快速开始
+# 快速开始
+
+> 本文旨在快速让开发者搭建 `CDS` 平台
+
+## 前置条件
+
+为了方便大家可以更好更快的使用 `CDS`，希望开发者提前：
+
+- `Go 1.13+`，对 `Go` 特性有一定了解；
+- 已安装 `docker` ，并对其使用了解；
+- 对 `clickhouse` 有一定的了解；
+- 需要对大数据组件有一定的使用经验
+
+## 极速启动
 
 ```bash
 git clone https://github.com/tal-tech/cds.git
@@ -6,82 +19,102 @@ cd cds
 sh ./start.sh
 ```
 
-当 start.sh 脚本执行结束后，检查是否有 contain 出现退出。
-这时可以打开控制台，如图
+当 start.sh 脚本执行结束后，检查是否有 container 出现退出，如有发现问题参看[docker常见问题]()。此时可以打开控制台，http://localhost:3414/cds.html，如图：
 
 ![image-20201118113750898](cds.png)
 
-http://localhost:3414/cds.html
-```
-user: admin@email.com
-password: 123456
-```
+## Hello world
 
-### 在控制台添加全量同步任务:
-```
+此时就可以在控制台上添加您的第一个 **全量同步任务**。
+
+操作分为两大部分：`Source(Mysql/Mongo)`，`Target(clickhouse)`
+
+### Source
+
 1. 点击右上角 "+"
-2. MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
-或
-MongoDB 输入连接串 mongodb://mongo:27017/test_mongo
-3. 点连接
-4. 选择表,如默认的 example_mysql (MySQL) 或 example (MongoDB)
-5. 点击"目标库"，
-6. 点刷新 
-7. 选择同步至Clickhouse 的schema（"default"）
-8. 切换回"数据源"，点击 "生成建表语句"
-注意：根据需要选择 partition 字段，这里 'PARTITION BY toYYYYMM()' 可删除，或 替换成 'PARTITION BY toYYYYMM(dt)'
-9. 点击 "执行SQL" ，下方弹出执行成功
-10. 点击 "添加"，下方弹出执行成功
+2. 输入 `DSN`「可以选择 `Mysql` 或者 `Mongo`」：
+   - `Mysql`：`root:root@tcp(mysql:3306)/test_mysql`
+   - `Mongo`：`mongodb://mongo:27017/test_mongo`
+3. 点击连接
+4. 选择表中会自动出现默认表。如默认的 `example_mysql (MySQL)` 或 `example (MongoDB)`
 
-刷新页面
+### Target
 
-建立 connector 流程和增量同步流程与建立全量同步类似
-```
-如图
+1. 点击 **目标库**。此时 `DSN` 已经默认填写了
+
+2. 点击 **刷新**
+
+3. 选择同步至 Clickhouse 的 schema（**default**）
+
+4. 切换回 **数据源**，点击 **生成建表语句**
+
+   > 注意：根据需要选择 `partition` 字段，这里 `PARTITION BY toYYYYMM()` 可删除，或 替换成 `PARTITION BY toYYYYMM(datetime)`。我们这以时间做 `partition` 字段。
+
+5. 点击 **执行SQL** ，下方弹出 **执行成功**
+
+6. 点击 **添加**，下方弹出执行成功
 
 ![image-20201118114502666](image-20201118114502666.png)
 
 
-查看任务状态
+刷新页面，如下图，则证明您的 `Hello World CDS` 成功啦：
 
 
 ![image-20201118121334999](image-20201118121334999.png)
 
-在 Clickhouse 中确认数据!
+同时在 Clickhouse 中确认数据（一定要做数据较对！）：
 
-[image-20201118135156133](image-20201118135156133.png)
+![](image-20201118135156133.png)
 
+## 增量同步
 
-### 启动实时增量同步
+`CDS` 中增量同步依赖：
 
-```
-1 点击“CONNECTOR监听”
-2 点击右上角“+”
-3 MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
-4 点击 “添加”
+- `CONNECTOR`：从 `Mysql/Mongo` 监听数据变化，并把变化同步到 `Kafka`
+- `RTU`：消费 `Kafka` 消息，并插入数据到 `clickhouse`
 
-5 点击 "RTU增量同步"-"重放"使之启动
-6 点击右上角“+”
-7 MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
-8 点击 “添加”
-```
+所以增量同步需要开发者先后开启这两个：
+
+1. 点击 **CONNECTOR监听**
+2. 点击右上角 + 
+3. 输入 `DSN`：
+   - `Mysql`：`root:root@tcp(mysql:3306)/test_mysql`
+   - `Mongo`：`mongodb://mongo:27017/test_mongo`
+4. 点击 **添加**
+5. 点击 **RTU增量同步**
+6. 点击右上角 +
+7. 输入 `Source DSN`，同上
+8. 点击 **添加**
+9. 点击 **重放** 使之启动
+
+刷新页面，如下图，则证明您的 **增量同步任务** 添加成功啦：
 
 ![image-20201118135412565](image-20201118135412565.png)
-再次执行初始化数据库脚本，重新插入100000条数据。
 
-```
+### 验证
+
+为了验证我们新添加的增量同步任务是否正常运行：再次执行初始化数据库脚本，重新插入100000条数据。
+
+```shell
 cd docker/init
 sh ./init.sh
-或者
+```
+
+或者使用以下方式：
+
+```python
 python3 -m pip install -r requirement.txt
 python3 init_db.py
-即可分别初始化 MySQL 和 MongoDB
-MySQL: `test_mysql`.`example_mysql`
-MongoDB:  `test_mongo`.`example`
 ```
+
+即可分别初始化 MySQL 和 MongoDB：
+
+- MySQL: `test_mysql`.`example_mysql`
+
+- MongoDB:  `test_mongo`.`example`
 
 验证mysql-增量同步数据：
 
 ![image-20201118135503830](image-20201118135503830.png)
 
-MongoDB同步使用方式类似MySQL
+> 注：`MongoDB` 同步使用方式类似 `MySQL`，大家可以按照同样的步骤熟悉 `CDS` 。

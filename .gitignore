@@ -15,3 +15,9 @@ vendor
 logs
 component/etcd
 *.swp
+
+# build
+docker/build
+
+# jetbrain
+.idea/
