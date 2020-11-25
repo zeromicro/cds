@@ -3,7 +3,7 @@ package cryptox
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/md5"
+	"crypto/md5"  // #nosec
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
@@ -14,7 +14,7 @@ import (
 )
 
 func createHash(key string) string {
-	hasher := md5.New()
+	hasher := md5.New() // #nosec
 	_, err := hasher.Write([]byte(key))
 	if err != nil {
 		logx.Error(err)

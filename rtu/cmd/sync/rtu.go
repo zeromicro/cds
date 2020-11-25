@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"log"
-	_ "net/http/pprof"
+	_ "net/http/pprof" // #nosec
 	"os"
 	"os/signal"
 	"runtime"

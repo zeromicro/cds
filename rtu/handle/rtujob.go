@@ -1,7 +1,7 @@
 package handle
 
 import (
-	"math/rand"
+	"math/rand" // #nosec
 	"sync"
 	"sync/atomic"
 	"time"
@@ -233,7 +233,7 @@ func (rengine *runEngine) isAlive() bool {
 }
 
 func (rengine *runEngine) autoResetTimer() {
-	restartTime := 21600 + rand.Int63n(2000)
+	restartTime := 21600 + rand.Int63n(2000) // #nosec
 	now := time.Now().Unix()
 	logx.Infof("[autoReset] %s will reset at %s", rengine.conf.Kafka.Topic, time.Unix(now+restartTime, 0))
 	tick := time.NewTicker(time.Second * time.Duration(restartTime))

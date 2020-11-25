@@ -1,9 +1,9 @@
 package strx
 
-import "math/rand"
+import "math/rand" // #nosec
 
 func RandomRune() rune {
-	i := 'a' + rand.Intn(26)
+	i := 'a' + rand.Intn(26) // #nosec
 	return rune(i)
 }
 
