@@ -1,4 +1,4 @@
-### 快速开始
+## 快速开始
 
 ```bash
 git clone https://github.com/tal-tech/cds.git
@@ -17,7 +17,7 @@ user: admin@email.com
 password: 123456
 ```
 
-在控制台添加全量同步任务:
+### 在控制台添加全量同步任务:
 ```
 1. 点击右上角 "+"
 2. MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
@@ -52,7 +52,7 @@ MongoDB 输入连接串 mongodb://mongo:27017/test_mongo
 [image-20201118135156133](image-20201118135156133.png)
 
 
-启动实时增量同步
+### 启动实时增量同步
 
 ```
 1 点击“CONNECTOR监听”
