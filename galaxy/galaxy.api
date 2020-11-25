@@ -1,0 +1,376 @@
+info(
+	title: "title"
+	desc: "desc"
+	author: Michael
+)
+
+type (
+	// user-login
+	UserLoginRequest struct {
+		email    string `json:"email"`
+		password string `json:"password"`
+	}
+	TokenResponse struct {
+		token string `json:"token"`
+	}
+	// user-add
+	UserAddRequest struct {
+		Name     string `json:"name"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		GroupID  int    `json:"groupID"`
+	}
+	// user-get
+	UserGetResponse struct {
+		Name    string `json:"name"`
+		GroupId int    `json:"groupId"`
+		Email   string `json:"email"`
+	}
+	// instances-list
+	InstancesRequest struct {
+		Page int `json:"page"`
+		Size int `json:"size"`
+	}
+)
+
+type (
+	// dm-list
+	Dm struct {
+		ID              int        `json:"id"`
+		Name            string     `json:"name"`
+		SourceType      string     `json:"sourceType"`
+		SourceDsn       string     `json:"sourceDsn"`
+		SourceTable     string     `json:"sourceTable"`
+		SourceDb        string     `json:"sourceDb"`
+		SourceQueryKey  string     `json:"sourceQueryKey"`
+		TargetType      string     `json:"targetType"`
+		TargetShards    [][]string `json:"targetShards"`
+		TargetDB        string     `json:"targetDB"`
+		TargetChProxy   string     `json:"targetChProxy"`
+		TargetTable     string     `json:"targetTable"`
+		WindowStartHour int        `json:"windowStartHour"`
+		WindowEndHour   int        `json:"windowEndHour"`
+		Status          string     `json:"status"`
+		Information     string     `json:"information"`
+		CreateTime      string     `json:"createTime"`
+		UpdateTime      string     `json:"updateTime"`
+	}
+	DmListResponse struct {
+		DmList      []Dm        `json:"dmList"`
+		PageAndSize PageAndSize `json:"pageAndSize"`
+	}
+	DefaultConfigResponse struct {
+		QueryNode string     `json:"queryNode"`
+		Shards    [][]string `json:"shards"`
+		Cluster   string     `json:"cluster"`
+	}
+	// dm-add
+	Source struct {
+		Dsn            string   `json:"dsn"`
+		Tables         []string `json:"tables"`
+		Suffix         string   `json:"suffix"`
+		SelectedTable  []string `json:"selectedTable"`
+		CreateTableSql []string `json:"createTableSql"`
+		QueryKey       []string `json:"queryKey"`
+	}
+
+	DeleteConnectorRequest struct {
+		Type     string `json:"type"`
+		SourceId string `json:"sourceId"`
+	}
+	Target struct {
+		Databases        []string `json:"databases"`
+		SelectedDatabase string   `json:"selectedDatabase"`
+	}
+	DmModel struct {
+		Source          Source `json:"source"`
+		Target          Target `json:"target"`
+		WindowStartHour string `json:"windowStartHour"`
+		WindowEndHour   string `json:"windowEndHour"`
+	}
+	PageAndSize struct {
+		Page int `json:"page"`
+		Size int `json:"size"`
+	}
+	ListRequest struct {
+		DbName string `json:"dbName"`
+		PageAndSize
+	}
+	// list-tables
+	String struct {
+		String string `json:"string"`
+	}
+	StringList struct {
+		StringList []string `json:"stringList"`
+	}
+	// generate-create-sql
+	GenerateCreateSqlRequest struct {
+		Dsn      string   `json:"dsn"`
+		Table    []string `json:"table"`
+		Database string   `json:"database"`
+	}
+	GenerateCreateSqlResponse struct {
+		Sql           []string `json:"sql"`
+		QueryKey      []string `json:"queryKey"`
+		FailedTables  []string `json:"failedTables"`
+		FailedReasons []string `json:"failedReasons"`
+	}
+	// exec-sql
+	ExecSqlRequest struct {
+		Sql []string `json:"sql"`
+	}
+	// rtu-list
+	Rtu struct {
+		ID             int        `json:"id"`
+		Name           string     `json:"name"`
+		SourceType     string     `json:"sourceType"`
+		SourceTopic    string     `json:"sourceTopic"`
+		SourceDsn      string     `json:"sourceDsn"`
+		SourceTable    string     `json:"sourceTable"`
+		SourceDb       string     `json:"sourceDb"`
+		SourceQueryKey string     `json:"sourceQueryKey"`
+		TargetType     string     `json:"targetType"`
+		TargetShards   [][]string `json:"targetShards"`
+		TargetDB       string     `json:"targetDB"`
+		TargetChProxy  string     `json:"targetChProxy"`
+		TargetTable    string     `json:"targetTable"`
+		Status         string     `json:"status"`
+		Information    string     `json:"information"`
+		CreateTime     string     `json:"createTime"`
+		UpdateTime     string     `json:"updateTime"`
+	}
+	RtuList struct {
+		RtuList     []Rtu       `json:"rtuList"`
+		PageAndSize PageAndSize `json:"pageAndSize"`
+	}
+	// rtu-add
+	RtuModel struct {
+		Source Source `json:"source"`
+		Target Target `json:"target"`
+	}
+	// connector-add
+	ConnectorModel struct {
+		Source Source `json:"source"`
+	}
+	Connector struct {
+		SourceType  string `json:"sourceType"`
+		SourceTable string `json:"sourceTable"`
+		SourceDB    string `json:"sourceDb"`
+		SourceId    string `json:"sourceId"`
+		CreateTime  string `json:"createTime"`
+		UpdateTime  string `json:"updateTime"`
+	}
+	ConnectorListResponse struct {
+		ConnectorList []*Connector `json:"connectorList"`
+		PageAndSize   PageAndSize  `json:"pageAndSize"`
+	}
+	ExecSqlResponse struct {
+		FailedTables  []string `json:"failedTables"`
+		FailedReasons []string `json:"failedReasons"`
+	}
+)
+
+@server(
+	host: 0.0.0.0
+	port: 8080
+)
+service galaxy-api {
+	@doc(
+		summary: user-login
+	)
+	@server(
+		handler: LoginHandler
+		folder: user
+	)
+	post /galaxy/user/login(UserLoginRequest) returns(TokenResponse)
+
+	@doc(
+		summary: user-add
+	)
+	@server(
+		handler: AddHandler
+		folder: user
+	)
+	post /galaxy/user/add(UserAddRequest)
+
+	@doc(
+		summary: user-get
+	)
+	@server(
+		handler: GetHandler
+		folder: user
+	)
+	get /galaxy/user/get() returns(UserGetResponse)
+
+	@doc(
+		summary: dm-list
+	)
+	@server(
+		handler: DmListHandler
+		folder:blackhole
+	)
+	post /galaxy/html/dm-list() returns(DmListResponse)
+
+	@doc(
+		summary: dm-add
+	)
+	@server(
+		handler: DmAddHandler
+		folder:blackhole
+	)
+	post /galaxy/html/dm-add(DmModel) returns(DmModel)
+
+	@doc(
+		summary: list-tables
+	)
+	@server(
+		handler: ListTableHandler
+		folder:blackhole
+	)
+	post /galaxy/html/list-tables(String) returns(StringList)
+
+	@doc(
+		summary: list-databases
+	)
+	@server(
+		handler: ListDatabasesHandler
+		folder:blackhole
+	)
+	post /galaxy/html/list-databases(String) returns(StringList)
+
+	@doc(
+		summary: list-databases
+	)
+	@server(
+		handler: DatabaseListHandler
+		folder:blackhole
+	)
+	post /galaxy/html/database-list(String) returns(StringList)
+
+	@doc(
+		summary: config-default
+	)
+	@server(
+		handler: DefaultConfigHandler
+		folder:blackhole
+	)
+	get /galaxy/html/default-config() returns(DefaultConfigResponse)
+
+	@doc(
+		summary: generate-create-sql
+	)
+	@server(
+		handler: GenerateCreateSqlHandler
+		folder:blackhole
+	)
+	post /galaxy/html/generate-create-sql(GenerateCreateSqlRequest) returns(GenerateCreateSqlResponse)
+
+	@doc(
+		summary: exec-sql
+	)
+	@server(
+		handler: ExecSqlHandler
+		folder:blackhole
+	)
+	post /galaxy/html/exec-sql(ExecSqlRequest)
+
+	@doc(
+		summary: dm-stop
+	)
+	@server(
+		handler: DmStopHandler
+		folder:blackhole
+	)
+	post /galaxy/html/dm-stop(String)
+
+	@doc(
+		summary: dm-delete
+	)
+	@server(
+		handler: DmDeleteHandler
+		folder:blackhole
+	)
+	post /galaxy/html/dm-delete(String)
+
+	@doc(
+		summary: dm-redo
+	)
+	@server(
+		handler: DmRedoHandler
+		folder:blackhole
+	)
+	post /galaxy/html/dm-redo(String)
+
+	@doc(
+		summary: rtu-list
+	)
+	@server(
+		handler: RtuListHandler
+		folder:blackhole
+	)
+	post /galaxy/html/rtu-list() returns(RtuList)
+
+	@doc(
+		summary: rtu-add
+	)
+	@server(
+		handler: RtuAddHandler
+		folder:blackhole
+	)
+	post /galaxy/html/rtu-add(RtuModel) returns(RtuModel)
+
+	@doc(
+		summary: rtu-stop
+	)
+	@server(
+		handler: RtuStopHandler
+		folder:blackhole
+	)
+	post /galaxy/html/rtu-stop(String)
+
+	@doc(
+		summary: rtu-delete
+	)
+	@server(
+		handler: RtuDeleteHandler
+		folder:blackhole
+	)
+	post /galaxy/html/rtu-delete(String)
+
+	@doc(
+		summary: rtu-redo
+	)
+	@server(
+		handler: RtuRedoHandler
+		folder:blackhole
+	)
+	post /galaxy/html/rtu-redo(String)
+
+	@doc(
+		summary: connector-list
+	)
+	@server(
+		handler: ConnectorListHandler
+		folder:blackhole
+	)
+	post /galaxy/html/connector-list() returns(StringList)
+
+	@doc(
+		summary: connector-add
+	)
+	@server(
+		handler: ConnectorAddHandler
+		folder:blackhole
+	)
+	post /galaxy/html/connector-add(ConnectorModel)
+
+	@doc(
+		summary: connector-delete
+	)
+	@server(
+		handler: ConnectorDeleteHandler
+		folder:blackhole
+	)
+	post /galaxy/html/connector-delete(String)
+}
+

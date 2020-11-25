@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: mysql
+    image: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: mysqlx
+      TZ: "Asia/Shanghai"
+    ports:
+      - 3307:3306
+    # volumes:
+    #   - /tmp/mysql:/var/lib/mysql
+    security_opt:
+      - seccomp:unconfined
+    command: [
+      "--default-authentication-plugin=mysql_native_password",
+      "--log-bin=mysql-bin",
+      "--server-id=1",
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_unicode_ci",
+      "--innodb_flush_log_at_trx_commit=1",
+      "--sync_binlog=1",
+      "--log-bin=/var/lib/mysql/mysql-bin.log",
+      "--binlog_do_db=mysqlx"
+    ]

@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  kafka:
+    container_name: kafka
+    image: landoop/fast-data-dev:latest
+    volumes:
+      - ./data:/data
+    ports:
+      - '2181:2181'
+      - '9092:9092'
+      - '3030:3030'
+    environment:
+      - ADV_HOST=127.0.0.1
+
+  zookeeper:
+    container_name: zookeeper
+    image: zookeeper
+    volumes:
+      - ./zk/data:/data
+      - ./zk/datalog:/datalog
+    environment:
+      TZ: "Asia/Shanghai"

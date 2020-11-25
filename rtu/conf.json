@@ -1,0 +1,32 @@
+{
+  "BatchSize": 10000,
+  "Prometheus": {
+    "Host": "0.0.0.0",
+    "Port": 9998,
+    "Path": "/metrics"
+  },
+  "Redis": {
+    "Host": "redis:6379",
+    "Type": "node",
+    "Pass": ""
+  },
+  "Etcd": {
+    "Hosts": [
+      "etcd:2379"
+    ],
+    "Key": "/hera/rtu/job"
+  },
+  "kafka": {
+    "Group": "mysql",
+    "Brokers": [
+      "kafka:9092"
+    ],
+    "SliceSize": 100,
+    "TimerPeriod": 10,
+    "ThrottleSize": 209715200,
+    "WorkerNum": 32
+  },
+  "Log": {
+    "mode": "console"
+  }
+}

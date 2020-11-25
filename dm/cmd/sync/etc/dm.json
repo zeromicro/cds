@@ -1,0 +1,17 @@
+{
+  "Etcd": {
+    "Hosts": [
+      "etcd:2379"
+    ],
+    "Key": "/hera/dm/job"
+  },
+  "MaxParallelJobCount": 2,
+  "MongoBatchSize": 50000,
+  "Prometheus": {
+    "Host": "0.0.0.0",
+    "Port": 9998
+  },
+  "log": {
+    "Mode": "console"
+  }
+}

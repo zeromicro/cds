@@ -1,0 +1,50 @@
+version: "3.2"
+services:
+  ch-server-1:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./users.xml:/etc/clickhouse-server/users.xml
+      - ./macros1.xml:/etc/clickhouse-server/config.d/macros.xml
+    ports:
+      - 8123:8123
+      - 9000:9000
+    environment:
+      TZ: "Asia/Shanghai"
+  ch-server-2:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./users.xml:/etc/clickhouse-server/users.xml
+      - ./macros2.xml:/etc/clickhouse-server/config.d/macros.xml
+    ports:
+      - 8124:8123
+      - 9001:9000
+    environment:
+      TZ: "Asia/Shanghai"
+  ch-server-3:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./users.xml:/etc/clickhouse-server/users.xml
+      - ./macros3.xml:/etc/clickhouse-server/config.d/macros.xml
+    ports:
+      - 8125:8123
+      - 9002:9000
+    environment:
+      TZ: "Asia/Shanghai"
+  ch-server-4:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./users.xml:/etc/clickhouse-server/users.xml
+      - ./macros4.xml:/etc/clickhouse-server/config.d/macros.xml
+    ports:
+      - 8126:8123
+      - 9003:9000
+    environment:
+      TZ: "Asia/Shanghai"
+  zookeeper:
+    image: zookeeper
+    environment:
+      TZ: "Asia/Shanghai"
