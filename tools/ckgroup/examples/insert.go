@@ -1,8 +1,8 @@
 package main
 
 import (
-	"cds/tools/ckgroup"
 	"fmt"
+	"github.com/tal-tech/cds/tools/ckgroup"
 )
 
 func insert(group ckgroup.DBGroup) {

@@ -1,8 +1,8 @@
 package strx
 
 import (
-	"cds/tools/cryptox"
 	"encoding/base64"
+	"github.com/tal-tech/cds/tools/cryptox"
 	"strings"
 )
 

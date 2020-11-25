@@ -7,8 +7,8 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"cds/tools/mysqlx"
 	"encoding/base64"
+	"github.com/tal-tech/cds/tools/mysqlx"
 )
 
 type (

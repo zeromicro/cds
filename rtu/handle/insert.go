@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"cds/rtu/model"
-	util "cds/rtu/utils"
+	"github.com/tal-tech/cds/rtu/model"
+	util "github.com/tal-tech/cds/rtu/utils"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )

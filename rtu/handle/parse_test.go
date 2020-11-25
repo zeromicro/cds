@@ -4,8 +4,8 @@ import (
 	json1 "encoding/json"
 	"testing"
 
-	"cds/rtu/cmd/sync/config"
-	"cds/rtu/model"
+	"github.com/tal-tech/cds/rtu/cmd/sync/config"
+	"github.com/tal-tech/cds/rtu/model"
 
 	jsoniter "github.com/json-iterator/go"
 )

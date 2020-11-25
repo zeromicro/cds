@@ -1,4 +1,4 @@
-module cds
+module github.com/tal-tech/cds
 
 go 1.14
 

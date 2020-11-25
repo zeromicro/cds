@@ -6,7 +6,7 @@ import (
 	"strings"
 	"text/template"
 
-	"cds/tools/strx"
+	"github.com/tal-tech/cds/tools/strx"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )

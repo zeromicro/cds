@@ -3,7 +3,7 @@ package handle
 import (
 	"testing"
 
-	"cds/rtu/model"
+	"github.com/tal-tech/cds/rtu/model"
 )
 
 func TestInitInsertSql(t *testing.T) {

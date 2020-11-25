@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
 
 	"github.com/tal-tech/go-zero/rest"
 )

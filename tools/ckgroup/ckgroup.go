@@ -7,7 +7,7 @@ import (
 	_ "github.com/ClickHouse/clickhouse-go"
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/tools/ckgroup/config"
+	"github.com/tal-tech/cds/tools/ckgroup/config"
 )
 
 type (

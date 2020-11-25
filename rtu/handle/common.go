@@ -10,9 +10,9 @@ import (
 	"github.com/tal-tech/go-zero/core/logx"
 	"go.uber.org/atomic"
 
-	"cds/rtu/cmd/sync/config"
-	"cds/rtu/monitor"
-	"cds/tools/ckgroup"
+	"github.com/tal-tech/cds/rtu/cmd/sync/config"
+	"github.com/tal-tech/cds/rtu/monitor"
+	"github.com/tal-tech/cds/tools/ckgroup"
 )
 
 // prometheus vec

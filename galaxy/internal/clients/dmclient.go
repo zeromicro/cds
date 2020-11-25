@@ -1,11 +1,11 @@
 package clients
 
 import (
-	"cds/dm/cmd/sync/config"
-	"cds/tools/strx"
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/tools/strx"
 	"time"
 
 	"github.com/tal-tech/go-zero/core/logx"

@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"cds/tools/iox"
-	"cds/tools/mysqlx/views"
+	"github.com/tal-tech/cds/tools/iox"
+	"github.com/tal-tech/cds/tools/mysqlx/views"
 )
 
 func MustLaunchDockerInstance() string {

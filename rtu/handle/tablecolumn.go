@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"cds/rtu/model"
+	"github.com/tal-tech/cds/rtu/model"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )

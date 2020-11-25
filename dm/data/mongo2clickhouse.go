@@ -14,10 +14,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 
-	"cds/dm/choperator"
-	"cds/dm/cmd/sync/config"
-	"cds/dm/util"
-	"cds/tools/mongodbx"
+	"github.com/tal-tech/cds/dm/choperator"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/dm/util"
+	"github.com/tal-tech/cds/tools/mongodbx"
 )
 
 type (

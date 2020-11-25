@@ -1,8 +1,8 @@
 package handler
 
 import (
-	logic2 "cds/galaxy/internal/logic"
-	"cds/galaxy/internal/svc"
+	logic2 "github.com/tal-tech/cds/galaxy/internal/logic"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/go-zero/rest/httpx"
 	"net/http"
 )

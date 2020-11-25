@@ -7,8 +7,8 @@ import (
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
 	"github.com/tal-tech/go-zero/rest/httpx"
 
-	"cds/galaxy/internal/model"
-	"cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/model"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
 )
 
 func handleToken(ctx *svc.ServiceContext, w http.ResponseWriter, r *http.Request) (*model.User, error) {

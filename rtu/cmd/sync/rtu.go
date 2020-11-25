@@ -11,8 +11,8 @@ import (
 	"syscall"
 	"time"
 
-	"cds/rtu/cmd/sync/config"
-	"cds/rtu/handle"
+	"github.com/tal-tech/cds/rtu/cmd/sync/config"
+	"github.com/tal-tech/cds/rtu/handle"
 
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/core/logx"

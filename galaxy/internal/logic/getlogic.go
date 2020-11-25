@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"cds/galaxy/internal/model"
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
 	"context"
+	"github.com/tal-tech/cds/galaxy/internal/model"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )

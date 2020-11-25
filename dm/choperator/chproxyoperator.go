@@ -6,7 +6,7 @@ import (
 
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/dm/util"
+	"github.com/tal-tech/cds/dm/util"
 )
 
 type (

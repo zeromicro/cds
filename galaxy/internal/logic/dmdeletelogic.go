@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"cds/galaxy/internal/clients"
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
 	"context"
+	"github.com/tal-tech/cds/galaxy/internal/clients"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
 	"strconv"
 
 	"github.com/tal-tech/go-zero/core/logx"

@@ -1,10 +1,10 @@
 package handler
 
 import (
-	logic2 "cds/galaxy/internal/logic"
+	logic2 "github.com/tal-tech/cds/galaxy/internal/logic"
 	"net/http"
 
-	"cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
 )
 
 func defaultConfigHandler(ctx *svc.ServiceContext) http.HandlerFunc {

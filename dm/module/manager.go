@@ -1,10 +1,10 @@
 package module
 
 import (
-	"cds/dm/cmd/sync/config"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
 	"runtime/debug"
 	"strconv"
 	"time"
