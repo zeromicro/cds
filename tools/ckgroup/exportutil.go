@@ -68,6 +68,7 @@ func BatchScanRows(db *sql.DB, ch chan interface{}, dest interface{}, query stri
 	}
 	go func() {
 		defer close(ch)
+		defer rows.Close()
 
 		for rows.Next() {
 			v := reflect.New(dataType)

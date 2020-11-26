@@ -24,6 +24,6 @@ const (
 )
 
 const (
-	MaxTimeUnix = 2051222400 //time.Date(2180, 1, 1, 0, 0, 0, 0, time.UTC)
+	MaxTimeUnix = 2051222400 // time.Date(2180, 1, 1, 0, 0, 0, 0, time.UTC)
 	MinTimeUnix = 0          // time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)
 )
