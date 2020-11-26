@@ -50,15 +50,12 @@ type Status struct {
 }
 
 const (
-	//type
-	TYPE_MYSQL      = "mysql"
-	TYPE_MONGODB    = "mongodb"
 	TYPE_CLICKHOUSE = "clickhouse"
 	//status
 	STATUS_PENDING  = "pending"
 	STATUS_RUNNING  = "running"
-	STATUS_PAUSE    = "pause"
+
 	STATUS_ERROR    = "error"
-	STATUS_FINISHED = "finished"
+
 	STATUS_STOPPED  = "stopped"
 )
