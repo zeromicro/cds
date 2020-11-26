@@ -151,7 +151,7 @@ func saveData(db *sql.DB, insertSql string, values []rowValue) error {
 
 // val 是 struct 类型的 value
 func generateRowValue(val reflect.Value, tags []string) (rowValue, error) {
-	args := make([]interface{}, len(tags))
+	args := make(rowValue, 0, len(tags))
 	for _, tagVal := range tags {
 		fieldVal, err := fieldByTag(val, DbTag, tagVal)
 		if err != nil {

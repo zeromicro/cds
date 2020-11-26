@@ -84,7 +84,7 @@ func MustCKGroup(c config.Config, opts ...OptionFunc) DBGroup {
 }
 
 func (g *dbGroup) GetAllNodes() []CKConn {
-	var all []CKConn
+	all := make([]CKConn, 0, len(g.ShardNodes))
 	for _, shard := range g.ShardNodes {
 		all = append(all, shard.GetAllConn()...)
 	}

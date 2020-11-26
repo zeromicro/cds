@@ -99,7 +99,7 @@ func Test_parseInsertSQL(t *testing.T) {
 		{args: args{`insert into user (id,real_name,city) values (#{id},#{real-name},#{city})`},
 			want: `insert into user (id,real_name,city) values (?,#{real-name},?)`, want1: []string{`id`, `city`}},
 		{args: args{`insert into user (id,real_name,city) values (#{real-name})`},
-			want: `insert into user (id,real_name,city) values (#{real-name})`, want1: nil},
+			want: `insert into user (id,real_name,city) values (#{real-name})`, want1: []string{}},
 	}
 	for _, tt := range tests {
 		v := tt
@@ -172,7 +172,7 @@ func Test_generateRowValue(t *testing.T) {
 	}{
 		{args: args{testVal, []string{`f1`, `f2`, `f3`}}, want: rowValue{f1, f2, f3}, wantErr: false},
 		{args: args{testVal, []string{`f3`, `f2`}}, want: rowValue{f3, f2}, wantErr: false},
-		{args: args{testVal, []string{`f4`, `f2`}}, want: nil, wantErr: true},
+		{args: args{testVal, []string{`f4`, `f2`}}, want: rowValue{}, wantErr: true},
 	}
 	for _, tt := range tests {
 		v := tt
