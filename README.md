@@ -1,5 +1,5 @@
 # ClickHouse Data System
-基于ClickHouse的大数据数据同步、存储、计算系统
+基于 [go-zero](https://github.com/tal-tech/go-zero) 构建的 `ClickHouse` 的大数据数据同步、存储、计算系统。
 
 ![avatar](doc/logo.png)
 
@@ -23,7 +23,7 @@
  - 建表方案
  - 注意事项
 
-
+欢迎大家使用和 `star` 🤝
 
 
 
