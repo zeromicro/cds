@@ -8,9 +8,11 @@ import (
 
 func main() {
 	group := ckgroup.MustCKGroup(ckgroupConfig, ckgroup.WithRetryNum(3))
-	demo(group)
+	//queryRowNoType(group)
+	//queryRowsNoType(group)
 	//query(group)
 	//querySteram(group)
+	demo(group)
 }
 
 func demo(group ckgroup.DBGroup) {

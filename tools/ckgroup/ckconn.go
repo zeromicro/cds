@@ -13,6 +13,8 @@ type CKConn interface {
 	GetUser() string
 	GetRawConn() *sql.DB
 	Exec(query string, args ...interface{}) error
+	QueryRowNoType(query string, args ...interface{}) (map[string]interface{}, error)
+	QueryRowsNoType(query string, args ...interface{}) ([]map[string]interface{}, error)
 	QueryRow(v interface{}, query string, args ...interface{}) error
 	QueryRows(v interface{}, query string, args ...interface{}) error
 	// QueryStream 流式查询 , 利用 chan 来存储查询的数据

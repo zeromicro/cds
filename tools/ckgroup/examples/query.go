@@ -28,3 +28,23 @@ func querySteram(group ckgroup.DBGroup) {
 		fmt.Println(item)
 	}
 }
+
+func queryRowNoType(group ckgroup.DBGroup) {
+	m, err := group.GetQueryNode().QueryRowNoType(`select id, real_name, city from user where  city = ? limit 1`, "test_city")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	id := m["city"]
+	fmt.Println(id.(string))
+	fmt.Printf("%+v\n", m)
+}
+
+func queryRowsNoType(group ckgroup.DBGroup) {
+	m, err := group.GetQueryNode().QueryRowsNoType(`select id, real_name, city from user where  city = ? limit 10`, "test_city")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%+v\n", m)
+}
