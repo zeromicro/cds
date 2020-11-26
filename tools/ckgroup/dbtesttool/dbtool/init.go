@@ -16,13 +16,14 @@ func init() {
 func (s *DBTestToolSqlConn) SetUp() error {
 	filePath := s.getPackagePath()
 	if s.isQuery {
-		filePath = filePath + "/script/ck/initialize_query.up.sql"
+		filePath += "/script/ck/initialize_query.up.sql"
 	} else {
-		if s.dbType == dbTypeMySQL {
-			filePath = filePath + "/script/mysql/initialize_schema.up.sql"
-		} else if s.dbType == dbTypeCK {
-			filePath = filePath + "/script/ck/initialize_schema.up.sql"
-		} else {
+		switch s.dbType {
+		case dbTypeMySQL:
+			filePath += "/script/mysql/initialize_schema.up.sql"
+		case dbTypeCK:
+			filePath += "/script/ck/initialize_schema.up.sql"
+		default:
 			return errors.New("error db type")
 		}
 	}
@@ -47,13 +48,14 @@ func (s *DBTestToolSqlConn) SetUp() error {
 func (s *DBTestToolSqlConn) Clean() error {
 	filePath := s.getPackagePath()
 	if s.isQuery {
-		filePath = filePath + "/script/ck/initialize_query.down.sql"
+		filePath += "/script/ck/initialize_query.down.sql"
 	} else {
-		if s.dbType == dbTypeMySQL {
-			filePath = filePath + "/script/mysql/initialize_schema.down.sql"
-		} else if s.dbType == dbTypeCK {
-			filePath = filePath + "/script/ck/initialize_schema.down.sql"
-		} else {
+		switch s.dbType {
+		case dbTypeMySQL:
+			filePath += "/script/mysql/initialize_schema.down.sql"
+		case dbTypeCK:
+			filePath += "/script/ck/initialize_schema.down.sql"
+		default:
 			return errors.New("error db type")
 		}
 	}

@@ -21,11 +21,13 @@ const insertCK = "insert into test.test_data_all (pk,int_value,float_value,doubl
 
 func (s *DBTestToolSqlConn) Insert() ([]*DataInstance, error) {
 	var query string
-	if s.dbType == dbTypeMySQL {
+
+	switch s.dbType {
+	case dbTypeMySQL:
 		query = insertMySQL
-	} else if s.dbType == dbTypeCK {
+	case dbTypeCK:
 		query = insertCK
-	} else {
+	default:
 		return nil, errors.New("not support db type")
 	}
 

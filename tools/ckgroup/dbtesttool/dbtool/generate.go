@@ -71,7 +71,7 @@ func generateDataSetBatch(num, batch int) [][]*DataInstance {
 }
 
 func UpdateDataSet(dataSet []*DataInstance) []*DataInstance {
-	var result []*DataInstance
+	result := make([]*DataInstance, 0, len(dataSet))
 	for _, item := range dataSet {
 		ins := &DataInstance{PK: item.PK}
 		ins.IntValue = rand.Int()
