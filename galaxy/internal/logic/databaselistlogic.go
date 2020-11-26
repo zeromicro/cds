@@ -6,10 +6,10 @@ import (
 
 	"github.com/tal-tech/go-zero/core/logx"
 
-	dmConfig "cds/dm/cmd/sync/config"
-	"cds/galaxy/internal/clients"
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
+	dmConfig "github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/galaxy/internal/clients"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
 )
 
 type DatabaseListLogic struct {

@@ -6,8 +6,8 @@ import (
 
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
 )
 
 type ConnectorListLogic struct {

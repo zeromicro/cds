@@ -1,9 +1,9 @@
 package module
 
 import (
-	"cds/dm/cmd/sync/config"
 	"context"
 	"encoding/json"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
 	"time"
 
 	"github.com/coreos/etcd/clientv3"

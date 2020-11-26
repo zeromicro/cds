@@ -3,9 +3,9 @@ package choperator
 import (
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/dm/util"
-	"cds/tools/ckgroup"
-	ckcfg "cds/tools/ckgroup/config"
+	"github.com/tal-tech/cds/dm/util"
+	"github.com/tal-tech/cds/tools/ckgroup"
+	ckcfg "github.com/tal-tech/cds/tools/ckgroup/config"
 )
 
 type ChOperator interface {

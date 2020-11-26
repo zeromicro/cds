@@ -1,10 +1,10 @@
 package svc
 
 import (
-	"cds/galaxy/internal/config"
-	"cds/galaxy/internal/model"
-	"cds/tools/canalx"
-	"cds/tools/debeziumx"
+	"github.com/tal-tech/cds/galaxy/internal/config"
+	"github.com/tal-tech/cds/galaxy/internal/model"
+	"github.com/tal-tech/cds/tools/canalx"
+	"github.com/tal-tech/cds/tools/debeziumx"
 	"log"
 
 	"go.etcd.io/etcd/clientv3"

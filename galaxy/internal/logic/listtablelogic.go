@@ -1,12 +1,12 @@
 package logic
 
 import (
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
-	"cds/tools/mongodbx"
-	"cds/tools/mysqlx"
 	"context"
 	"fmt"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
+	"github.com/tal-tech/cds/tools/mongodbx"
+	"github.com/tal-tech/cds/tools/mysqlx"
 	"sort"
 	"strings"
 

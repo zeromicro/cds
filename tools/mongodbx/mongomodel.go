@@ -1,9 +1,9 @@
 package mongodbx
 
 import (
-	"cds/tools/strx"
 	"context"
 	"errors"
+	"github.com/tal-tech/cds/tools/strx"
 	"log"
 	"reflect"
 

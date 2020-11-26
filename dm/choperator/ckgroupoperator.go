@@ -1,8 +1,8 @@
 package choperator
 
 import (
-	"cds/dm/util"
-	"cds/tools/ckgroup"
+	"github.com/tal-tech/cds/dm/util"
+	"github.com/tal-tech/cds/tools/ckgroup"
 	"time"
 
 	"github.com/tal-tech/go-zero/core/logx"

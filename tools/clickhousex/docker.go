@@ -1,11 +1,11 @@
 package clickhousex
 
 import (
-	"cds/tools/clickhousex/views"
+	"github.com/tal-tech/cds/tools/clickhousex/views"
 	"log"
 	"os"
 
-	"cds/tools/iox"
+	"github.com/tal-tech/cds/tools/iox"
 )
 
 var (

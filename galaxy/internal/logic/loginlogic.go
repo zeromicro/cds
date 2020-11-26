@@ -7,8 +7,8 @@ import (
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
 
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
 )
 
 type LoginLogic struct {

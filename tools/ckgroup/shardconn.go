@@ -3,7 +3,7 @@ package ckgroup
 import (
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/tools/ckgroup/config"
+	"github.com/tal-tech/cds/tools/ckgroup/config"
 )
 
 type ShardConn interface {

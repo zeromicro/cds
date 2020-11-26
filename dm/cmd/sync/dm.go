@@ -1,12 +1,12 @@
 package main
 
 import (
-	"cds/dm/cmd/sync/config"
-	"cds/dm/module"
-	"cds/tools/strx"
 	"context"
 	"encoding/json"
 	"flag"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/dm/module"
+	"github.com/tal-tech/cds/tools/strx"
 	"time"
 
 	"github.com/coreos/etcd/clientv3"

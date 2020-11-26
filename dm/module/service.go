@@ -10,10 +10,10 @@ import (
 	"go.etcd.io/etcd/clientv3/concurrency"
 	"gopkg.in/mgo.v2/bson"
 
-	"cds/dm/choperator"
-	"cds/dm/cmd/sync/config"
-	"cds/dm/data"
-	"cds/tools/mongodbx"
+	"github.com/tal-tech/cds/dm/choperator"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/dm/data"
+	"github.com/tal-tech/cds/tools/mongodbx"
 )
 
 type Service struct {

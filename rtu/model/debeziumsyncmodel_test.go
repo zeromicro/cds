@@ -70,27 +70,3 @@ func TestDelete(t *testing.T) {
 		t.Fail()
 	}
 }
-
-//func TestLoop(t *testing.T) {
-//	clientOptions := options.Client().ApplyURI("mongodb://192.168.56.104:27017")
-//
-//	// Connect to MongoDB
-//	client, err := mongo.Connect(context.TODO(), clientOptions)
-//
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//
-//	// Check the connection
-//	err = client.Ping(context.TODO(), nil)
-//
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//
-//	sess := client.Database("aaa").Collection("aaa")
-//	sess.InsertOne(context.TODO(), struct {
-//		ID int     `json:"id"`
-//		Bb float64 `json:"bb"`
-//	}{123, 1.2})
-//}

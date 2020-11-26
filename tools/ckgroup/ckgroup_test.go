@@ -3,8 +3,8 @@
 package ckgroup
 
 import (
-	"cds/tools/ckgroup/config"
 	_ "github.com/ClickHouse/clickhouse-go"
+	"github.com/tal-tech/cds/tools/ckgroup/config"
 	"testing"
 )
 

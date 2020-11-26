@@ -1,8 +1,8 @@
 package main
 
 import (
-	"cds/tools/ckgroup/config"
 	"fmt"
+	"github.com/tal-tech/cds/tools/ckgroup/config"
 )
 
 var (

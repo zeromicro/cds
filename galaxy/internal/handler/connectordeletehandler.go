@@ -1,14 +1,14 @@
 package handler
 
 import (
-	logic2 "cds/galaxy/internal/logic"
+	logic2 "github.com/tal-tech/cds/galaxy/internal/logic"
 	"net/http"
 
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/rest/httpx"
 
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
 )
 
 func connectorDeleteHandler(ctx *svc.ServiceContext) http.HandlerFunc {

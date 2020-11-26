@@ -1,7 +1,7 @@
 package handle
 
 import (
-	"math/rand"
+	"math/rand" // #nosec
 	"sync"
 	"sync/atomic"
 	"time"
@@ -9,11 +9,11 @@ import (
 	"github.com/coreos/etcd/clientv3"
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/rtu/cmd/sync/config"
-	"cds/rtu/model"
-	"cds/rtu/monitor"
-	"cds/tools/ckgroup"
-	groupcfg "cds/tools/ckgroup/config"
+	"github.com/tal-tech/cds/rtu/cmd/sync/config"
+	"github.com/tal-tech/cds/rtu/model"
+	"github.com/tal-tech/cds/rtu/monitor"
+	"github.com/tal-tech/cds/tools/ckgroup"
+	groupcfg "github.com/tal-tech/cds/tools/ckgroup/config"
 )
 
 type runEngine struct {
@@ -233,7 +233,7 @@ func (rengine *runEngine) isAlive() bool {
 }
 
 func (rengine *runEngine) autoResetTimer() {
-	restartTime := 21600 + rand.Int63n(2000)
+	restartTime := 21600 + rand.Int63n(2000) // #nosec
 	now := time.Now().Unix()
 	logx.Infof("[autoReset] %s will reset at %s", rengine.conf.Kafka.Topic, time.Unix(now+restartTime, 0))
 	tick := time.NewTicker(time.Second * time.Duration(restartTime))

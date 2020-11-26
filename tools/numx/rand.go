@@ -1,7 +1,7 @@
 package numx
 
 import (
-	"math/rand"
+	"math/rand" // #nosec
 	"time"
 )
 
@@ -10,9 +10,9 @@ func init() {
 }
 
 func Rand63n(i int64) int64 {
-	return rand.Int63n(i)
+	return rand.Int63n(i) // #nosec
 }
 
 func Randn(i int) int {
-	return rand.Intn(i)
+	return rand.Intn(i) // #nosec
 }

@@ -1,4 +1,4 @@
-### 快速开始
+## 快速开始
 
 ```bash
 git clone https://github.com/tal-tech/cds.git
@@ -17,7 +17,7 @@ user: admin@email.com
 password: 123456
 ```
 
-在控制台添加全量同步任务:
+### 在控制台添加全量同步任务:
 ```
 1. 点击右上角 "+"
 2. MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
@@ -52,17 +52,19 @@ MongoDB 输入连接串 mongodb://mongo:27017/test_mongo
 [image-20201118135156133](image-20201118135156133.png)
 
 
-启动增量同步
+### 启动实时增量同步
 
-点击“CONNECTOR监听”
-点击右上角“+”
-MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
-点击 “添加”
+```
+1 点击“CONNECTOR监听”
+2 点击右上角“+”
+3 MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
+4 点击 “添加”
 
-点击 "RTU增量同步"-"重放"使之启动
-点击右上角“+”
-MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
-点击 “添加”
+5 点击 "RTU增量同步"-"重放"使之启动
+6 点击右上角“+”
+7 MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
+8 点击 “添加”
+```
 
 ![image-20201118135412565](image-20201118135412565.png)
 再次执行初始化数据库脚本，重新插入100000条数据。

@@ -1,9 +1,9 @@
 package clickhousex
 
 import (
-	"cds/tools/numx"
-	"cds/tools/strx"
 	"errors"
+	"github.com/tal-tech/cds/tools/numx"
+	"github.com/tal-tech/cds/tools/strx"
 	"log"
 	"net/url"
 	"reflect"

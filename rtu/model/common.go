@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"cds/rtu/monitor"
+	"github.com/tal-tech/cds/rtu/monitor"
 
 	jsoniter "github.com/json-iterator/go"
 )

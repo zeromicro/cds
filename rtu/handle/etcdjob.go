@@ -1,15 +1,15 @@
 package handle
 
 import (
-	"cds/tools/strx"
 	"context"
 	"encoding/json"
+	"github.com/tal-tech/cds/tools/strx"
 	"os"
 	"strings"
 	"sync"
 	"time"
 
-	"cds/rtu/cmd/sync/config"
+	"github.com/tal-tech/cds/rtu/cmd/sync/config"
 
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/clientv3/concurrency"

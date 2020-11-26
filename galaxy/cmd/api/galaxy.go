@@ -1,12 +1,12 @@
 package main
 
 import (
-	"cds/galaxy/internal/clients"
-	"cds/galaxy/internal/config"
-	"cds/galaxy/internal/handler"
-	"cds/galaxy/internal/svc"
 	"flag"
 	"github.com/robfig/cron"
+	"github.com/tal-tech/cds/galaxy/internal/clients"
+	"github.com/tal-tech/cds/galaxy/internal/config"
+	"github.com/tal-tech/cds/galaxy/internal/handler"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/rest"

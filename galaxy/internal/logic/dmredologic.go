@@ -5,9 +5,9 @@ import (
 
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/galaxy/internal/clients"
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
+	"github.com/tal-tech/cds/galaxy/internal/clients"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
 )
 
 type DmRedoLogic struct {

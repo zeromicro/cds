@@ -10,13 +10,13 @@ import (
 	"github.com/go-sql-driver/mysql"
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/dm/cmd/sync/config"
-	"cds/galaxy/internal/clients"
-	"cds/galaxy/internal/model"
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
-	"cds/tools/mongodbx"
-	"cds/tools/strx"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/galaxy/internal/clients"
+	"github.com/tal-tech/cds/galaxy/internal/model"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
+	"github.com/tal-tech/cds/tools/mongodbx"
+	"github.com/tal-tech/cds/tools/strx"
 )
 
 type DmAddLogic struct {

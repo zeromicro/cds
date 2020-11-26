@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"cds/tools/mysqlx"
-	"cds/tools/strx"
+	"github.com/tal-tech/cds/tools/mysqlx"
+	"github.com/tal-tech/cds/tools/strx"
 )
 
 type (

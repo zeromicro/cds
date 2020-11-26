@@ -1,9 +1,9 @@
 package logic
 
 import (
-	"cds/galaxy/internal/svc"
-	"cds/tools/clickhousex"
 	"context"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/tools/clickhousex"
 	"strings"
 
 	"github.com/tal-tech/go-zero/core/logx"

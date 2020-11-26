@@ -3,7 +3,7 @@ package handle
 import (
 	"database/sql"
 
-	"cds/rtu/model"
+	"github.com/tal-tech/cds/rtu/model"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )

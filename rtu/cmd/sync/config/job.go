@@ -1,7 +1,7 @@
 package config
 
 import (
-	"cds/tube"
+	"github.com/tal-tech/cds/tube"
 	"time"
 )
 

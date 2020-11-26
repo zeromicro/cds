@@ -14,8 +14,8 @@ import (
 	"github.com/go-sql-driver/mysql"
 	"github.com/tal-tech/go-zero/core/logx"
 
-	"cds/tools/numx"
-	"cds/tools/strx"
+	"github.com/tal-tech/cds/tools/numx"
+	"github.com/tal-tech/cds/tools/strx"
 )
 
 type Debeziumx struct {

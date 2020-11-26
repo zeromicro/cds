@@ -1,14 +1,14 @@
 package logic
 
 import (
-	"cds/dm/cmd/sync/config"
-	"cds/galaxy/internal/clients"
-	"cds/galaxy/internal/svc"
-	"cds/galaxy/internal/types"
-	"cds/tools/strx"
-	"cds/tools/timex"
 	"context"
 	"encoding/json"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/galaxy/internal/clients"
+	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/cds/galaxy/internal/types"
+	"github.com/tal-tech/cds/tools/strx"
+	"github.com/tal-tech/cds/tools/timex"
 	"strconv"
 	"time"
 

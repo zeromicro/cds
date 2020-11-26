@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"log"
-	_ "net/http/pprof"
+	_ "net/http/pprof" // #nosec
 	"os"
 	"os/signal"
 	"runtime"
@@ -11,8 +11,8 @@ import (
 	"syscall"
 	"time"
 
-	"cds/rtu/cmd/sync/config"
-	"cds/rtu/handle"
+	"github.com/tal-tech/cds/rtu/cmd/sync/config"
+	"github.com/tal-tech/cds/rtu/handle"
 
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/core/logx"
