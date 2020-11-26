@@ -2,11 +2,11 @@ package logic
 
 import (
 	"context"
+	"sort"
+
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
 	"github.com/tal-tech/cds/tools/clickhousex"
-	"sort"
-
 	"github.com/tal-tech/go-zero/core/logx"
 )
 

@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/tal-tech/cds/dm/cmd/sync/config"
 	"runtime/debug"
 	"strconv"
 	"time"
 
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
 	"github.com/tal-tech/go-zero/core/logx"
 	"go.etcd.io/etcd/clientv3/concurrency"
 )

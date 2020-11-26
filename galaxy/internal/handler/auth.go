@@ -4,11 +4,10 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/core/stores/sqlx"
-	"github.com/tal-tech/go-zero/rest/httpx"
-
 	"github.com/tal-tech/cds/galaxy/internal/model"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func handleToken(ctx *svc.ServiceContext, w http.ResponseWriter, r *http.Request) (*model.User, error) {

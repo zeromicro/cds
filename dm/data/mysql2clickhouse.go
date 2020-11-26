@@ -3,14 +3,14 @@ package data
 import (
 	"database/sql"
 	"errors"
-	"github.com/tal-tech/cds/dm/choperator"
-	"github.com/tal-tech/cds/dm/cmd/sync/config"
-	"github.com/tal-tech/cds/dm/util"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/tal-tech/cds/dm/choperator"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/dm/util"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 

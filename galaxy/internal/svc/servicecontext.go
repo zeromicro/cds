@@ -1,12 +1,12 @@
 package svc
 
 import (
+	"log"
+
 	"github.com/tal-tech/cds/galaxy/internal/config"
 	"github.com/tal-tech/cds/galaxy/internal/model"
 	"github.com/tal-tech/cds/tools/canalx"
 	"github.com/tal-tech/cds/tools/debeziumx"
-	"log"
-
 	"go.etcd.io/etcd/clientv3"
 )
 

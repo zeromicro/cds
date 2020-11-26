@@ -6,12 +6,11 @@ import (
 	"strings"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/tal-tech/go-zero/core/logx"
-	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
-
 	"github.com/tal-tech/cds/galaxy/internal/model"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
+	"github.com/tal-tech/go-zero/core/logx"
+	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
 )
 
 type ConnectorAddLogic struct {
