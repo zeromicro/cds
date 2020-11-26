@@ -8,8 +8,20 @@
 ## 特性
 
 * 插入时在代码层面做 hash , 防止 ClickHouse 的分布式表负担过大
-* 插入失败时有重试机制 
-* 查询结果自动转为 struct
+* 查询方便 , 支持普通查询和流式查询 
+* 查询结果可以映射为 struct 或 map
+* 插入失败时有重试机制
+
+
+## 安装
+
+* Golang 1.13+
+* ClicHouse 19.16+
+
+```go
+go get -u github.com/tal-tech/ckgroup
+```
+
 
 ## 快速体验 ckgroup
 该命令依赖 `docker` , `docker-compose` , `golang` 
@@ -39,12 +51,8 @@ func main() {
 	
 	group := ckgroup.MustCKGroup(c)
 
-	var args [][]interface{}
-	for _, item := range generateUsers() {
-		args = append(args, []interface{}{item.Id, item.RealName, item.City})
-	}
-
-	err := group.ExecAuto(`insert into user (id,real_name,city) values (?,?,?)`, 0, args)
+    users := generateUsers()
+    err := group.InsertAuto(`insert into user (id,real_name,city) values (#{id},#{real_name},#{city})`, `id`, users)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -70,7 +78,7 @@ func main() {
 	group := ckgroup.MustCKGroup(c)
 
 	datas := &[]*user{}
-	err := group.QueryRows(datas, `select id, real_name, city from user where  city = ?`, "上海")
+	err := group.GetQueryNode().QueryRows(datas, `select id, real_name, city from user where  city = ?`, "上海")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -83,11 +91,5 @@ func main() {
 
 
 
-## TODO
-
-- [ ] 流式查询
-- [ ] 改进 Insert 的易用性
-- [ ] 改为接口实现 , 方便 test mock
-- [ ] 等等
 
 

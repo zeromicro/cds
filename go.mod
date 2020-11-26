@@ -11,7 +11,9 @@ require (
 	github.com/coreos/etcd v3.3.4+incompatible
 	github.com/dchest/siphash v1.2.2
 	github.com/frankban/quicktest v1.10.2 // indirect
+	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/go-xorm/builder v0.3.4
 	github.com/json-iterator/go v1.1.10
 	github.com/klauspost/compress v1.11.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
@@ -21,6 +23,7 @@ require (
 	github.com/prometheus/common v0.15.0
 	github.com/robfig/cron v1.2.0
 	github.com/segmentio/kafka-go v0.4.8
+	github.com/stretchr/testify v1.6.1
 	github.com/tal-tech/go-zero v1.0.26
 	github.com/ugorji/go v1.2.0 // indirect
 	go.etcd.io/etcd v3.3.4+incompatible
