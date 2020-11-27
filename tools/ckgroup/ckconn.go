@@ -13,6 +13,8 @@ type CKConn interface {
 	GetUser() string
 	GetRawConn() *sql.DB
 	Exec(query string, args ...interface{}) error
+	QueryRowNoType(query string, args ...interface{}) (map[string]interface{}, error)
+	QueryRowsNoType(query string, args ...interface{}) ([]map[string]interface{}, error)
 	QueryRow(v interface{}, query string, args ...interface{}) error
 	QueryRows(v interface{}, query string, args ...interface{}) error
 	// QueryStream 流式查询 , 利用 chan 来存储查询的数据
@@ -86,6 +88,7 @@ func (client *ckConn) QueryRow(v interface{}, query string, args ...interface{})
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 	names, err := rows.Columns()
 	if err != nil {
 		return err
@@ -139,6 +142,7 @@ func (client *ckConn) QueryRows(v interface{}, query string, args ...interface{}
 		}
 		return err
 	}
+	defer rows.Close()
 	names, err := rows.Columns()
 	if err != nil {
 		return err
@@ -223,6 +227,7 @@ func (client *ckConn) QueryStream(dataChan interface{}, query string, args ...in
 	}
 	go func() {
 		defer chVal.Close()
+		defer rows.Close()
 
 		for rows.Next() {
 			v := reflect.New(dataType)
@@ -274,4 +279,63 @@ func (client *ckConn) Insert(query string, sliceData interface{}) error {
 	}
 
 	return saveData(client.Conn, insertSQL, argss)
+}
+
+func (client *ckConn) QueryRowNoType(query string, args ...interface{}) (map[string]interface{}, error) {
+	rows, err := client.Conn.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	cols, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+
+	if rows.Next() {
+		values := make([]interface{}, len(cols))
+		for i := range values {
+			values[i] = &values[i]
+		}
+		err := rows.Scan(values...)
+		if err != nil {
+			return nil, err
+		}
+		m := make(map[string]interface{})
+		for i, col := range cols {
+			m[col] = values[i]
+		}
+		return m, nil
+	}
+	return nil, sql.ErrNoRows
+}
+
+func (client *ckConn) QueryRowsNoType(query string, args ...interface{}) ([]map[string]interface{}, error) {
+	rows, err := client.Conn.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	cols, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+	var result []map[string]interface{}
+
+	for rows.Next() {
+		values := make([]interface{}, len(cols))
+		for i := range values {
+			values[i] = &values[i]
+		}
+		err := rows.Scan(values...)
+		if err != nil {
+			return nil, err
+		}
+		m := make(map[string]interface{})
+		for i, col := range cols {
+			m[col] = values[i]
+		}
+		result = append(result, m)
+	}
+	return result, nil
 }

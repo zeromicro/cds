@@ -30,7 +30,7 @@ func (g *dbGroup) InsertAuto(query string, hashTag string, sliceData interface{}
 		return typeErr
 	}
 
-	//数组的元素是的类型 : *[]struct 或 *[]*struct
+	// 数组的元素是的类型 : *[]struct 或 *[]*struct
 	shardDatas := make([]reflect.Value, 0, len(g.ShardNodes))
 	for range g.ShardNodes {
 		shardDatas = append(shardDatas, reflect.New(reflect.SliceOf(sliceType)))
