@@ -1,5 +1,5 @@
 <p align="left">
-  <img width ="200px" src="doc/logo.png">
+  <img width ="200px" src="https://gitee.com/kevwan/static/raw/master/doc/images/cds/logo.png">
 </p>
 
 # Clickhouse Data System
@@ -16,16 +16,15 @@
 从系统架构和同步设计上介绍 `CDS` ，并带开发者可以快速启动体验，启动一个同步任务。
 
 ### 系统架构
+
 下图展示了以 `clickhouse` 为存储和计算引擎的数仓架构。
-![avatar](doc/clickhouse_arch.png)
+
+![avatar](https://gitee.com/kevwan/static/raw/master/doc/images/cds/clickhouse_arch1.png)
 
 ### 数据同步设计
 该部分实现了从 `MySQL/MongoDB` 数据源自动实时同步数据到 `ClickHouse` 集群的功能。
 
-
-![同步drawio](doc/同步drawio.png)
-
-
+![同步drawio](https://gitee.com/kevwan/static/raw/master/doc/images/cds/同步drawio.png)
 
 接下来可以通过这个 [快速开始](doc/quickstart.md)，极速开始体验吧 :hammer: ​​
 
@@ -44,5 +43,8 @@
 
 欢迎大家使用和 `star` 🤝，也请添加您的项目在这里~~ :happy: ​
 
+### 交流群
+
+<img src="https://gitee.com/kevwan/static/raw/master/images/cds.jpg" alt="cds" width="310" />
 
 
