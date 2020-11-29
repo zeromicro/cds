@@ -9,7 +9,7 @@ import (
 )
 
 type ChOperator interface {
-	MysqlBatchInsert(insertData [][]interface{}, insertQuery string, arr []util.DataType, indexOfFlag, indexOfInsertID, indexOfPrimKey int) error
+	MysqlBatchInsert(insertData [][]interface{}, insertQuery string, arr []util.DataType, indexOfFlag, indexOfInsertID int, indexOfPrimKeys int) error
 	ObtainClickHouseKV(targetDB, targetTable string) (map[string]string, error)
 	BatchInsert(insertData [][]interface{}, insertQuery string, indexOfPrimKey int) error
 }

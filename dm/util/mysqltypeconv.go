@@ -42,7 +42,7 @@ func NewMysqlTypeConvModel(mysqlConn *sql.DB) *MysqlTypeConverter {
 	return &MysqlTypeConverter{mysqlConn: mysqlConn}
 }
 
-func (tc *MysqlTypeConverter) ObtainMysqlTypeMap(tableName string) map[string]DataType {
+func (tc *MysqlTypeConverter) ObtainMysqlTypeMap(tableName string) (map[string]DataType, map[string]int) {
 	mp := make(map[string]string)
 	res := make(map[string]DataType)
 	descSQL := "DESC `" + tableName + "`"
@@ -50,22 +50,32 @@ func (tc *MysqlTypeConverter) ObtainMysqlTypeMap(tableName string) map[string]Da
 	if err != nil {
 		logx.Error(err)
 	}
+	pks := make(map[string]int, 8)
+	index := 0
 	for rows.Next() {
 		var mysqlDesc MysqlDesc
 		err := rows.Scan(&mysqlDesc.Field, &mysqlDesc.Type, &mysqlDesc.Null, &mysqlDesc.Key, &mysqlDesc.Default, &mysqlDesc.Extra)
 		if err != nil {
 			logx.Error(err)
 		}
+		if mysqlDesc.Key == "PRI" {
+			pks[mysqlDesc.Field] = index
+		}
 		mp[mysqlDesc.Field] = mysqlDesc.Type
+		index++
 	}
 	for k, v := range mp {
 		d := ParseTypeByMysqlType(v)
 		res[k] = d
 	}
-	return res
+	return res, pks
 }
 
-func ParseValueByType(v string, t DataType) (interface{}, error) {
+func ParseValueByType(vv interface{}, t DataType) (interface{}, error) {
+	v, ok := vv.(string)
+	if !ok {
+		return vv, nil
+	}
 	if v == "<nil>" {
 		return nil, nil
 	}
