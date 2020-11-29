@@ -10,7 +10,7 @@ cd cds
 sh ./start.sh
 ```
 
-当 start.sh 脚本执行结束后，检查是否有 container 出现退出。此时可以打开控制台，http://localhost:3414/cds.html，如图：
+当 start.sh 脚本执行结束后，检查是否有 container 出现退出。此时可以打开控制台，http://localhost:3414/cds.html ，如图：
 
 ![image-20201118113750898](cds.png)
 
