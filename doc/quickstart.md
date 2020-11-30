@@ -1,8 +1,7 @@
 # 快速开始
 
-> 本文旨在快速让开发者搭建 `CDS` 平台。
 
-## 极速启动
+## 启动
 
 ```bash
 git clone https://github.com/tal-tech/cds.git
@@ -13,8 +12,6 @@ sh ./start.sh
 当 start.sh 脚本执行结束后，检查是否有 container 出现退出。此时可以打开控制台，http://localhost:3414/cds.html ，如图：
 
 ![image-20201118113750898](cds.png)
-
-## Hello world
 
 此时就可以在控制台上添加你的第一个 **全量同步任务**。
 
@@ -48,7 +45,7 @@ sh ./start.sh
 ![image-20201118114502666](image-20201118114502666.png)
 
 
-刷新页面，如下图，则证明你的 `Hello World CDS` 成功啦：
+刷新页面，如下图
 
 
 ![image-20201118121334999](image-20201118121334999.png)
@@ -57,15 +54,13 @@ sh ./start.sh
 
 ![](image-20201118135156133.png)
 
-## 增量同步
+## 实时增量同步
 
-`CDS` 中增量同步依赖：
-
+增量同步需要先后开启这两个：
 - `CONNECTOR`：从 `Mysql/Mongo` 监听数据变化，并把变化同步到 `Kafka`
 - `RTU`：消费 `Kafka` 消息，并插入数据到 `clickhouse`
 
-所以增量同步需要开发者先后开启这两个：
-
+步骤：
 1. 点击 **CONNECTOR监听**
 2. 点击右上角 + 
 3. 输入 `DSN`：
@@ -78,13 +73,13 @@ sh ./start.sh
 8. 点击 **添加**
 9. 点击 **重放** 使之启动
 
-刷新页面，如下图，则证明你的 **增量同步任务** 添加成功啦：
+刷新页面，如下图
 
 ![image-20201118135412565](image-20201118135412565.png)
 
 ### 验证
 
-为了验证我们新添加的增量同步任务是否正常运行：再次执行初始化数据库脚本，重新插入100000条数据。
+再次执行初始化数据库脚本，重新插入100000条数据。
 
 ```shell
 cd docker/init
@@ -98,11 +93,7 @@ python3 -m pip install -r requirement.txt
 python3 init_db.py
 ```
 
-即可分别初始化 MySQL 和 MongoDB：
-
 - MySQL: `test_mysql`.`example_mysql`
-
-- MongoDB:  `test_mongo`.`example`
 
 验证mysql-增量同步数据：
 
