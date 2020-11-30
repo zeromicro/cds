@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"runtime"
+
 	"github.com/robfig/cron"
 	"github.com/tal-tech/cds/galaxy/internal/clients"
 	"github.com/tal-tech/cds/galaxy/internal/config"
@@ -10,7 +12,6 @@ import (
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/rest"
-	"runtime"
 )
 
 var configFile = flag.String("f", "etc/galaxy-api.json", "the config file")

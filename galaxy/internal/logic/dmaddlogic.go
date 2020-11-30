@@ -8,8 +8,6 @@ import (
 	"strings"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/tal-tech/go-zero/core/logx"
-
 	"github.com/tal-tech/cds/dm/cmd/sync/config"
 	"github.com/tal-tech/cds/galaxy/internal/clients"
 	"github.com/tal-tech/cds/galaxy/internal/model"
@@ -17,6 +15,7 @@ import (
 	"github.com/tal-tech/cds/galaxy/internal/types"
 	"github.com/tal-tech/cds/tools/mongodbx"
 	"github.com/tal-tech/cds/tools/strx"
+	"github.com/tal-tech/go-zero/core/logx"
 )
 
 type DmAddLogic struct {

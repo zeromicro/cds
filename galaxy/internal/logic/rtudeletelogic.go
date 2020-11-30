@@ -3,13 +3,13 @@ package logic
 import (
 	"context"
 	"encoding/json"
+	"strconv"
+
 	"github.com/tal-tech/cds/galaxy/internal/clients"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
 	"github.com/tal-tech/cds/rtu/cmd/sync/config"
 	"github.com/tal-tech/cds/tools/strx"
-	"strconv"
-
 	"github.com/tal-tech/go-zero/core/logx"
 )
 

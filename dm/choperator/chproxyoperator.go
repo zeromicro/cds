@@ -38,13 +38,13 @@ func (cpo *ChProxyOperator) BatchInsert(insertData [][]interface{}, insertQuery 
 				tempData = append(tempData, val)
 				continue
 			}
-			inter, err := util.ParseValueByType(func() string {
+			inter, err := util.ParseValueByType(func() interface{} {
 				if uar, ok := val.(time.Time); ok {
 					return uar.In(ShangHaiLocation).Format("2006-01-02 15:04:05")
 				} else if uar, ok := val.([]uint8); ok {
 					return string(uar)
 				}
-				return ""
+				return val
 			}(), arr[key])
 			if err != nil {
 				return err

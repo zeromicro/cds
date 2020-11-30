@@ -3,14 +3,15 @@ package data
 import (
 	"database/sql"
 	"errors"
-	"github.com/tal-tech/cds/dm/choperator"
-	"github.com/tal-tech/cds/dm/cmd/sync/config"
-	"github.com/tal-tech/cds/dm/util"
+	"fmt"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/tal-tech/cds/dm/choperator"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/dm/util"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 
@@ -33,14 +34,12 @@ func (mc *Mysql2ClickHouse) MysqlInertIntoClickHouse(job *config.Job) (string, e
 		logx.Error(err)
 		return "", err
 	}
-	sql, sqlForInsert, indexOfFlag, indexOfInsertID, indexOfPrimKey := combineSQL(ckMap, job.Source.Table, job.Target.Table, job.Target.DB, job.Source.QueryKey)
-	rows, err := mc.mysqlConn.Query(sql)
-	if err != nil {
-		logx.Error(err)
-		return "", err
-	}
+
 	tc := util.NewMysqlTypeConvModel(mc.mysqlConn)
-	typeMap := tc.ObtainMysqlTypeMap(job.Source.Table)
+	typeMap, pks := tc.ObtainMysqlTypeMap(job.Source.Table)
+
+	selectPreSQL, sqlForInsert, indexOfFlag, indexOfInsertID, indexOfPrimKey := combineSQL(ckMap, job.Source.Table, job.Target.Table, job.Target.DB, pks, 20000)
+
 	var typeArr []util.DataType
 	kt := make([]string, 0, len(ckMap))
 	for k := range ckMap {
@@ -57,69 +56,107 @@ func (mc *Mysql2ClickHouse) MysqlInertIntoClickHouse(job *config.Job) (string, e
 			typeArr = append(typeArr, typeMap[kt[i]])
 		}
 	}
+	first := true
+	pksToSql := make([]string, 0, len(pks))
 
+	pkOrder := make([]int, 0, len(pks))
+	indexs := 0
+	for pk, order := range indexOfPrimKey {
+		pksToSql = append(pksToSql, pk+">?")
+		pkOrder = append(pkOrder, order)
+		indexs = order
+	}
+	firstSql := fmt.Sprintf(selectPreSQL, "")
+	remainSql := fmt.Sprintf(selectPreSQL, "where "+strings.Join(pksToSql, " and "))
 	var insertData [][]interface{}
-	for rows.Next() {
-		countOfColumn := len(ckMap) - 2 //字段数量为Ck字段数减2 (flag和insert_id)
-		temp := make([]interface{}, countOfColumn)
-		tempPointer := make([]interface{}, countOfColumn)
-		for i := 0; i < countOfColumn; i++ {
-			tempPointer[i] = &temp[i]
+
+	for {
+		var selectSQL string
+		args := make([]interface{}, 0, len(pks))
+		if first {
+			selectSQL = firstSql
+			first = !first
+		} else {
+			if len(insertData) == 0 {
+				break
+			}
+			selectSQL = remainSql
+
+			last := insertData[len(insertData)-1]
+			for _, i := range pkOrder {
+				args = append(args, last[i])
+			}
+			insertData = insertData[:0]
 		}
-		err := rows.Scan(tempPointer...)
+		rows, err := mc.mysqlConn.Query(selectSQL, args...)
 		if err != nil {
 			logx.Error(err)
 			return "", err
 		}
-		//先填 Flag Insert_ID 进去 然后把Mysql的数据再塞进去
-		allData, err := combineData(temp, indexOfFlag, indexOfInsertID)
-		if err != nil {
-			logx.Error(err)
-			return "", err
-		}
-		insertData = append(insertData, allData)
-		if len(insertData) == 1e4 {
-			select {
-			case <-*mc.controller:
-				logx.Info("Task ID:" + job.ID + " has been stopped manually")
+		for rows.Next() {
+			err := formatToInsert(rows, ckMap, indexOfFlag, indexOfInsertID, &insertData)
+			if err != nil {
 				return "stopped", nil
-			default:
-				err = (*mc.chOperator).MysqlBatchInsert(insertData, sqlForInsert, typeArr, indexOfFlag, indexOfInsertID, indexOfPrimKey)
-				if err != nil {
-					logx.Error(err)
-					return "", err
-				}
-				insertData = insertData[:0]
+			}
+		}
+		select {
+		case <-*mc.controller:
+			logx.Info("Task ID:" + job.ID + " has been stopped manually")
+			return "stopped", nil
+		default:
+			err = (*mc.chOperator).MysqlBatchInsert(insertData, sqlForInsert, typeArr, indexOfFlag, indexOfInsertID, indexs)
+			if err != nil {
+				logx.Error(err)
+				return "", err
 			}
 		}
 	}
-	if len(insertData) > 0 {
-		if err := (*mc.chOperator).MysqlBatchInsert(insertData, sqlForInsert, typeArr, indexOfFlag, indexOfInsertID, indexOfPrimKey); err != nil {
-			logx.Error(err)
-			return "", err
-		}
-	}
+
 	return "", nil
 }
 
+func formatToInsert(rows *sql.Rows, ckMap map[string]string, indexOfFlag, indexOfInsertID int, insertData *[][]interface{}) error {
+	countOfColumn := len(ckMap) - 2 //字段数量为Ck字段数减2 (flag和insert_id)
+	temp := make([]interface{}, countOfColumn)
+	tempPointer := make([]interface{}, countOfColumn)
+	for i := 0; i < countOfColumn; i++ {
+		tempPointer[i] = &temp[i]
+	}
+	err := rows.Scan(tempPointer...)
+	if err != nil {
+		logx.Error(err)
+		return err
+	}
+	//先填 Flag Insert_ID 进去 然后把Mysql的数据再塞进去
+	allData, err := combineData(temp, indexOfFlag, indexOfInsertID)
+	if err != nil {
+		logx.Error(err)
+		return err
+	}
+	*insertData = append(*insertData, allData)
+	return nil
+}
+
 //This func create the sql which 1.get data from mysql 2.insert data to clickhouse
-func combineSQL(mc map[string]string, sourceTable, targetTable, targetDB, primaryKey string) (string, string, int, int, int) {
+func combineSQL(ckTypeMap map[string]string, sourceTable, targetTable, targetDB string, pks map[string]int, batchCnt int) (string, string, int, int, map[string]int) {
 	var selectSqlBuilder, insertSqlBuilder strings.Builder
-	indexOfFlag, indexOfInertID, indexOfPrimKey := -1, -1, -1
+	indexOfFlag, indexOfInertID := -1, -1
 	//prepare the query
 	selectSqlBuilder.WriteString("SELECT ")
 	insertSqlBuilder.WriteString("INSERT INTO " + targetDB + "." + targetTable + " (")
 	var suffix string
 	var ar, des []string
 
-	kt := make([]string, 0, len(mc))
-	for k := range mc {
+	kt := make([]string, 0, len(ckTypeMap))
+	for k := range ckTypeMap {
 		kt = append(kt, k)
 	}
 	sort.Strings(kt)
+	pksIndex := make(map[string]int, len(pks))
 	for i := 0; i < len(kt); i++ {
-		if kt[i] == primaryKey {
-			indexOfPrimKey = i
+		if _, ok := pks[kt[i]]; ok {
+			//pksIndex = append(pksIndex, i)
+			pksIndex[kt[i]] = i
 		}
 		switch {
 		case kt[i] != "ck_is_delete" && kt[i] != "insert_id":
@@ -146,8 +183,10 @@ func combineSQL(mc map[string]string, sourceTable, targetTable, targetDB, primar
 		}
 	}
 	selectSqlBuilder.WriteString(" FROM `" + sourceTable + "`")
+	selectSqlBuilder.WriteString(" %s limit ")
+	selectSqlBuilder.WriteString(strconv.Itoa(batchCnt))
 	insertSqlBuilder.WriteString(") VALUES (" + suffix + ")")
-	return selectSqlBuilder.String(), insertSqlBuilder.String(), indexOfFlag, indexOfInertID, indexOfPrimKey
+	return selectSqlBuilder.String(), insertSqlBuilder.String(), indexOfFlag, indexOfInertID, pksIndex
 }
 
 func combineData(data []interface{}, indexOfFlag int, indexOfInsertID int) ([]interface{}, error) {

@@ -1,14 +1,13 @@
 package model
 
 import (
+	"encoding/base64"
 	"log"
 	"strconv"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
-
-	"encoding/base64"
 	"github.com/tal-tech/cds/tools/mysqlx"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type (

@@ -2,8 +2,9 @@ package strx
 
 import (
 	"encoding/base64"
-	"github.com/tal-tech/cds/tools/cryptox"
 	"strings"
+
+	"github.com/tal-tech/cds/tools/cryptox"
 )
 
 const (

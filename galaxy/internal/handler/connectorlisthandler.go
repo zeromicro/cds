@@ -1,14 +1,13 @@
 package handler
 
 import (
-	logic2 "github.com/tal-tech/cds/galaxy/internal/logic"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/core/logx"
-	"github.com/tal-tech/go-zero/rest/httpx"
-
+	logic2 "github.com/tal-tech/cds/galaxy/internal/logic"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
+	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func connectorListHandler(ctx *svc.ServiceContext) http.HandlerFunc {

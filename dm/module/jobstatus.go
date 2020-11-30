@@ -3,10 +3,10 @@ package module
 import (
 	"context"
 	"encoding/json"
-	"github.com/tal-tech/cds/dm/cmd/sync/config"
 	"time"
 
 	"github.com/coreos/etcd/clientv3"
+	"github.com/tal-tech/cds/dm/cmd/sync/config"
 )
 
 const (

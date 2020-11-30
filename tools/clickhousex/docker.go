@@ -1,10 +1,10 @@
 package clickhousex
 
 import (
-	"github.com/tal-tech/cds/tools/clickhousex/views"
 	"log"
 	"os"
 
+	"github.com/tal-tech/cds/tools/clickhousex/views"
 	"github.com/tal-tech/cds/tools/iox"
 )
 

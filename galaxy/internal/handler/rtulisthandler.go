@@ -1,12 +1,13 @@
 package handler
 
 import (
+	"net/http"
+
 	logic2 "github.com/tal-tech/cds/galaxy/internal/logic"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/rest/httpx"
-	"net/http"
 )
 
 func rtuListHandler(ctx *svc.ServiceContext) http.HandlerFunc {

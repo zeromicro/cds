@@ -1,11 +1,12 @@
 package model
 
 import (
-	"github.com/tal-tech/cds/tools/mysqlx"
-	"github.com/tal-tech/cds/tools/strx"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/tal-tech/cds/tools/mysqlx"
+	"github.com/tal-tech/cds/tools/strx"
 )
 
 type (

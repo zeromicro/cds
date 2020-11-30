@@ -18,6 +18,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-xorm/builder v0.3.4
 	github.com/google/go-cmp v0.5.4 // indirect
+	github.com/google/uuid v1.1.1
 	github.com/json-iterator/go v1.1.10
 	github.com/klauspost/compress v1.11.0 // indirect
 	github.com/kr/text v0.2.0 // indirect

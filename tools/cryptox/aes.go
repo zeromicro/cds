@@ -3,7 +3,7 @@ package cryptox
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/md5"  // #nosec
+	"crypto/md5" // #nosec
 	"crypto/rand"
 	"encoding/hex"
 	"errors"

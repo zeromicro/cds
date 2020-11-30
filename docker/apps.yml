@@ -6,19 +6,19 @@ services:
   dm:
     image: golang:1.14
     volumes:
-      - ../../cds:/cds
+      - ../dm/cmd/sync/etc/dm.json:/cds/dm.json
+      - ./build/dm:/cds/dm
     command:
-       /cds/docker/build/dm -f /cds/dm/cmd/sync/etc/dm.json
+       /cds/dm -f /cds/dm.json
   galaxy:
     image: golang:1.14
-    container_name: galaxy
     ports:
       - "8080:8080"
     volumes:
-      - ../../cds:/cds
-    working_dir: /cds/galaxy
+      - ../galaxy/etc/galaxy-api.json:/cds/galaxy-api.json
+      - ./build/galaxy:/cds/galaxy1
     command:
-      /cds/docker/build/galaxy -f /cds/galaxy/etc/galaxy-api.json
+      /cds/galaxy1 -f /cds/galaxy-api.json
   rtu:
     image: golang:1.14
     volumes:

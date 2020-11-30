@@ -4,12 +4,11 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/tal-tech/go-zero/core/logx"
-
 	dmConfig "github.com/tal-tech/cds/dm/cmd/sync/config"
 	"github.com/tal-tech/cds/galaxy/internal/clients"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
+	"github.com/tal-tech/go-zero/core/logx"
 )
 
 type DatabaseListLogic struct {

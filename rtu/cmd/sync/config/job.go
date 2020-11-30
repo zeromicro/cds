@@ -1,8 +1,9 @@
 package config
 
 import (
-	"github.com/tal-tech/cds/tube"
 	"time"
+
+	"github.com/tal-tech/cds/tube"
 )
 
 // Job 任务配置
