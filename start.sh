@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="v1.0.0"
+version="v0.0.1"
 
 echo "
               ___  ____   ___
