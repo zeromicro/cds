@@ -15,7 +15,7 @@ import (
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 )
 
-var configFile = flag.String("f", "etc/galaxy-api.yaml", "the config file")
+var configFile = flag.String("f", "etc/galaxy-api.json", "the config file")
 
 func main() {
 	flag.Parse()
