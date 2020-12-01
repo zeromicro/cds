@@ -99,6 +99,9 @@ func (mc *Mysql2ClickHouse) MysqlInertIntoClickHouse(job *config.Job) (string, e
 				return "stopped", nil
 			}
 		}
+		if len(insertData) == 0 {
+			break
+		}
 		select {
 		case <-*mc.controller:
 			logx.Info("Task ID:" + job.ID + " has been stopped manually")
