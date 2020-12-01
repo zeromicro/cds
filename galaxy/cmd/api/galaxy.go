@@ -5,16 +5,17 @@ import (
 	"runtime"
 
 	"github.com/robfig/cron"
+	"github.com/tal-tech/go-zero/core/conf"
+	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/tal-tech/go-zero/rest"
+
 	"github.com/tal-tech/cds/galaxy/internal/clients"
 	"github.com/tal-tech/cds/galaxy/internal/config"
 	"github.com/tal-tech/cds/galaxy/internal/handler"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
-	"github.com/tal-tech/go-zero/core/conf"
-	"github.com/tal-tech/go-zero/core/logx"
-	"github.com/tal-tech/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/galaxy-api.json", "the config file")
+var configFile = flag.String("f", "etc/heragalaxy-api.yaml", "the config file")
 
 func main() {
 	flag.Parse()

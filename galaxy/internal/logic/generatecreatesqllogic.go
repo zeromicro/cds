@@ -47,7 +47,7 @@ func (l *GenerateCreateSqlLogic) GenerateCreateSql(req types.GenerateCreateSqlRe
 				continue
 			}
 		}
-		sqls = append(sqls, strings.Join(sql, ";\n"))
+		sqls = append(sqls, strings.Join(sql, "\n"))
 		qks = append(qks, qk)
 	}
 	return &types.GenerateCreateSqlResponse{
