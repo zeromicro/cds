@@ -13,6 +13,7 @@ import (
 )
 
 const (
+	// 各节点实体表
 	createEntityTableSql = `CREATE TABLE if not exists ` + "`" + `{{.DB}}` + "`" + `.` + "`" + `{{.Table}}` + "`" + ` ON CLUSTER bip_ck_cluster
 	(
        insert_id UInt64 COMMENT '插入id unix timestamp nano second',
@@ -22,6 +23,7 @@ const (
 	) ENGINE ReplicatedMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_{{.DB}}_{{.Table}}',
 			 '{replica}') PARTITION BY toYYYYMM({{.CreateTime}}) ORDER BY({{.Indexes}}) SETTINGS index_granularity = 8192;`
 
+	// 各节点All表
 	createAllTableSql = `CREATE TABLE if not exists ` + "`" + `{{.DB}}` + "`" + `.` + "`" + `{{.Table}}_all` + "`" + ` ON CLUSTER bip_ck_cluster
 	(
 	   insert_id UInt64 COMMENT '插入id unix timestamp nano second',
@@ -30,7 +32,7 @@ const (
 	  ck_is_delete UInt8 	COMMENT '用于记录状态 0为正常状态 1为删除状态'
 	) ENGINE Distributed(bip_ck_cluster, '{{.DB}}', '{{.Table}}', sipHash64({{.QueryKey}}));`
 
-	// 单独查询节点sql
+	// 单独查询节点All表
 	createQueryNodeSql = `CREATE TABLE if not exists ` + "`" + `{{.DB}}` + "`" + `.` + "`" + `{{.Table}}_all` + "`" + `
 	(
 	   insert_id UInt64 COMMENT '插入id unix timestamp nano second',
@@ -40,12 +42,14 @@ const (
 	) ENGINE Distributed(bip_ck_cluster, '{{.DB}}', '{{.Table}}', sipHash64({{.QueryKey}}));`
 )
 
-var re = regexp.MustCompile(`(?m)^\s*$[\r\n]*|[\r\n]+\s+\z`)
-var templates = []string{
-	createEntityTableSql,
-	createAllTableSql,
-	createQueryNodeSql,
-}
+var (
+	re        = regexp.MustCompile(`(?m)^\s*$[\r\n]*|[\r\n]+\s+\z`)
+	templates = []string{
+		createEntityTableSql,
+		createAllTableSql,
+		createQueryNodeSql,
+	}
+)
 
 func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string, error) {
 	columns, e := DescribeMysqlTable(TakeMySQLConnx(dsn), table)
