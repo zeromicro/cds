@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="res/js/api.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/mdui/0.4.3/css/mdui.min.css">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css"> -->
+  <script src="https://cdnjs.loli.net/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/theme-chalk/index.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.min.js"></script>
+  <title>Data Sync</title>
+</head>
+
+<body>
+  <style>
+  .app-navbar {
+    color: black;
+    background-color: #fff;
+  }
+  .table-data {
+    padding: 0 15px;
+  }
+  .mdui-tab .mdui-tab-active {
+    color: black;
+  }
+  .mdui-tab-indicator {
+    background-color: black;
+  }
+  .el-dialog__body {
+    padding: 0 20px;
+  }
+  .el-message-box__wrapper {
+    overflow-y: auto;
+  }
+  .el-pagination {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .dm-search, .rtu-search, .connector-search {
+    margin: 4px 16px 16px;
+  }
+  .dm-search span, .rtu-search span, .connector-search span {
+    color: #606266;
+    margin-right: 10px;
+  }
+  .shards-input input {
+    text-align: center;
+  }
+  </style>
+  <div id="app" style="width: 100%;height: 100%;display: flex;flex-direction: column;">
+    <template>
+      <div class="mdui-appbar app-navbar">
+        <div class="mdui-toolbar">
+          <a href="#" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">home</i></a>
+          <a href="javascript:;" class="mdui-typo-title">Data Sync</a>
+          <div class="mdui-toolbar-spacer"></div>
+        </div>
+        <div class="mdui-tab" mdui-tab>
+          <a href="#tab-dm" class="mdui-ripple mdui-ripple-white">DM全量同步</a>
+          <a href="#tab-connector" class="mdui-ripple mdui-ripple-white">connector监听</a>
+          <a href="#tab-rtu" class="mdui-ripple mdui-ripple-white">RTU增量同步</a>
+        </div>
+      </div>
+      <div id="tab-dm" style="display: flex;flex-direction: column;flex-grow: 1;">
+        <div class="mdui-toolbar mdui-color-theme">
+          <span class="mdui-typo-title">DM列表:</span>
+          <div class="mdui-toolbar-spacer"></div>
+          <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons" @click='loadDmModel()'>add</i></a>
+          <a href="javascript:;" @click='dmRefresh()' class="mdui-btn mdui-btn-icon mdui-ripple"><i
+              class="mdui-icon material-icons">refresh</i></a>
+        </div>
+        <div class="dm-search">
+          <span>选择database</span>
+          <el-select filterable v-model="dmString" placeholder="请选择" @change="dmRefresh(1)">
+            <el-option
+              v-for="(item, index) in dmDbList"
+              :key="index"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="table-data">
+          <el-table
+            size="mini"
+            :data="dmList"
+            tooltip-effect="light"
+            stripe
+            border
+          >
+            <el-table-column label="任务名" sortable prop="name" align="center"></el-table-column>
+            <el-table-column label="状态" sortable prop="status" align="center"></el-table-column>
+            <el-table-column label="详情" prop="information" align="center"></el-table-column>
+            <el-table-column label="窗口期" align="center">
+              <template slot-scope="scope">
+                <span v-if='scope.row.windowStartHour>0&&scope.row.windowEndHour>0'>
+                  {{scope.row.windowStartHour}}:00-{{scope.row.windowEndHour}}:00
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="更新时间" sortable prop="updateTime" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button type="text" v-if='scope.row.status!=="running"' @click='doDmRedo(scope.row.id)'>开始</el-button>
+                <el-button type="text" v-if="scope.row.status === 'running'" @click='doDmStop(scope.row.id)'>停止</el-button>
+                <el-button type="text" @click='doDmDelete(scope.row.id)'>删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <el-pagination
+          @current-change="dmRefresh"
+          :current-page.sync="dmPage.page"
+          :page-size="10"
+          layout="prev, pager, next"
+          :total="dmPage.total">
+        </el-pagination>
+      </div>
+      <div id="tab-connector">
+        <div class="mdui-toolbar mdui-color-theme">
+          <span class="mdui-typo-title">监听列表:</span>
+          <div class="mdui-toolbar-spacer"></div>
+          <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons" @click='connectorDialogVisible = true'>add</i></a>
+          <a href="javascript:;" @click='connectorRefresh()' class="mdui-btn mdui-btn-icon mdui-ripple"><i
+              class="mdui-icon material-icons">refresh</i></a>
+        </div>
+        <div class="connector-search">
+          <span>选择database</span>
+          <el-select filterable v-model="connectorString" placeholder="请选择" @change="connectorRefresh(1)">
+            <el-option
+              v-for="(item, index) in connectorDbList"
+              :key="index"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="table-data">
+          <el-table
+            size="mini"
+            :data="connectorList"
+            tooltip-effect="light"
+            stripe
+            border
+          >
+            <el-table-column label="源数据库" sortable prop="sourceDb" align="center"></el-table-column>
+            <el-table-column label="源表" sortable prop="sourceTable" align="center"></el-table-column>
+            <el-table-column label="名称" sortable prop="sourceId" align="center"></el-table-column>
+            <el-table-column label="connector类型" sortable prop="sourceType" align="center"></el-table-column>
+            <el-table-column label="创建时间" sortable prop="createTime" align="center"></el-table-column>
+            <el-table-column label="修改时间" sortable prop="updateTime" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button type="text" @click='connectorDelete(scope.row)'>删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <el-pagination
+          @current-change="connectorRefresh"
+          :current-page.sync="connectorPage.page"
+          :page-size="10"
+          layout="prev, pager, next"
+          :total="connectorPage.total">
+        </el-pagination>
+      </div>
+      <div id="tab-rtu" style="display: flex;flex-direction: column;flex-grow: 1;">
+        <div class="mdui-toolbar mdui-color-theme">
+          <span class="mdui-typo-title">RTU列表:</span>
+          <div class="mdui-toolbar-spacer"></div>
+          <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons" @click='loadRtuModel()'>add</i></a>
+          <a href="javascript:;" @click='rtuRefresh()' class="mdui-btn mdui-btn-icon mdui-ripple"><i
+              class="mdui-icon material-icons">refresh</i></a>
+        </div>
+        <div class="rtu-search">
+          <span>选择database</span>
+          <el-select filterable v-model="rtuString" placeholder="请选择" @change="rtuRefresh(1)">
+            <el-option
+              v-for="(item, index) in rtuDbList"
+              :key="index"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="table-data">
+          <el-table
+            size="mini"
+            :data="rtuList"
+            tooltip-effect="light"
+            stripe
+            border
+          >
+            <el-table-column label="任务名" sortable prop="name" align="center"></el-table-column>
+            <el-table-column label="状态" sortable prop="status" align="center"></el-table-column>
+            <el-table-column label="详情" prop="information" align="center"></el-table-column>
+            <el-table-column label="更新时间" sortable prop="updateTime" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button type="text" v-if='scope.row.status!=="running"' @click='doRtuRedo(scope.row.id)'>重放</el-button>
+                <el-button type="text" v-if="scope.row.status === 'running'" @click='doRtuStop(scope.row.id)'>停止</el-button>
+                <el-button type="text" @click='doRtuDelete(scope.row.id)'>删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <el-pagination
+          @current-change="rtuRefresh"
+          :current-page.sync="rtuPage.page"
+          :page-size="10"
+          layout="prev, pager, next"
+          :total="rtuPage.total">
+        </el-pagination>
+      </div>
+      <!-- dm-dialog -->
+      <el-dialog
+        title="添加DM任务"
+        :close-on-click-modal="false"
+        :visible.sync="dmDialogVisible"
+        width="40%"
+      >
+        <el-tabs v-model="dmActiveName">
+          <el-tab-pane label="数据源" name="dmAddSource">
+            <el-form label-position="top">
+              <el-form-item label="数据源(连接串)">
+                <el-input v-model="dmModel.source.dsn">
+                  <el-button slot="append" :disabled='!dmModel.source.dsn' @click='dmListTables'>连接</el-button>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="选择表">
+                <el-select filterable multiple style="width: 100%;" v-model="dmModel.source.selectedTable" placeholder="选择表">
+                  <el-option v-for='table in dmModel.source.tables' :label="table" :value="table"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="后缀">
+                <el-input v-model="dmModel.source.suffix"></el-input>
+              </el-form-item>
+              <el-form-item label="运行窗口期">
+                <el-input-number v-model="dmModel.windowStartHour" :controls="false" :min="0" :max="23"></el-input-number> —
+                <el-input-number v-model="dmModel.windowEndHour" :controls="false" :min="0" :max="23"></el-input-number>
+              </el-form-item>
+              <el-form-item>
+                <el-button :disabled='dmModel.source.dsn==""||dmModel.source.selectedTable.length==0||dmModel.target.selectedDatabase==""' @click='generateSql()'>
+                  生成建表语句
+                </el-button>
+                <el-button :disabled="!dmModel.source.createTableSql.length > 0" @click='execSql()'>
+                  执行SQL
+                </el-button>
+              </el-form-item>
+              <el-input
+                type="textarea"
+                v-model="dmModel.source.createTableSql"
+                :rows="10"
+              >
+              </el-input>
+              <el-button style="float: right;margin-top: 10px; display: none;" type="primary" :disabled='dmModel.source.selectedTable.length ===0 || dmModel.source.dsn=="" || dmModel.target.selectedDatabase==""' @click="doAllAdd">一键三连</el-button>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="目标库" name="dmAddTarget">
+            <el-form label-position="top">
+              <el-form-item>
+                <el-input v-model="dmModel.target.queryNode" class="shards-input" readonly>
+                  <template slot="prepend">查询节点</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="目标库Shards">
+                <div
+                  v-for='(shard,i) in dmModel.target.shards'
+                  style="margin-bottom: 10px;"
+                  :key="i"
+                >
+                  <el-input
+                    v-for='(item, index) in shard'
+                    class="shards-input"
+                    style="margin-bottom: 5px;"
+                    v-model="item"
+                    readonly
+                  >
+                    <template slot="prepend">{{ index === 0 ? `插入节点${i + 1}` : `备用节点${i + 1}`}}</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item label="集群名">
+                <el-input v-model="dmModel.target.cluster" readonly></el-input>
+              </el-form-item>
+              <el-form-item label="选择Database">
+                <el-select filterable v-model="dmModel.target.selectedDatabase" placeholder="选择表">
+                  <el-option v-for='db in dmModel.target.databases' :label="db" :value="db"></el-option>
+                </el-select>
+                <el-button @click='dmListDatabases()' :disabled='dmModel.target.shards.length==0'>刷新</el-button>
+              </el-form-item>
+              <el-button style="float: right;margin-top:10px;" type="primary" :disabled='dmModel.source.selectedTable.length ===0 || dmModel.source.dsn=="" || dmModel.target.selectedDatabase==""' @click="doAllAdd">一键三连</el-button>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" :disabled='dmModel.source.selectedTable.length === 0 || dmModel.source.dsn=="" || dmModel.target.selectedDatabase==""' @click="dmAdd">添 加</el-button>
+          <el-button @click="dmDialogVisible = false">取 消</el-button>
+        </span>
+      </el-dialog>
+      <!-- connector-dialog -->
+      <el-dialog
+        title="添加Connector任务"
+        :close-on-click-modal="false"
+        :visible.sync="connectorDialogVisible"
+        width="40%"
+      >
+        <el-form label-position="top">
+          <el-form-item label="数据源(连接串)">
+            <el-input v-model="connectorModel.source.dsn">
+              <el-button slot="append" :disabled='!connectorModel.source.dsn' @click='connectorListTables'>刷新</el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="选择表">
+            <el-select multiple filterable style="width: 100%;" v-model="connectorModel.source.selectedTable" placeholder="选择表">
+              <el-option v-for='table in connectorModel.source.tables' :label="table" :value="table"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="后缀">
+            <el-input v-model="connectorModel.source.suffix"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" :disabled='connectorModel.source.selectedTable.length==0 || connectorModel.source.dsn==""' @click="connectorAdd">添 加</el-button>
+          <el-button @click="connectorDialogVisible = false">取 消</el-button>
+        </span>
+      </el-dialog>
+      <!-- rtu-dialog -->
+      <el-dialog
+        title="添加RTU任务"
+        :close-on-click-modal="false"
+        :visible.sync="rtuDialogVisible"
+        width="40%"
+      >
+        <el-tabs v-model="rtuActiveName">
+          <el-tab-pane label="数据源" name="rtuAddSource">
+            <el-form label-position="top">
+              <el-form-item label="数据源(连接串)">
+                <el-input v-model="rtuModel.source.dsn">
+                  <el-button slot="append" :disabled='!rtuModel.source.dsn' @click='rtuListTables'>连接</el-button>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="选择表">
+                <el-select multiple filterable style="width: 100%;" v-model="rtuModel.source.selectedTable" placeholder="选择表">
+                  <el-option v-for='table in rtuModel.source.tables' :label="table" :value="table"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="目标库" name="rtuAddTarget">
+            <el-form label-position="top">
+              <el-form-item>
+                <el-input v-model="rtuModel.target.queryNode" class="shards-input" readonly>
+                  <template slot="prepend">查询节点</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="目标库Shards">
+                <div
+                  v-for='(shard,i) in rtuModel.target.shards'
+                  style="margin-bottom: 10px;"
+                  :key="i"
+                >
+                  <el-input
+                    v-for='(item, index) in shard'
+                    style="margin-bottom: 5px;"
+                    class="shards-input"
+                    v-model="item"
+                    readonly
+                  >
+                    <template slot="prepend">{{ index === 0 ? `插入节点${i + 1}` : `备用节点${i + 1}`}}</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item label="集群名">
+                <el-input v-model="rtuModel.target.cluster" readonly></el-input>
+              </el-form-item>
+              <el-form-item label="选择Database">
+                <el-select filterable v-model="rtuModel.target.selectedDatabase" placeholder="选择表">
+                  <el-option v-for='db in rtuModel.target.databases' :label="db" :value="db"></el-option>
+                </el-select>
+                <el-button @click='rtuListDatabases()' :disabled='rtuModel.target.shards.length==0'>连接</el-button>
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" :disabled='rtuModel.source.selectedTable.length==0 || rtuModel.source.dsn=="" || rtuModel.target.selectedDatabase==""' @click="rtuAdd">添 加</el-button>
+          <el-button @click="rtuDialogVisible = false">取 消</el-button>
+        </span>
+      </el-dialog>
+    </template>
+  </div>
+  <script>
+    app = new Vue({
+      el: '#app',
+      data: {
+        dmList: [],
+        dmDialogVisible: false,
+        dmActiveName: 'dmAddSource',
+        dmString: '',
+        dmDbList: [],
+        dmPage: {
+          page: 1,
+          total: 0
+        },
+        dmModel: {
+          source: {
+            dsn: '',
+            tables: ['one', 'two'],
+            suffix: '',
+            selectedTable: [],
+            createTableSql: [],
+            queryKey: []
+          },
+          target: {
+            shards: [],
+            cluster: 'bip_ck_cluster',
+            databases: [],
+            selectedDatabase: '',
+            queryNode: ''
+          },
+          windowStartHour: '',
+          windowEndHour: ''
+        },
+        connectorString: '',
+        connectorDbList: [],
+        connectorList: [],
+        connectorDialogVisible: false,
+        connectorPage: {
+          page: 1,
+          total: 0
+        },
+        connectorModel: {
+          source: {
+            dsn: '',
+            tables: [],
+            suffix: '',
+            selectedTable: [],
+            createTableSql: [],
+            queryKey: []
+          }
+        },
+        rtuString: '',
+        rtuDbList: [],
+        rtuList: [],
+        rtuDialogVisible: false,
+        rtuActiveName: 'rtuAddSource',
+        rtuPage: {
+          page: 1,
+          total: 0
+        },
+        rtuModel: {
+          source: {
+            dsn: '',
+            tables: ['one', 'two'],
+            suffix: '',
+            selectedTable: [],
+            createTableSql: [],
+            queryKey: []
+          },
+          target: {
+            shards: [],
+            cluster: 'bip_ck_cluster',
+            databases: [],
+            selectedDatabase: '',
+            queryNode: ''
+          }
+        }
+      },
+      methods: {
+        //一键三连
+        doAllAdd() {
+          const { source, target } = app.dmModel
+          const dmModel = {
+            ...app.dmModel,
+            windowStartHour: app.dmModel.windowStartHour.toString(),
+            windowEndHour: app.dmModel.windowEndHour.toString()
+          }
+          apiBlackholeDmAdd(dmModel, function (rp) {
+            apiBlackholeConnectorAdd({ source }, function () {
+              apiBlackholeRtuAdd({ source, target }, function (rp) {
+                mdui.snackbar({
+                  message: '添加成功'
+                })
+                app.dmDialogVisible = false
+                app.dmRefresh()
+                app.connectorRefresh()
+                app.rtuRefresh()
+                app.refresh()
+              }, function (e) {
+                app.showAlert(e)
+              }, function () {
+                localStorage.setItem('rtuModel', JSON.stringify({ source, target }))
+              })
+            }, function (e) {
+              app.showAlert(e)
+            })
+          }, function (e) {
+            app.showAlert(e)
+          }, function () {
+            localStorage.setItem('dmModel', JSON.stringify(app.dmModel))
+          })
+        },
+        loadDmModel: function () {
+          this.dmDialogVisible = true
+          var model = localStorage.getItem('dmModel')
+          if (model) {
+            app.dmModel = JSON.parse(model)
+          }
+          apiBlackholeDefaultConfig(function(rp) {
+            const { shards, cluster, queryNode } = rp
+            app.dmModel.target.shards = shards
+            app.dmModel.target.cluster = cluster
+            app.dmModel.target.queryNode = queryNode
+          }, function (e) {
+            mdui.snackbar({
+              message: e,
+            })
+          })
+        },
+        loadRtuModel: function () {
+          this.rtuDialogVisible = true
+          var model = localStorage.getItem('rtuModel')
+          if (model) {
+            app.rtuModel = JSON.parse(model)
+          }
+          apiBlackholeDefaultConfig(function(rp) {
+            const { shards, cluster, queryNode } = rp
+            app.rtuModel.target.shards = shards
+            app.rtuModel.target.cluster = cluster
+            app.rtuModel.target.queryNode = queryNode
+          }, function (e) {
+            mdui.snackbar({
+              message: e,
+            })
+          })
+        },
+        refresh() {
+          this.getDbList('dm')
+          this.getDbList('connector')
+          this.getDbList('rtu')
+        },
+        getDbList(type) {
+          const params = { string: type }
+          apiBlackholeDatabaseList(params, function (rp) {
+            const stringList = ['all', ...rp.stringList]
+            switch (type) {
+              case 'dm':
+                app.dmDbList = stringList
+                break;
+              case 'connector':
+                app.connectorDbList = stringList
+                break;
+              case 'rtu':
+                app.rtuDbList = stringList
+                break;
+            }
+          }, function (e) {
+            mdui.snackbar({
+              message: e,
+            })
+          })
+        },
+        dmRefresh: function (page) {
+          if (page) {
+            app.dmPage.page = page
+          }
+          const params = { page: page || app.dmPage.page, size: 10, dbName: app.dmString }
+          apiBlackholeDmList(params, function (rp) {
+            app.dmList = rp.dmList
+            app.dmPage = {
+              ...app.dmPage,
+              total: rp.pageAndSize.size
+            }
+          }, function (e) {
+            if (e.indexOf('token expired') > -1) {
+              location.href = 'login.html'
+              return
+            }
+            mdui.snackbar({
+              message: e,
+            })
+          })
+        },
+        rtuRefresh: function (page) {
+          if (page) {
+            app.rtuPage.page = page
+          }
+          const params = { page: page || app.rtuPage.page, size: 10, dbName: app.rtuString }
+          apiBlackholeRtuList(params, function (rp) {
+            app.rtuList = rp.rtuList
+            app.rtuPage = {
+              ...app.rtuPage,
+              total: rp.pageAndSize.size
+            }
+          }, function (e) {
+            mdui.snackbar({
+              message: e,
+            })
+          })
+        },
+        dmAdd: function () {
+          if (app.dmModel.windowStartHour > 23 || app.dmModel.windowEndHour > 23) {
+            mdui.snackbar({
+              message: '窗口期不能超过24时'
+            })
+            return
+          }
+          const dmModel = {
+            ...app.dmModel,
+            windowStartHour: app.dmModel.windowStartHour.toString(),
+            windowEndHour: app.dmModel.windowEndHour.toString()
+          }
+          apiBlackholeDmAdd(dmModel, function (rp) {
+            mdui.snackbar({
+              message: '添加成功'
+            })
+            app.dmRefresh()
+            app.dmDialogVisible = false
+          }, function (e) {
+            if (e.includes("Error 1062")) {
+              app.showAlert("添加失败：任务已存在，请删除后重试")
+            } else {
+              app.showAlert(e)
+            }
+          }, function () {
+            localStorage.setItem('dmModel', JSON.stringify(app.dmModel))
+          })
+        },
+        rtuAdd: function () {
+          apiBlackholeRtuAdd(app.rtuModel, function (rp) {
+            mdui.snackbar({
+              message: '添加成功'
+            })
+            app.dmRefresh()
+            app.connectorRefresh()
+            app.rtuRefresh()
+            app.refresh()
+            app.rtuDialogVisible = false
+          }, function (e) {
+            app.showAlert(e)
+          }, function () {
+            localStorage.setItem('rtuModel', JSON.stringify(app.rtuModel))
+          })
+        },
+        dmListTables: function () {
+          apiBlackholeListTables({
+            string: app.dmModel.source.dsn
+          }, function (rp) {
+            app.dmModel.source.tables = rp.stringList
+            if (rp.stringList.length > 0) {
+              app.dmModel.source.selectedTable.push(rp.stringList[0])
+            }
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        rtuListTables: function () {
+          apiBlackholeListTables({
+            string: app.rtuModel.source.dsn
+          }, function (rp) {
+            app.rtuModel.source.tables = rp.stringList
+            if (rp.stringList.length > 0) {
+              app.rtuModel.source.selectedTable.push(rp.stringList[0])
+            }
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        dmListDatabases: function () {
+          apiBlackholeListDatabases({
+            string: app.dmModel.target.shards[0][0].split(',')[0]
+          }, function (rp) {
+            app.dmModel.target.databases = rp.stringList
+            if (rp.stringList.length > 0) {
+              app.dmModel.target.selectedDatabase = rp.stringList[0]
+            }
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        rtuListDatabases: function () {
+          apiBlackholeListDatabases({
+            string: app.rtuModel.target.shards[0][0].split(',')[0]
+          }, function (rp) {
+            app.rtuModel.target.databases = rp.stringList
+            if (rp.stringList.length > 0) {
+              app.rtuModel.target.selectedDatabase = rp.stringList[0]
+            }
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        generateSql: function () {
+          apiBlackholeGenerateCreateSql({
+            dsn: app.dmModel.source.dsn,
+            table: app.dmModel.source.selectedTable,
+            database: app.dmModel.target.selectedDatabase
+          }, function (rp) {
+            app.dmModel.source.queryKey = rp.queryKey || []
+            app.dmModel.source.createTableSql = rp.sql || []
+            if (rp.failedTables && rp.failedTables.length) {
+              app.dmModel.source.selectedTable = app.dmModel.source.selectedTable.filter(sel => rp.failedTables.findIndex(failed => failed === sel) === -1)
+            }
+            if(rp.failedReasons && rp.failedReasons.length) {
+              app.showAlert(rp.failedReasons[0])
+            }
+            if (rp.info) {
+              app.showAlert(rp.info)
+            }
+          }, function (e) {
+            app.showAlert(e)
+          })
+        },
+        execSql: function () {
+            if (typeof(app.dmModel.source.createTableSql) === "string") {
+                app.dmModel.source.createTableSql = [app.dmModel.source.createTableSql]
+            }
+          apiBlackholeExecSql({
+            sql: app.dmModel.source.createTableSql
+          }, function (rp) {
+            mdui.snackbar({
+              message: '执行成功'
+            })
+          }, function (e) {
+            app.showAlert(e)
+          })
+        },
+        doDmStop: function (i) {
+          apiBlackholeDmStop({
+            string: new String(i)
+          }, function () {
+            mdui.snackbar({
+              message: '停止指令已发送'
+            })
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        doDmDelete: function (i) {
+          apiBlackholeDmDelete({
+            string: new String(i)
+          }, function () {
+            mdui.snackbar({
+              message: '删除成功!'
+            })
+            app.dmRefresh()
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        doDmRedo: function (i) {
+          apiBlackholeDmRedo({
+            string: new String(i)
+          }, function () {
+            mdui.snackbar({
+              message: '重放成功'
+            })
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        doRtuStop: function (i) {
+          apiBlackholeRtuStop({
+            string: new String(i)
+          }, function () {
+            mdui.snackbar({
+              message: '停止指令已发送',
+            })
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        doRtuDelete: function (i) {
+          apiBlackholeRtuDelete({
+            string: new String(i)
+          }, function () {
+            mdui.snackbar({
+              message: '删除成功'
+            })
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        doRtuRedo: function (i) {
+          apiBlackholeRtuRedo({
+            string: new String(i)
+          }, function () {
+            mdui.snackbar({
+              message: '重放成功'
+            })
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        connectorRefresh: function (page) {
+          if (page) {
+            app.connectorPage.page = page
+          }
+          const params = { page: page || app.connectorPage.page, size: 10, dbName: app.connectorString }
+          apiBlackholeConnectorList(params, function (rp) {
+            app.connectorList = rp.connectorList
+            app.connectorPage = {
+              ...app.connectorPage,
+              total: rp.pageAndSize.size
+            }
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        connectorAdd: function () {
+          apiBlackholeConnectorAdd(app.connectorModel, function () {
+            mdui.snackbar({
+              message: '添加成功',
+            })
+            app.dmRefresh()
+            app.connectorRefresh()
+            app.rtuRefresh()
+            app.refresh()
+            app.connectorDialogVisible = false
+          }, function (e) {
+            app.showAlert(e)
+          })
+        },
+        connectorDelete: function (connector) {
+          const { sourceId, sourceType } = connector
+          apiBlackholeConnectorDelete({
+            sourceId,
+            type: sourceType
+          }, function () {
+            mdui.snackbar({
+              message: '删除成功'
+            })
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        connectorListTables: function () {
+          apiBlackholeListTables({
+            string: app.connectorModel.source.dsn
+          }, function (rp) {
+            app.connectorModel.source.tables = rp.stringList
+            if (rp.stringList.length > 0) {
+              app.connectorModel.source.selectedTable.push(rp.stringList[0])
+            }
+          }, function (e) {
+            mdui.snackbar({
+              message: e
+            })
+          })
+        },
+        showAlert(content) {
+          app.$alert(content, {confirmButtonText: '确定'})
+        }
+      }
+    })
+
+    // app.getDbList('dm')
+    // app.getDbList('connector')
+    // app.getDbList('rtu')
+    app.refresh()
+  </script>
+</body>
+
+</html>

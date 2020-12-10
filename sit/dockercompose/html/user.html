@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="res/js/api.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/mdui/0.4.3/css/mdui.min.css">
+    <script src="https//cdnjs.loli.net/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>User</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="mdui-appbar">
+            <div class="mdui-toolbar mdui-color-theme">
+                <a href="#" class="mdui-btn mdui-btn-icon mdui-ripple"><i
+                        class="mdui-icon material-icons">home</i></a>
+                <span class="mdui-typo-title">个人信息</span>
+                <div class="mdui-toolbar-spacer"></div>
+                <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i
+                        class="mdui-icon material-icons">more_vert</i></a>
+            </div>
+        </div>
+        <div class="content" style="padding: 15px;">
+            <h3> {{user.name}}</h3>
+            <h4>{{user.email}}</h4>
+        </div>
+    </div>
+    <script>
+        app = new Vue({
+            el: '#app',
+            data: {
+                user: {
+                    name: 'username',
+                    groupId: 0,
+                    email: 'asd@a.com'
+                }
+            },
+            methods: {
+                doUserGet: function () {
+                    apiUserGet(function (rp) {
+                        app.user = rp
+                    }, function (e) {
+                        mdui.snackbar({
+                            methods: e
+                        })
+                    })
+                }
+            }
+        })
+        app.doUserGet()
+    </script>
+</body>
+
+</html>

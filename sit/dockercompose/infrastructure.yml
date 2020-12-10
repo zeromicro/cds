@@ -1,0 +1,211 @@
+version: '3.5'
+# networks:
+#    bridge:
+#         external: true
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/init/init.sql:/docker-entrypoint-initdb.d/test.sql
+      - ./mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+    restart: always
+    environment:
+       MYSQL_ROOT_PASSWORD: root
+    # networks:
+    #   - bridge
+    healthcheck:
+      test: ["CMD", "mysql" ,"-h", "mysql", "-P", "3306", "-u", "root", "-proot" , "-e", "SELECT 1"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  etcd:
+    image: bitnami/etcd:3.4.13
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    healthcheck:
+      test: ["CMD", "etcdctl", "member", "list", '--endpoints="localhost:2379"']
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+  zookeeper:
+    image: zookeeper:3.5
+    ports:
+      - 2181:2181
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  ch-server-1:
+      image: yandex/clickhouse-server
+      volumes:
+        - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
+        - ./clickhouse/macros1.xml:/etc/clickhouse-server/config.d/macros.xml
+      ports:
+        - 8123:8123
+        - 9000:9000
+      environment:
+        TZ: "Asia/Shanghai"
+      depends_on:
+        mysql:
+          condition: service_healthy
+        redis:
+          condition: service_healthy
+        etcd:
+          condition: service_healthy
+        zookeeper:
+          condition: service_healthy
+  ch-server-2:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./clickhouse/macros2.xml:/etc/clickhouse-server/config.d/macros.xml
+    ports:
+      - 8124:8123
+      - 9001:9000
+    environment:
+      TZ: "Asia/Shanghai"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      etcd:
+        condition: service_healthy
+      zookeeper:
+        condition: service_healthy
+  ch-server-3:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./clickhouse/macros3.xml:/etc/clickhouse-server/config.d/macros.xml
+    ports:
+      - 8125:8123
+      - 9002:9000
+    environment:
+      TZ: "Asia/Shanghai"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      etcd:
+        condition: service_healthy
+      zookeeper:
+        condition: service_healthy
+  ch-server-4:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
+      - ./clickhouse/macros4.xml:/etc/clickhouse-server/config.d/macros.xml
+    ports:
+      - 8126:8123
+      - 9003:9000
+    environment:
+      TZ: "Asia/Shanghai"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      etcd:
+        condition: service_healthy
+      zookeeper:
+        condition: service_healthy
+  mongo:
+    image: zadki3l/mongodb-oplog
+    ports:
+    - 27017:27017
+    healthcheck:
+      test: ["CMD", "mongo"]
+      interval: 10s
+      timeout: 5s
+  kafka:
+    image: ches/kafka
+    restart: always
+    ports:
+      - 9092:9092
+    environment:
+      - ZOOKEEPER_IP=zookeeper
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "9092" ]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  kafka-connector:
+    image: liliankasem/kafka-connect:1.1.0
+    hostname: connect
+    container_name: connect
+    restart: always
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_PLUGIN_PATH: /usr/share/java
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "kafka-connector", "8083" ]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - ./mongo-kafka-1.2.0-all.jar:/usr/share/java/mongo-kafka-1.2.0-all.jar
+    depends_on:
+      kafka:
+        condition: service_healthy
+  canal-server:
+    image: canal/canal-server
+    restart: always
+    environment:
+      canal.admin.user: admin
+      canal.admin.port: 11110
+      canal.admin.passwd: 4ACFE3202A5FF5CF467898FC58AAB1D615029441
+      canal.admin.manager: canal-admin:8089
+  canal-admin:
+    image: canal/canal-admin
+    ports:
+      - 8089:8089
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://canal-admin:8089" ]
+      interval: 30s
+      timeout: 15s
+      retries: 30
+    restart: always    
+    depends_on: 
+      - canal-server
+    volumes:
+      - ./canal_admin_conf/canal-template.properties:/home/admin/canal-admin/conf/canal-template.properties
+

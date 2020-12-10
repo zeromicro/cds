@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="res/js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.loli.net/ajax/libs/mdui/0.4.3/css/mdui.min.css"
+    />
+    <script src="https://cdnjs.loli.net/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/theme-chalk/index.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.min.js"></script>
+    <title>用户管理</title>
+  </head>
+
+  <body>
+    <style>
+      .mdui-appbar {
+        color: #fff;
+        background-color: #1a73e8;
+      }
+      .container {
+        padding: 20px 15px;
+      }
+      .el-tabs {
+        margin-top: 20px;
+      }
+      .el-pagination {
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+    <div id="app">
+      <template>
+        <div class="mdui-appbar">
+          <div class="mdui-toolbar mdui-color-theme">
+            <span class="mdui-typo-title">用户管理</span>
+            <div class="mdui-toolbar-spacer"></div>
+          </div>
+        </div>
+        <div class="container">
+          <el-button size="small" type="primary" @click="chUserAdd"
+            >添加Ch用户</el-button
+          >
+          <el-button size="small" type="primary" @click="chProxyUserAdd"
+            >添加ChProxy用户</el-button
+          >
+          <el-tabs v-model="activeName" type="card">
+            <el-tab-pane label="Ch用户列表" name="chUser">
+              <el-table
+                size="mini"
+                :data="chUserList"
+                tooltip-effect="light"
+                stripe
+                border
+              >
+                <el-table-column
+                  label="姓名"
+                  prop="name"
+                  align="center"
+                ></el-table-column>
+                <el-table-column
+                  label="权限"
+                  prop="profile"
+                  align="center"
+                ></el-table-column>
+                <el-table-column label="数据库权限" align="center">
+                  <template slot-scope="scope">
+                    {{ scope.row.databases ? scope.row.databases.join(',') :
+                    'All' }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center">
+                  <template slot-scope="scope">
+                    <el-button type="text" @click="chUserEdit(scope.row)"
+                      >修改</el-button
+                    >
+                    <el-button type="text" @click="chUserDelete(scope.row)"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-pagination
+                @current-change="getChUserList"
+                :current-page.sync="chPage.page"
+                :page-size="10"
+                layout="prev, pager, next"
+                :total="chPage.total"
+              >
+              </el-pagination>
+            </el-tab-pane>
+            <el-tab-pane label="ChProxy用户列表" name="chProxyUser">
+              <el-table
+                size="mini"
+                :data="chProxyUserList"
+                tooltip-effect="light"
+                stripe
+                border
+              >
+                <el-table-column
+                  label="姓名"
+                  prop="name"
+                  align="center"
+                ></el-table-column>
+                <el-table-column
+                  label="关联Ch用户"
+                  prop="toChUser"
+                  align="center"
+                ></el-table-column>
+                <el-table-column
+                  label="集群"
+                  prop="toCluster"
+                  align="center"
+                ></el-table-column>
+                <el-table-column
+                  label="最大执行时间"
+                  prop="maxExecutionTime"
+                  align="center"
+                ></el-table-column>
+                <el-table-column label="操作" align="center">
+                  <template slot-scope="scope">
+                    <el-button type="text" @click="chProxyUserEdit(scope.row)"
+                      >修改</el-button
+                    >
+                    <el-button type="text" @click="chProxyUserDelete(scope.row)"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-pagination
+                @current-change="getChProxyUserList"
+                :current-page.sync="chProxyPage.page"
+                :page-size="10"
+                layout="prev, pager, next"
+                :total="chProxyPage.total"
+              >
+              </el-pagination>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <el-dialog
+          :title="isChEdit ? '编辑Ch用户' : '添加Ch用户'"
+          :close-on-click-modal="false"
+          :visible.sync="addChDialogVisible"
+          width="40%"
+        >
+          <el-form label-width="80px" label-position="left">
+            <el-form-item label="姓名">
+              <el-input
+                v-model="chUserInfo.name"
+                :readonly="isChEdit"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+              <el-input v-model="chUserInfo.password"></el-input>
+            </el-form-item>
+            <el-form-item label="权限">
+              <el-select
+                v-model="chUserInfo.profile"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in profileList"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="databases">
+              <el-select
+                v-model="chUserInfo.databases"
+                multiple
+                filterable
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in databaseList"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button
+              type="primary"
+              :disabled="!chUserInfo.name || (!isChEdit && !chUserInfo.password)"
+              @click="addChUser"
+              >{{isChEdit ? '修 改' : '添 加'}}</el-button
+            >
+            <el-button @click="addChDialogVisible = false">取 消</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog
+          :title="isChProxyEdit ? '编辑ChProxy用户' : '添加ChProxy用户'"
+          :close-on-click-modal="false"
+          :visible.sync="addChProxyDialogVisible"
+          width="40%"
+        >
+          <el-form label-width="100px" label-position="left">
+            <el-form-item label="姓名">
+              <el-input
+                v-model="chProxyUserInfo.name"
+                :readonly="isChProxyEdit"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+              <el-input v-model="chProxyUserInfo.password"></el-input>
+            </el-form-item>
+            <el-form-item label="最大执行时间">
+              <el-input v-model="chProxyUserInfo.maxExecutionTime"></el-input>
+            </el-form-item>
+            <el-form-item label="关联用户">
+              <el-select
+                v-model="chProxyUserInfo.toChUser"
+                filterable
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in allUserList"
+                  :key="item.name"
+                  :label="item.name"
+                  :value="item.name"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="toCluster">
+              <el-select
+                v-model="chProxyUserInfo.toCluster"
+                filterable
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in clusterList"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button
+              type="primary"
+              :disabled="!chProxyUserInfo.name || !chProxyUserInfo.toChUser || !chProxyUserInfo.toCluster"
+              @click="addChProxyUser"
+              >{{isChProxyEdit ? '修 改' : '添 加'}}</el-button
+            >
+            <el-button @click="addChProxyDialogVisible = false"
+              >取 消</el-button
+            >
+          </span>
+        </el-dialog>
+      </template>
+    </div>
+    <script>
+      app = new Vue({
+        el: "#app",
+        data() {
+          return {
+            activeName: "chUser",
+            databaseList: [],
+            allUserList: [],
+            chUserList: [],
+            clusterList: [],
+            profileList: ['api', 'default', 'readonly'],
+            chPage: {
+              page: 1,
+              total: 0,
+            },
+            addChDialogVisible: false,
+            isChEdit: false,
+            chUserInfo: {},
+            chProxyUserList: [],
+            chProxyPage: {
+              page: 1,
+              total: 0,
+            },
+            addChProxyDialogVisible: false,
+            isChProxyEdit: false,
+            chProxyUserInfo: {},
+          };
+        },
+        methods: {
+          getChUserList() {
+            const { page } = app.chPage;
+            const listObj = {
+              page,
+              size: 10,
+            };
+            apiChUserList(
+              listObj,
+              function (rp) {
+                const { userList, totalCount } = rp;
+                app.chUserList = userList;
+                app.chPage = {
+                  page,
+                  total: totalCount,
+                };
+              },
+              function (e) {
+                mdui.snackbar({
+                  methods: e,
+                });
+              }
+            );
+          },
+          chUserAdd() {
+            app.getDatabaseList();
+            app.addChDialogVisible = true;
+            app.isChEdit = false;
+            app.chUserInfo = {
+              name: "",
+              password: "",
+              profile: "",
+              databases: [],
+            };
+          },
+          chUserEdit(chUserInfo) {
+            app.getDatabaseList();
+            app.addChDialogVisible = true;
+            app.isChEdit = true;
+            app.chUserInfo = {
+              name: chUserInfo.name,
+              password: "",
+              profile: chUserInfo.profile,
+              databases: chUserInfo.databases || [],
+            };
+          },
+          addChUser() {
+            const listObj = JSON.parse(JSON.stringify(app.chUserInfo));
+            !listObj.password && delete listObj.password;
+            if (app.isChEdit) {
+              apiChUserEdit(
+                listObj,
+                function (rp) {
+                  app.$message({
+                    type: "success",
+                    message: "修改成功!",
+                  });
+                  app.addChDialogVisible = false;
+                  app.getChUserList();
+                },
+                function (e) {
+                  mdui.snackbar({
+                    methods: e,
+                  });
+                }
+              );
+            } else {
+              apiChUserAdd(
+                listObj,
+                function (rp) {
+                  app.$message({
+                    type: "success",
+                    message: "添加成功!",
+                  });
+                  app.addChDialogVisible = false;
+                  app.chPage.page = 1;
+                  app.getChUserList();
+                },
+                function (e) {
+                  mdui.snackbar({
+                    methods: e,
+                  });
+                }
+              );
+            }
+          },
+          chUserDelete(chUserInfo) {
+            const { name } = chUserInfo;
+            const listObj = { name };
+            app
+              .$confirm(`是否要删除用户${name}`, "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+              })
+              .then(() => {
+                apiChUserDelete(
+                  listObj,
+                  function (rp) {
+                    app.$message({
+                      type: "success",
+                      message: "删除成功!",
+                    });
+                    app.getChUserList();
+                  },
+                  function (e) {
+                    mdui.snackbar({
+                      methods: e,
+                    });
+                  }
+                );
+              })
+              .catch(() => {
+                app.$message({
+                  type: "info",
+                  message: "已取消删除",
+                });
+              });
+          },
+          getChProxyUserList() {
+            const { page } = app.chProxyPage;
+            const listObj = {
+              page,
+              size: 10,
+            };
+            apiChProxyUserList(
+              listObj,
+              function (rp) {
+                const { userList, totalCount } = rp;
+                app.chProxyUserList = userList;
+                app.chProxyPage = {
+                  page,
+                  total: totalCount,
+                };
+              },
+              function (e) {
+                mdui.snackbar({
+                  methods: e,
+                });
+              }
+            );
+          },
+          chProxyUserAdd() {
+            app.getAllUser();
+            app.getClusterList();
+            app.addChProxyDialogVisible = true;
+            app.isChProxyEdit = false;
+            app.chProxyUserInfo = {
+              name: "",
+              password: "",
+              toCluster: "",
+              toChUser: "",
+              maxExecutionTime: "",
+            };
+          },
+          chProxyUserEdit(chProxyUserInfo) {
+            app.getAllUser();
+            app.getClusterList();
+            app.addChProxyDialogVisible = true;
+            app.isChProxyEdit = true;
+            app.chProxyUserInfo = {
+              name: chProxyUserInfo.name,
+              password: "",
+              toCluster: chProxyUserInfo.toCluster,
+              toChUser: chProxyUserInfo.toChUser,
+              maxExecutionTime: chProxyUserInfo.max_execution_time,
+            };
+          },
+          addChProxyUser() {
+            const listObj = JSON.parse(JSON.stringify(app.chProxyUserInfo));
+            !listObj.password && delete listObj.password;
+            if (app.isChProxyEdit) {
+              apiChProxyUserEdit(
+                listObj,
+                function (rp) {
+                  app.$message({
+                    type: "success",
+                    message: "修改成功!",
+                  });
+                  app.addChProxyDialogVisible = false;
+                  app.getChProxyUserList();
+                },
+                function (e) {
+                  mdui.snackbar({
+                    methods: e,
+                  });
+                }
+              );
+            } else {
+              apiChProxyUserAdd(
+                listObj,
+                function (rp) {
+                  app.$message({
+                    type: "success",
+                    message: "添加成功!",
+                  });
+                  app.addChProxyDialogVisible = false;
+                  app.chProxyPage.page = 1;
+                  app.getChProxyUserList();
+                },
+                function (e) {
+                  mdui.snackbar({
+                    methods: e,
+                  });
+                }
+              );
+            }
+          },
+          chProxyUserDelete(chProxyUserInfo) {
+            const { name } = chProxyUserInfo;
+            const listObj = { name };
+            app
+              .$confirm(`是否要删除用户${name}`, "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+              })
+              .then(() => {
+                apiChProxyUserDelete(
+                  listObj,
+                  function (rp) {
+                    app.$message({
+                      type: "success",
+                      message: "删除成功!",
+                    });
+                    app.getChProxyUserList();
+                  },
+                  function (e) {
+                    mdui.snackbar({
+                      methods: e,
+                    });
+                  }
+                );
+              })
+              .catch(() => {
+                app.$message({
+                  type: "info",
+                  message: "已取消删除",
+                });
+              });
+          },
+          // 获取databases
+          getDatabaseList() {
+            const listObj = {
+              page: 1,
+              size: 100,
+            };
+            apiChDatabaseList(
+              listObj,
+              function (rp) {
+                app.databaseList = rp.databases;
+              },
+              function (e) {
+                mdui.snackbar({
+                  methods: e,
+                });
+              }
+            );
+          },
+          // 获取所有chUser
+          getAllUser() {
+            const listObj = {
+              page: 1,
+              size: 1000,
+            };
+            apiChUserList(
+              listObj,
+              function (rp) {
+                app.allUserList = rp.userList;
+              },
+              function (e) {
+                mdui.snackbar({
+                  methods: e,
+                });
+              }
+            );
+          },
+          getClusterList() {
+            apChClusterList(
+              {},
+              function (rp) {
+                app.clusterList = rp.clusters;
+              },
+              function (e) {
+                mdui.snackbar({
+                  methods: e,
+                });
+              }
+            );
+          },
+        },
+      });
+      app.getChUserList();
+      app.getChProxyUserList();
+    </script>
+  </body>
+</html>
