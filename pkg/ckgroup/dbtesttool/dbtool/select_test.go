@@ -32,7 +32,9 @@ func TestDBTestTool_SelectMySQL(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	DumpSelectInfo(result)
+	if !dbtool.DumpSelectInfo(result) {
+		t.Error("data not same !")
+	}
 }
 
 func TestDBTestTool_SelectCK(t *testing.T) {
@@ -60,5 +62,7 @@ func TestDBTestTool_SelectCK(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	DumpSelectInfo(result)
+	if !dbtool.DumpSelectInfo(result) {
+		t.Error("data not same !")
+	}
 }

@@ -45,7 +45,7 @@ func (g *dbGroup) InsertAuto(query string, hashTag string, sliceData interface{}
 		} else {
 			findTagVal = interVal
 		}
-		hashVal, err := findFieldValueByTag(findTagVal, DbTag, hashTag)
+		hashVal, err := findFieldValueByTagCache(findTagVal, DbTag, hashTag)
 		if err != nil {
 			return err
 		}

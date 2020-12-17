@@ -196,7 +196,7 @@ func saveData(db *sql.DB, insertSql string, values []rowValue) error {
 func generateRowValue(val reflect.Value, tags []string) (rowValue, error) {
 	args := make(rowValue, 0, len(tags))
 	for _, tagVal := range tags {
-		fieldVal, err := findFieldValueByTag(val, DbTag, tagVal)
+		fieldVal, err := findFieldValueByTagCache(val, DbTag, tagVal)
 		if err != nil {
 			return args, err
 		}

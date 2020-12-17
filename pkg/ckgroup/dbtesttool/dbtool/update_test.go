@@ -31,7 +31,9 @@ func TestDBTestTool_UpdateMySQL(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	DumpSelectInfo(statMap)
+	if !dbtool.DumpSelectInfo(statMap) {
+		t.Error("data not same !")
+	}
 }
 
 func TestDBTestTool_UpdateCK(t *testing.T) {
@@ -58,7 +60,9 @@ func TestDBTestTool_UpdateCK(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	DumpSelectInfo(statMap)
+	if !dbtool.DumpSelectInfo(statMap) {
+		t.Error("data not same !")
+	}
 }
 
 func TestDBTestTool_UpdateBenchmark(t *testing.T) {

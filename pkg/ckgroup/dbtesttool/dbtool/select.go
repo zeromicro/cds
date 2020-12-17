@@ -131,12 +131,12 @@ func CompareDataSet(base []*DataInstance, current []*DataInstance, showSummary b
 		}
 	}
 	if showSummary {
-		DumpSelectInfo(statMap)
+		_ = DumpSelectInfo(statMap)
 	}
 	return isSame
 }
 
-func DumpSelectInfo(selectResult map[int64]int) {
+func DumpSelectInfo(selectResult map[int64]int) bool {
 	sameDataCount := 0
 	notSameDataCount := 0
 	lostDataCount := 0
@@ -156,4 +156,5 @@ func DumpSelectInfo(selectResult map[int64]int) {
 	fmt.Println("right: ", sameDataCount)
 	fmt.Println("wrong: ", notSameDataCount)
 	fmt.Println("lost:  ", lostDataCount)
+	return total == sameDataCount
 }

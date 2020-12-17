@@ -31,5 +31,7 @@ func Test_dbGroup_InsertAuto(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	dbtool.DumpSelectInfo(statMap)
+	if !dbtool.DumpSelectInfo(statMap) {
+		t.Error("data not same !")
+	}
 }
