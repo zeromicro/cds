@@ -73,6 +73,18 @@ func findFieldIndexByTag(t reflect.Type, tag, tagValue string) (int, error) {
 func findFieldValueByTagCache(value reflect.Value, tag, tagValue string) (reflect.Value, error) {
 	t := value.Type()
 	tagMap, ok := indexCache[t]
+
+	commonFunc := func(innerMap map[string]int) (reflect.Value, error) {
+		index, err := findFieldIndexByTag(t, tag, tagValue)
+		if err == nil {
+			innerMap[tag+tagValue] = index
+			return value.Field(index), nil
+		} else {
+			innerMap[tag+tagValue] = -1
+			return reflect.Value{}, err
+		}
+	}
+
 	if ok {
 		fieldIndex, b := tagMap[tag+tagValue]
 		if b {
@@ -82,27 +94,13 @@ func findFieldValueByTagCache(value reflect.Value, tag, tagValue string) (reflec
 				return value.Field(fieldIndex), nil
 			}
 		} else {
-			index, err := findFieldIndexByTag(t, tag, tagValue)
-			if err == nil {
-				tagMap[tag+tagValue] = index
-				return value.Field(index), nil
-			} else {
-				tagMap[tag+tagValue] = -1
-				return reflect.Value{}, err
-			}
+			return commonFunc(tagMap)
 		}
 	} else {
 		tagMap = map[string]int{}
 		indexCache[t] = tagMap
 
-		index, err := findFieldIndexByTag(t, tag, tagValue)
-		if err == nil {
-			tagMap[tag+tagValue] = index
-			return value.Field(index), nil
-		} else {
-			tagMap[tag+tagValue] = -1
-			return reflect.Value{}, err
-		}
+		return commonFunc(tagMap)
 	}
 }
 
