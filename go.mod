@@ -2,11 +2,9 @@ module github.com/tal-tech/cds
 
 go 1.14
 
-replace github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.5
 
 require (
 	github.com/ClickHouse/clickhouse-go v1.4.3
-	github.com/DataDog/zstd v1.4.5
 	github.com/coreos/bbolt v1.3.2 // indirect
 	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/coreos/go-semver v0.3.0 // indirect
