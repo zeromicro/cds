@@ -7,11 +7,7 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/DataDog/zstd" // uncompress
 	"github.com/segmentio/kafka-go"
-	_ "github.com/segmentio/kafka-go/gzip" // uncompress
-	_ "github.com/segmentio/kafka-go/lz4"
-	_ "github.com/segmentio/kafka-go/snappy"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 
