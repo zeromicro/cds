@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func execSqlHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func ExecSqlHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		l := logic2.NewExecSqlLogic(r.Context(), ctx)

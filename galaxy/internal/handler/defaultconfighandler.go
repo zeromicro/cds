@@ -7,7 +7,7 @@ import (
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 )
 
-func defaultConfigHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func DefaultConfigHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewDefaultConfigLogic(r.Context(), ctx)
 		resp := l.DefaultConfig()

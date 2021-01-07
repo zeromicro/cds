@@ -73,7 +73,7 @@ type (
 		CreateTableSql []string `json:"createTableSql"`
 		QueryKey       []string `json:"queryKey"`
 	}
-
+	
 	DeleteConnectorRequest struct {
 		Type     string `json:"type"`
 		SourceId string `json:"sourceId"`
@@ -183,7 +183,7 @@ service galaxy-api {
 		folder: user
 	)
 	post /galaxy/user/login(UserLoginRequest) returns(TokenResponse)
-
+	
 	@doc(
 		summary: user-add
 	)
@@ -192,7 +192,7 @@ service galaxy-api {
 		folder: user
 	)
 	post /galaxy/user/add(UserAddRequest)
-
+	
 	@doc(
 		summary: user-get
 	)
@@ -201,7 +201,7 @@ service galaxy-api {
 		folder: user
 	)
 	get /galaxy/user/get() returns(UserGetResponse)
-
+	
 	@doc(
 		summary: dm-list
 	)
@@ -210,7 +210,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/dm-list() returns(DmListResponse)
-
+	
 	@doc(
 		summary: dm-add
 	)
@@ -219,7 +219,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/dm-add(DmModel) returns(DmModel)
-
+	
 	@doc(
 		summary: list-tables
 	)
@@ -228,7 +228,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/list-tables(String) returns(StringList)
-
+	
 	@doc(
 		summary: list-databases
 	)
@@ -237,7 +237,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/list-databases(String) returns(StringList)
-
+	
 	@doc(
 		summary: list-databases
 	)
@@ -246,7 +246,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/database-list(String) returns(StringList)
-
+	
 	@doc(
 		summary: config-default
 	)
@@ -255,7 +255,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	get /galaxy/html/default-config() returns(DefaultConfigResponse)
-
+	
 	@doc(
 		summary: generate-create-sql
 	)
@@ -264,7 +264,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/generate-create-sql(GenerateCreateSqlRequest) returns(GenerateCreateSqlResponse)
-
+	
 	@doc(
 		summary: exec-sql
 	)
@@ -273,7 +273,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/exec-sql(ExecSqlRequest)
-
+	
 	@doc(
 		summary: dm-stop
 	)
@@ -282,7 +282,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/dm-stop(String)
-
+	
 	@doc(
 		summary: dm-delete
 	)
@@ -291,7 +291,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/dm-delete(String)
-
+	
 	@doc(
 		summary: dm-redo
 	)
@@ -300,7 +300,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/dm-redo(String)
-
+	
 	@doc(
 		summary: rtu-list
 	)
@@ -309,7 +309,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/rtu-list() returns(RtuList)
-
+	
 	@doc(
 		summary: rtu-add
 	)
@@ -318,7 +318,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/rtu-add(RtuModel) returns(RtuModel)
-
+	
 	@doc(
 		summary: rtu-stop
 	)
@@ -327,7 +327,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/rtu-stop(String)
-
+	
 	@doc(
 		summary: rtu-delete
 	)
@@ -336,7 +336,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/rtu-delete(String)
-
+	
 	@doc(
 		summary: rtu-redo
 	)
@@ -345,7 +345,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/rtu-redo(String)
-
+	
 	@doc(
 		summary: connector-list
 	)
@@ -354,7 +354,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/connector-list() returns(StringList)
-
+	
 	@doc(
 		summary: connector-add
 	)
@@ -363,7 +363,7 @@ service galaxy-api {
 		folder:blackhole
 	)
 	post /galaxy/html/connector-add(ConnectorModel)
-
+	
 	@doc(
 		summary: connector-delete
 	)
@@ -373,4 +373,3 @@ service galaxy-api {
 	)
 	post /galaxy/html/connector-delete(String)
 }
-
