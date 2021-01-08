@@ -1,4 +1,4 @@
-package mod
+package wrap
 
 import (
 	"flag"
@@ -12,7 +12,7 @@ import (
 
 var configFile = flag.String("f", "etc/galaxy-api.yaml", "the config file")
 
-func Mod() {
+func Wrap() {
 	flag.Parse()
 
 	var c config.Config
