@@ -10,5 +10,5 @@ echo "start build dm"
 go build -o /cds/docker/build/dm dm/cmd/sync/dm.go
 echo "end build dm"
 echo "start build galaxy"
-go build -o /cds/docker/build/galaxy galaxy/cmd/api/galaxy.go
+go build -o /cds/docker/build/galaxy galaxy/galaxy.go
 echo "end build galaxy"

@@ -7,7 +7,7 @@ info(
 type (
 	// user-login
 	UserLoginRequest struct {
-		email    string `json:"email"`
+		email string `json:"email"`
 		password string `json:"password"`
 	}
 	TokenResponse struct {
@@ -15,16 +15,16 @@ type (
 	}
 	// user-add
 	UserAddRequest struct {
-		Name     string `json:"name"`
-		Email    string `json:"email"`
+		Name string `json:"name"`
+		Email string `json:"email"`
 		Password string `json:"password"`
-		GroupID  int    `json:"groupID"`
+		GroupID int `json:"groupID"`
 	}
 	// user-get
 	UserGetResponse struct {
-		Name    string `json:"name"`
-		GroupId int    `json:"groupId"`
-		Email   string `json:"email"`
+		Name string `json:"name"`
+		GroupId int `json:"groupId"`
+		Email string `json:"email"`
 	}
 	// instances-list
 	InstancesRequest struct {
@@ -36,57 +36,57 @@ type (
 type (
 	// dm-list
 	Dm struct {
-		ID              int        `json:"id"`
-		Name            string     `json:"name"`
-		SourceType      string     `json:"sourceType"`
-		SourceDsn       string     `json:"sourceDsn"`
-		SourceTable     string     `json:"sourceTable"`
-		SourceDb        string     `json:"sourceDb"`
-		SourceQueryKey  string     `json:"sourceQueryKey"`
-		TargetType      string     `json:"targetType"`
-		TargetShards    [][]string `json:"targetShards"`
-		TargetDB        string     `json:"targetDB"`
-		TargetChProxy   string     `json:"targetChProxy"`
-		TargetTable     string     `json:"targetTable"`
-		WindowStartHour int        `json:"windowStartHour"`
-		WindowEndHour   int        `json:"windowEndHour"`
-		Status          string     `json:"status"`
-		Information     string     `json:"information"`
-		CreateTime      string     `json:"createTime"`
-		UpdateTime      string     `json:"updateTime"`
+		ID int `json:"id"`
+		Name string `json:"name"`
+		SourceType string `json:"sourceType"`
+		SourceDsn string `json:"sourceDsn"`
+		SourceTable string `json:"sourceTable"`
+		SourceDb string `json:"sourceDb"`
+		SourceQueryKey string `json:"sourceQueryKey"`
+		TargetType string `json:"targetType"`
+		TargetShards [][]string `json:"targetShards"`
+		TargetDB string `json:"targetDB"`
+		TargetChProxy string `json:"targetChProxy"`
+		TargetTable string `json:"targetTable"`
+		WindowStartHour int `json:"windowStartHour"`
+		WindowEndHour int `json:"windowEndHour"`
+		Status string `json:"status"`
+		Information string `json:"information"`
+		CreateTime string `json:"createTime"`
+		UpdateTime string `json:"updateTime"`
 	}
 	DmListResponse struct {
-		DmList      []Dm        `json:"dmList"`
+		DmList []Dm `json:"dmList"`
 		PageAndSize PageAndSize `json:"pageAndSize"`
 	}
 	DefaultConfigResponse struct {
-		QueryNode string     `json:"queryNode"`
-		Shards    [][]string `json:"shards"`
-		Cluster   string     `json:"cluster"`
+		QueryNode string `json:"queryNode"`
+		Shards [][]string `json:"shards"`
+		Cluster string `json:"cluster"`
 	}
 	// dm-add
 	Source struct {
-		Dsn            string   `json:"dsn"`
-		Tables         []string `json:"tables"`
-		Suffix         string   `json:"suffix"`
-		SelectedTable  []string `json:"selectedTable"`
+		Dsn string `json:"dsn"`
+		Tables []string `json:"tables"`
+		Suffix string `json:"suffix"`
+		SelectedTable []string `json:"selectedTable"`
 		CreateTableSql []string `json:"createTableSql"`
-		QueryKey       []string `json:"queryKey"`
+		QueryKey []string `json:"queryKey"`
 	}
 	
 	DeleteConnectorRequest struct {
-		Type     string `json:"type"`
+		Type string `json:"type"`
 		SourceId string `json:"sourceId"`
 	}
 	Target struct {
-		Databases        []string `json:"databases"`
-		SelectedDatabase string   `json:"selectedDatabase"`
+		Databases []string `json:"databases"`
+		SelectedDatabase string `json:"selectedDatabase"`
 	}
 	DmModel struct {
-		Source          Source `json:"source"`
-		Target          Target `json:"target"`
+		Source Source `json:"source"`
+		Target Target `json:"target"`
 		WindowStartHour string `json:"windowStartHour"`
-		WindowEndHour   string `json:"windowEndHour"`
+		WindowEndHour string `json:"windowEndHour"`
 	}
 	PageAndSize struct {
 		Page int `json:"page"`
@@ -105,14 +105,14 @@ type (
 	}
 	// generate-create-sql
 	GenerateCreateSqlRequest struct {
-		Dsn      string   `json:"dsn"`
-		Table    []string `json:"table"`
-		Database string   `json:"database"`
+		Dsn string `json:"dsn"`
+		Table []string `json:"table"`
+		Database string `json:"database"`
 	}
 	GenerateCreateSqlResponse struct {
-		Sql           []string `json:"sql"`
-		QueryKey      []string `json:"queryKey"`
-		FailedTables  []string `json:"failedTables"`
+		Sql []string `json:"sql"`
+		QueryKey []string `json:"queryKey"`
+		FailedTables []string `json:"failedTables"`
 		FailedReasons []string `json:"failedReasons"`
 	}
 	// exec-sql
@@ -121,26 +121,26 @@ type (
 	}
 	// rtu-list
 	Rtu struct {
-		ID             int        `json:"id"`
-		Name           string     `json:"name"`
-		SourceType     string     `json:"sourceType"`
-		SourceTopic    string     `json:"sourceTopic"`
-		SourceDsn      string     `json:"sourceDsn"`
-		SourceTable    string     `json:"sourceTable"`
-		SourceDb       string     `json:"sourceDb"`
-		SourceQueryKey string     `json:"sourceQueryKey"`
-		TargetType     string     `json:"targetType"`
-		TargetShards   [][]string `json:"targetShards"`
-		TargetDB       string     `json:"targetDB"`
-		TargetChProxy  string     `json:"targetChProxy"`
-		TargetTable    string     `json:"targetTable"`
-		Status         string     `json:"status"`
-		Information    string     `json:"information"`
-		CreateTime     string     `json:"createTime"`
-		UpdateTime     string     `json:"updateTime"`
+		ID int `json:"id"`
+		Name string `json:"name"`
+		SourceType string `json:"sourceType"`
+		SourceTopic string `json:"sourceTopic"`
+		SourceDsn string `json:"sourceDsn"`
+		SourceTable string `json:"sourceTable"`
+		SourceDb string `json:"sourceDb"`
+		SourceQueryKey string `json:"sourceQueryKey"`
+		TargetType string `json:"targetType"`
+		TargetShards [][]string `json:"targetShards"`
+		TargetDB string `json:"targetDB"`
+		TargetChProxy string `json:"targetChProxy"`
+		TargetTable string `json:"targetTable"`
+		Status string `json:"status"`
+		Information string `json:"information"`
+		CreateTime string `json:"createTime"`
+		UpdateTime string `json:"updateTime"`
 	}
 	RtuList struct {
-		RtuList     []Rtu       `json:"rtuList"`
+		RtuList []Rtu `json:"rtuList"`
 		PageAndSize PageAndSize `json:"pageAndSize"`
 	}
 	// rtu-add
@@ -153,19 +153,19 @@ type (
 		Source Source `json:"source"`
 	}
 	Connector struct {
-		SourceType  string `json:"sourceType"`
+		SourceType string `json:"sourceType"`
 		SourceTable string `json:"sourceTable"`
-		SourceDB    string `json:"sourceDb"`
-		SourceId    string `json:"sourceId"`
-		CreateTime  string `json:"createTime"`
-		UpdateTime  string `json:"updateTime"`
+		SourceDB string `json:"sourceDb"`
+		SourceId string `json:"sourceId"`
+		CreateTime string `json:"createTime"`
+		UpdateTime string `json:"updateTime"`
 	}
 	ConnectorListResponse struct {
 		ConnectorList []*Connector `json:"connectorList"`
-		PageAndSize   PageAndSize  `json:"pageAndSize"`
+		PageAndSize PageAndSize `json:"pageAndSize"`
 	}
 	ExecSqlResponse struct {
-		FailedTables  []string `json:"failedTables"`
+		FailedTables []string `json:"failedTables"`
 		FailedReasons []string `json:"failedReasons"`
 	}
 )
@@ -182,7 +182,7 @@ service galaxy-api {
 		handler: LoginHandler
 		folder: user
 	)
-	post /galaxy/user/login(UserLoginRequest) returns(TokenResponse)
+	post /galaxy/user/login (UserLoginRequest) returns (TokenResponse)
 	
 	@doc(
 		summary: user-add
@@ -191,7 +191,7 @@ service galaxy-api {
 		handler: AddHandler
 		folder: user
 	)
-	post /galaxy/user/add(UserAddRequest)
+	post /galaxy/user/add (UserAddRequest)
 	
 	@doc(
 		summary: user-get
@@ -200,176 +200,176 @@ service galaxy-api {
 		handler: GetHandler
 		folder: user
 	)
-	get /galaxy/user/get() returns(UserGetResponse)
+	get /galaxy/user/get () returns (UserGetResponse)
 	
 	@doc(
 		summary: dm-list
 	)
 	@server(
 		handler: DmListHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/dm-list() returns(DmListResponse)
+	post /galaxy/html/dm-list () returns (DmListResponse)
 	
 	@doc(
 		summary: dm-add
 	)
 	@server(
 		handler: DmAddHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/dm-add(DmModel) returns(DmModel)
+	post /galaxy/html/dm-add (DmModel) returns (DmModel)
 	
 	@doc(
 		summary: list-tables
 	)
 	@server(
 		handler: ListTableHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/list-tables(String) returns(StringList)
+	post /galaxy/html/list-tables (String) returns (StringList)
 	
 	@doc(
 		summary: list-databases
 	)
 	@server(
 		handler: ListDatabasesHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/list-databases(String) returns(StringList)
+	post /galaxy/html/list-databases (String) returns (StringList)
 	
 	@doc(
 		summary: list-databases
 	)
 	@server(
 		handler: DatabaseListHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/database-list(String) returns(StringList)
+	post /galaxy/html/database-list (String) returns (StringList)
 	
 	@doc(
 		summary: config-default
 	)
 	@server(
 		handler: DefaultConfigHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	get /galaxy/html/default-config() returns(DefaultConfigResponse)
+	get /galaxy/html/default-config () returns (DefaultConfigResponse)
 	
 	@doc(
 		summary: generate-create-sql
 	)
 	@server(
 		handler: GenerateCreateSqlHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/generate-create-sql(GenerateCreateSqlRequest) returns(GenerateCreateSqlResponse)
+	post /galaxy/html/generate-create-sql (GenerateCreateSqlRequest) returns (GenerateCreateSqlResponse)
 	
 	@doc(
 		summary: exec-sql
 	)
 	@server(
 		handler: ExecSqlHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/exec-sql(ExecSqlRequest)
+	post /galaxy/html/exec-sql (ExecSqlRequest)
 	
 	@doc(
 		summary: dm-stop
 	)
 	@server(
 		handler: DmStopHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/dm-stop(String)
+	post /galaxy/html/dm-stop (String)
 	
 	@doc(
 		summary: dm-delete
 	)
 	@server(
 		handler: DmDeleteHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/dm-delete(String)
+	post /galaxy/html/dm-delete (String)
 	
 	@doc(
 		summary: dm-redo
 	)
 	@server(
 		handler: DmRedoHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/dm-redo(String)
+	post /galaxy/html/dm-redo (String)
 	
 	@doc(
 		summary: rtu-list
 	)
 	@server(
 		handler: RtuListHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/rtu-list() returns(RtuList)
+	post /galaxy/html/rtu-list () returns (RtuList)
 	
 	@doc(
 		summary: rtu-add
 	)
 	@server(
 		handler: RtuAddHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/rtu-add(RtuModel) returns(RtuModel)
+	post /galaxy/html/rtu-add (RtuModel) returns (RtuModel)
 	
 	@doc(
 		summary: rtu-stop
 	)
 	@server(
 		handler: RtuStopHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/rtu-stop(String)
+	post /galaxy/html/rtu-stop (String)
 	
 	@doc(
 		summary: rtu-delete
 	)
 	@server(
 		handler: RtuDeleteHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/rtu-delete(String)
+	post /galaxy/html/rtu-delete (String)
 	
 	@doc(
 		summary: rtu-redo
 	)
 	@server(
 		handler: RtuRedoHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/rtu-redo(String)
+	post /galaxy/html/rtu-redo (String)
 	
 	@doc(
 		summary: connector-list
 	)
 	@server(
 		handler: ConnectorListHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/connector-list() returns(StringList)
+	post /galaxy/html/connector-list () returns (StringList)
 	
 	@doc(
 		summary: connector-add
 	)
 	@server(
 		handler: ConnectorAddHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/connector-add(ConnectorModel)
+	post /galaxy/html/connector-add (ConnectorModel)
 	
 	@doc(
 		summary: connector-delete
 	)
 	@server(
 		handler: ConnectorDeleteHandler
-		folder:blackhole
+		folder: blackhole
 	)
-	post /galaxy/html/connector-delete(String)
+	post /galaxy/html/connector-delete (String)
 }
