@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func connectorDeleteHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func ConnectorDeleteHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewConnectorDeleteLogic(r.Context(), ctx)
 		var req types.DeleteConnectorRequest

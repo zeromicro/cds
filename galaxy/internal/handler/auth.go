@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func handleToken(ctx *svc.ServiceContext, w http.ResponseWriter, r *http.Request) (*model.User, error) {
+func HandleToken(ctx *svc.ServiceContext, w http.ResponseWriter, r *http.Request) (*model.User, error) {
 	token, e := r.Cookie("token")
 	if e != nil {
 		httpx.Error(nil, errors.New("Token已过期，请重新登陆"))

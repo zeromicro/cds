@@ -10,10 +10,10 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func getHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func GetHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewGetLogic(r.Context(), ctx)
-		user, e := handleToken(ctx, w, r)
+		user, e := HandleToken(ctx, w, r)
 		if e != nil {
 			logx.Error(e)
 			return

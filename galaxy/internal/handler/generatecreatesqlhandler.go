@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func generateCreateSqlHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func GenerateCreateSqlHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewGenerateCreateSqlLogic(r.Context(), ctx)
 		var req types.GenerateCreateSqlRequest

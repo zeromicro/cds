@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/tal-tech/cds/galaxy/internal/svc"
+	"galaxy/internal/svc"
 
 	"github.com/tal-tech/go-zero/rest"
 )
@@ -15,112 +15,112 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/user/login",
-				Handler: loginHandler(serverCtx),
+				Handler: LoginHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/user/add",
-				Handler: addHandler(serverCtx),
+				Handler: AddHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
 				Path:    "/galaxy/user/get",
-				Handler: getHandler(serverCtx),
+				Handler: GetHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-list",
-				Handler: dmListHandler(serverCtx),
+				Handler: DmListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-add",
-				Handler: dmAddHandler(serverCtx),
+				Handler: DmAddHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/list-tables",
-				Handler: listTableHandler(serverCtx),
+				Handler: ListTableHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/list-databases",
-				Handler: listDatabasesHandler(serverCtx),
+				Handler: ListDatabasesHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/database-list",
-				Handler: databaseListHandler(serverCtx),
+				Handler: DatabaseListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
 				Path:    "/galaxy/html/default-config",
-				Handler: defaultConfigHandler(serverCtx),
+				Handler: DefaultConfigHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/generate-create-sql",
-				Handler: generateCreateSqlHandler(serverCtx),
+				Handler: GenerateCreateSqlHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/exec-sql",
-				Handler: execSqlHandler(serverCtx),
+				Handler: ExecSqlHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-stop",
-				Handler: dmStopHandler(serverCtx),
+				Handler: DmStopHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-delete",
-				Handler: dmDeleteHandler(serverCtx),
+				Handler: DmDeleteHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-redo",
-				Handler: dmRedoHandler(serverCtx),
+				Handler: DmRedoHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-list",
-				Handler: rtuListHandler(serverCtx),
+				Handler: RtuListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-add",
-				Handler: rtuAddHandler(serverCtx),
+				Handler: RtuAddHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-stop",
-				Handler: rtuStopHandler(serverCtx),
+				Handler: RtuStopHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-delete",
-				Handler: rtuDeleteHandler(serverCtx),
+				Handler: RtuDeleteHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-redo",
-				Handler: rtuRedoHandler(serverCtx),
+				Handler: RtuRedoHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/connector-list",
-				Handler: connectorListHandler(serverCtx),
+				Handler: ConnectorListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/connector-add",
-				Handler: connectorAddHandler(serverCtx),
+				Handler: ConnectorAddHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/connector-delete",
-				Handler: connectorDeleteHandler(serverCtx),
+				Handler: ConnectorDeleteHandler(serverCtx),
 			},
 		},
 	)

@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func rtuRedoHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func RtuRedoHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewRtuRedoLogic(r.Context(), ctx)
 		var req types.String
