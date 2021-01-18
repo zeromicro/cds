@@ -15,4 +15,5 @@ type Config struct {
 		ServerID string
 	}
 	CkDataNodes []string
+	DsnKey      string
 }

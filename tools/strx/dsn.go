@@ -8,9 +8,14 @@ import (
 )
 
 const (
-	dsnKey    = "123456"
 	dsnPrefix = "dsn://"
 )
+
+var dsnKey string
+
+func SetDsnKey(key string) {
+	dsnKey = key
+}
 
 func EncryptDsn(dsn string) string {
 	if strings.HasPrefix(dsn, dsnPrefix) {

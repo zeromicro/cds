@@ -24,5 +24,6 @@
     "IP": "canal-admin",
     "Port": "8089",
     "ServerID": "1"
-  }
+  },
+  "DsnKey": "123456"
 }
