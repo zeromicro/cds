@@ -2,6 +2,7 @@ package wrap
 
 import (
 	"flag"
+	"github.com/tal-tech/cds/tools/strx"
 
 	"github.com/tal-tech/cds/galaxy/internal/config"
 	"github.com/tal-tech/cds/galaxy/internal/handler"
@@ -17,7 +18,7 @@ func Wrap() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
-
+	strx.SetDsnKey(c.DsnKey)
 	ctx := svc.NewServiceContext(c)
 
 	engine := rest.MustNewServer(c.RestConf)
