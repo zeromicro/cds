@@ -53,7 +53,7 @@ func (l *DmListLogic) DmList(req types.ListRequest) (*types.DmListResponse, erro
 		return nil, e
 	}
 	rp := &types.DmListResponse{}
-	cnt, err := l.svcCtx.RtuModel.GetCountByDb(req.DbName)
+	cnt, err := l.svcCtx.DmModel.GetCountByDb(req.DbName)
 	if err != nil {
 		logx.Error(err)
 		return nil, err
