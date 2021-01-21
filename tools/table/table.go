@@ -36,7 +36,7 @@ func (meta *TableMeta) buildColumn() string {
 	for _, column := range meta.Columns {
 		buf.WriteString("`" + column.Name + "` " + column.Type)
 		if len(column.Comment) > 0 {
-			buf.WriteString("COMMENT '")
+			buf.WriteString(" COMMENT '")
 			buf.WriteString(column.Comment)
 			buf.WriteByte('\'')
 		}

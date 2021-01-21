@@ -99,7 +99,15 @@ func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string,
 			column := table2.Column{
 				Name: k,
 			}
-			column.Type = toClickhouseType(reflect.TypeOf(v))
+			if v == nil {
+				if k == "updateTime" {
+					column.Type = "DateTime"
+				} else {
+					return nil, "", errors.New(column.Name + " field is nil")
+				}
+			} else {
+				column.Type = toClickhouseType(reflect.TypeOf(v))
+			}
 			if val, ok := v.(string); ok && column.Type == "String" && (len(val) == 19 || len(val) == 23) {
 				_, err := time.Parse("2006-01-02 15:04:05.000", val)
 				if err == nil {
