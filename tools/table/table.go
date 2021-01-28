@@ -111,7 +111,7 @@ func (meta *TableMeta) buildEnd(category int, buf *strings.Builder) {
 	case MvNow:
 		buf.WriteString(" AS \n")
 		buf.WriteString("SELECT * FROM " + dbTable)
-		buf.WriteString("_mv")
+		buf.WriteString("_all")
 		buf.WriteString(" FINAL WHERE ck_is_delete = 0")
 	}
 }
