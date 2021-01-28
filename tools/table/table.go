@@ -36,7 +36,7 @@ func (meta *TableMeta) buildColumn() string {
 	for _, column := range meta.Columns {
 		buf.WriteString("`" + column.Name + "` " + column.Type)
 		if len(column.Comment) > 0 {
-			buf.WriteString("COMMENT '")
+			buf.WriteString(" COMMENT '")
 			buf.WriteString(column.Comment)
 			buf.WriteByte('\'')
 		}
@@ -111,7 +111,7 @@ func (meta *TableMeta) buildEnd(category int, buf *strings.Builder) {
 	case MvNow:
 		buf.WriteString(" AS \n")
 		buf.WriteString("SELECT * FROM " + dbTable)
-		buf.WriteString("_mv")
+		buf.WriteString("_all")
 		buf.WriteString(" FINAL WHERE ck_is_delete = 0")
 	}
 }
