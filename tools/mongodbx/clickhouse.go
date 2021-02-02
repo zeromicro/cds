@@ -9,6 +9,7 @@ import (
 
 	"github.com/tal-tech/go-zero/core/logx"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
 
@@ -34,104 +35,27 @@ func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string,
 	if c == 0 {
 		return nil, "", errors.New("没有数据，无法生成建表语句")
 	}
-	r := make([]*bson.M, 0, 2000)
-
-	// 倒序取 1000
-	opts := options.Find()
-	opts.SetSort(bson.D{{"$natural", -1}})
-	opts.SetLimit(1000)
-
-	cur, e := cli.Database(info.Database).Collection(table).Find(context.TODO(), bson.M{}, opts)
-	if e != nil {
-		logx.Error(e)
-		return nil, "", e
-	}
-	for cur.Next(context.TODO()) {
-		v := new(bson.M)
-
-		err := cur.Decode(v)
-		if err != nil {
-			logx.Error(err)
-			continue
-		}
-		r = append(r, v)
-	}
-
-	// 正序取 1000
-	opts = options.Find()
-	opts.SetSort(bson.D{{"$natural", 1}})
-	opts.SetLimit(1000)
-
-	cur, e = cli.Database(info.Database).Collection(table).Find(context.TODO(), bson.M{}, opts)
-	if e != nil {
-		logx.Error(e)
-		return nil, "", e
-	}
-	for cur.Next(context.TODO()) {
-		v := new(bson.M)
-
-		err := cur.Decode(v)
-		if err != nil {
-			logx.Error(err)
-			continue
-		}
-		r = append(r, v)
-	}
-
 	data := &table2.TableMeta{
 		DB:      db,
 		Table:   table,
 		Indexes: indexes,
 		M:       make(map[string]int),
 	}
-	for _, v := range r {
-		for k, v := range *v {
-			if k == "_id" {
-				data.QueryKey = "_id"
-			}
-			if k == "createTime" || k == "create_time" {
-				data.CreateTime = k
-			}
-			if k == "updateTime" || k == "update_time" || k == "insert_id" {
-				data.UpdateTime = k
-			}
-			//type converter
-			column := table2.Column{
-				Name: k,
-			}
-			if v == nil {
-				if k == "updateTime" {
-					column.Type = "DateTime"
-				} else {
-					return nil, "", errors.New(column.Name + " field is nil")
-				}
-			} else {
-				column.Type = toClickhouseType(reflect.TypeOf(v))
-			}
-			if val, ok := v.(string); ok && column.Type == "String" && (len(val) == 19 || len(val) == 23) {
-				_, err := time.Parse("2006-01-02 15:04:05.000", val)
-				if err == nil {
-					column.Type = "DateTime"
-					goto TYPEOK
-				}
-				_, err = time.Parse("2006-01-02 15:04:05", val)
-				if err == nil {
-					column.Type = "DateTime"
-					goto TYPEOK
-				}
-			}
-		TYPEOK:
-			if _, ok := data.M[column.Name]; !ok {
-				data.M[column.Name] = len(data.Columns)
-				data.Columns = append(data.Columns, column)
-			}
-		}
-		if data.QueryKey == "" {
-			return nil, "", errors.New("未能自动识别主键_id")
-		}
-		if data.Indexes == "" {
-			data.Indexes = data.QueryKey
-		}
+
+	err := getColumns(cli, info.Database, table, data, true)
+	if err != nil {
+		return nil, "", err
+	}
+	err = getColumns(cli, info.Database, table, data, false)
+	if err != nil {
+		return nil, "", err
+	}
+
+	if data.QueryKey == "" {
+		return nil, "", errors.New("未能自动识别主键_id")
+	}
+	if data.Indexes == "" {
+		data.Indexes = data.QueryKey
 	}
 
 	sort.Slice(data.Columns, func(i, j int) bool {
@@ -186,4 +110,90 @@ func toClickhouseType(t reflect.Type) string {
 	default:
 		return "String"
 	}
+}
+
+func getMongoDataCursor(cli *mongo.Client, db, table string, reverse bool) (*mongo.Cursor, error) {
+	// order 1: 正序, -1: 倒叙
+	order := 1
+	if !reverse {
+		order = -1
+	}
+	opts := options.Find()
+	opts.SetSort(bson.D{{"$natural", order}})
+	opts.SetLimit(1000)
+
+	cur, err := cli.Database(db).Collection(table).Find(context.TODO(), bson.M{}, opts)
+	if err != nil {
+		logx.Error(err)
+		return nil, err
+	}
+	return cur, nil
+}
+
+func getColumnNameAndTypeFromBsonM(v *bson.M, data *table2.TableMeta) error {
+	for k, v := range *v {
+		if k == "_id" {
+			data.QueryKey = "_id"
+		}
+		if k == "createTime" || k == "create_time" {
+			data.CreateTime = k
+		}
+		if k == "updateTime" || k == "update_time" || k == "insert_id" {
+			data.UpdateTime = k
+		}
+		//type converter
+		column := table2.Column{
+			Name: k,
+		}
+		if v == nil {
+			if k == "updateTime" {
+				column.Type = "DateTime"
+			} else {
+				return errors.New(column.Name + " field is nil")
+			}
+		} else {
+			column.Type = toClickhouseType(reflect.TypeOf(v))
+		}
+		if val, ok := v.(string); ok && column.Type == "String" && (len(val) == 19 || len(val) == 23) {
+			_, err := time.Parse("2006-01-02 15:04:05.000", val)
+			if err == nil {
+				column.Type = "DateTime"
+				goto TYPEOK
+			}
+			_, err = time.Parse("2006-01-02 15:04:05", val)
+			if err == nil {
+				column.Type = "DateTime"
+				goto TYPEOK
+			}
+		}
+	TYPEOK:
+		if _, ok := data.M[column.Name]; !ok {
+			data.M[column.Name] = len(data.Columns)
+			data.Columns = append(data.Columns, column)
+		}
+	}
+	return nil
+}
+
+func getColumns(cli *mongo.Client, db, table string, data *table2.TableMeta, reverse bool) error {
+	cur, e := getMongoDataCursor(cli, db, table, reverse)
+	if e != nil {
+		logx.Error(e)
+		return e
+	}
+	for cur.Next(context.TODO()) {
+		v := new(bson.M)
+
+		err := cur.Decode(v)
+		if err != nil {
+			logx.Error(err)
+			continue
+		}
+		err = getColumnNameAndTypeFromBsonM(v, data)
+		if err != nil {
+			logx.Error(err)
+			return err
+		}
+	}
+	return nil
 }
