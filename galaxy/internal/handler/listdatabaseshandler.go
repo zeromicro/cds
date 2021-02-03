@@ -8,7 +8,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func ListDatabasesHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func listDatabasesHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewListDatabasesLogic(r.Context(), ctx)
 		resp, err := l.ListDatabases(ctx.Config.CkDataNodes[0])

@@ -153,7 +153,7 @@ type Target struct {
 }
 
 type TokenResponse struct {
-	Token string `json:"token"`
+	Auth string `json:"auth"`
 }
 
 type UserAddRequest struct {

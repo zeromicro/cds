@@ -18,7 +18,7 @@ function apiPost(url, body, ok, fail, ev) {
         }
     }
     xhr.open('POST', `api/${url}`)
-    xhr.setRequestHeader('Cookies', document.cookie)
+    xhr.setRequestHeader('Authorization', 'Bearer ' + getCookie("auth"));
     if (!body) {
         xhr.send(null)
         return
@@ -192,4 +192,24 @@ function apiChDatabaseList(body, ok, fail, ev) {
 
 function apChClusterList(body, ok, fail, ev) {
     apiPost('ch-user-manager/cluster-list', body, ok, fail, ev);
+}
+
+function getQueryVariable(variable)
+{
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable){return pair[1];}
+    }
+    return(false);
+}
+
+function getCookie(name)
+{
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+        return unescape(arr[2]);
+    else
+        return null;
 }

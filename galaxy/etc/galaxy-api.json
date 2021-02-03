@@ -25,5 +25,8 @@
     "Port": "8089",
     "ServerID": "1"
   },
-  "DsnKey": "123456"
+  "DsnKey": "123456",
+  "Auth": {
+    "AccessSecret": "12345678"
+  }
 }

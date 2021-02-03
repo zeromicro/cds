@@ -12,64 +12,64 @@
 </head>
 
 <body style="background-color: azure">
-    <div id="app" style="display: flex;flex-direction: column;align-items: center;">
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        
-        <p></p>
-        <form style="width: 400px;" class="mdui-card">
-            <div class="mdui-card-primary">
-                <div class="mdui-card-primary-title">CDS</div>
-                <div class="mdui-card-primary-subtitle">clickhouse data system</div>
-              </div>
-            <div class="mdui-card-content">
-                <div class="mdui-textfield">
-                    <input type="email" class="mdui-textfield-input" v-model="email" id="email"
-                        aria-describedby="emailHelp" placeholder="邮箱">
-                    <small id="emailHelp" class="form-text text-muted">Tips: email account . </small>
-                </div>
-                <div class="mdui-textfield">
-                    <input type="password" class="mdui-textfield-input" v-model="password" id="password"
-                        placeholder="密码">
-                </div>
-                <div type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-blue"
-                    style="width: 100%;" v-on:click='doLogin()'>
-                    <span style="color: white;">登录</span>
-                </div>
+<div id="app" style="display: flex;flex-direction: column;align-items: center;">
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+
+    <p></p>
+    <form style="width: 400px;" class="mdui-card">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">CDS</div>
+            <div class="mdui-card-primary-subtitle">clickhouse data system</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-textfield">
+                <input type="email" class="mdui-textfield-input" v-model="email" id="email"
+                       aria-describedby="emailHelp" placeholder="邮箱">
+                <small id="emailHelp" class="form-text text-muted">Tips: email account . </small>
             </div>
-        </form>
-    </div>
-    <script>
-        app = new Vue({
-            el: '#app',
-            data: {
-                email: '',
-                password: '',
-            },
-            methods: {
-                doLogin: function () {
-                    apiUserLogin({
-                        email: app.email,
-                        password: app.password
-                    }, function (d) {
-                        if(d.token) {
-                            document.cookie = 'token=' + d.token + ';'
-                            location.href = 'cds.html'
-                        }
-                    }, function (e) {
-                        alert(e)
-                    })
-                }
-            }
-        })
-        document.getElementById('password').onkeyup = function (e) {
-            if (e.keyCode == 13) {
-                app.doLogin()
+            <div class="mdui-textfield">
+                <input type="password" class="mdui-textfield-input" v-model="password" id="password"
+                       placeholder="密码">
+            </div>
+            <div type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-blue"
+                 style="width: 100%;" v-on:click='doLogin()'>
+                <span style="color: white;">登录</span>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    app = new Vue({
+        el: '#app',
+        data: {
+            email: '',
+            password: '',
+        },
+        methods: {
+            doLogin: function () {
+                apiUserLogin({
+                    email: app.email,
+                    password: app.password
+                }, function (d) {
+                    if (d.auth) {
+                        document.cookie = 'auth=' + d.auth + ';'
+                        location.href = 'index.html'
+                    }
+                }, function (e) {
+                    alert(e)
+                })
             }
         }
-    </script>
+    })
+    document.getElementById('password').onkeyup = function (e) {
+        if (e.keyCode == 13) {
+            app.doLogin()
+        }
+    }
+</script>
 </body>
 
 </html>

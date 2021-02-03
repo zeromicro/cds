@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/tal-tech/cds/galaxy/internal/svc"
+
 	"github.com/tal-tech/go-zero/rest"
 )
 
@@ -13,113 +14,114 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/galaxy/user/login",
-				Handler: LoginHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
 				Path:    "/galaxy/user/add",
-				Handler: AddHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/galaxy/user/get",
-				Handler: GetHandler(serverCtx),
+				Handler: addHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-list",
-				Handler: DmListHandler(serverCtx),
+				Handler: dmListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-add",
-				Handler: DmAddHandler(serverCtx),
+				Handler: dmAddHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/list-tables",
-				Handler: ListTableHandler(serverCtx),
+				Handler: listTableHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/list-databases",
-				Handler: ListDatabasesHandler(serverCtx),
+				Handler: listDatabasesHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/database-list",
-				Handler: DatabaseListHandler(serverCtx),
+				Handler: databaseListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
 				Path:    "/galaxy/html/default-config",
-				Handler: DefaultConfigHandler(serverCtx),
+				Handler: defaultConfigHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/generate-create-sql",
-				Handler: GenerateCreateSqlHandler(serverCtx),
+				Handler: generateCreateSqlHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/exec-sql",
-				Handler: ExecSqlHandler(serverCtx),
+				Handler: execSqlHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-stop",
-				Handler: DmStopHandler(serverCtx),
+				Handler: dmStopHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-delete",
-				Handler: DmDeleteHandler(serverCtx),
+				Handler: dmDeleteHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/dm-redo",
-				Handler: DmRedoHandler(serverCtx),
+				Handler: dmRedoHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-list",
-				Handler: RtuListHandler(serverCtx),
+				Handler: rtuListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-add",
-				Handler: RtuAddHandler(serverCtx),
+				Handler: rtuAddHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-stop",
-				Handler: RtuStopHandler(serverCtx),
+				Handler: rtuStopHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-delete",
-				Handler: RtuDeleteHandler(serverCtx),
+				Handler: rtuDeleteHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/rtu-redo",
-				Handler: RtuRedoHandler(serverCtx),
+				Handler: rtuRedoHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/connector-list",
-				Handler: ConnectorListHandler(serverCtx),
+				Handler: connectorListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/connector-add",
-				Handler: ConnectorAddHandler(serverCtx),
+				Handler: connectorAddHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/galaxy/html/connector-delete",
-				Handler: ConnectorDeleteHandler(serverCtx),
+				Handler: connectorDeleteHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+	)
+
+	engine.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/galaxy/user/login",
+				Handler: loginHandler(serverCtx),
 			},
 		},
 	)

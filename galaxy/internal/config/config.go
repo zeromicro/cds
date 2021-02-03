@@ -16,4 +16,7 @@ type Config struct {
 	}
 	CkDataNodes []string
 	DsnKey      string
+	Auth        struct {
+		AccessSecret string
+	}
 }
