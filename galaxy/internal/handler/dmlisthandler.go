@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func DmListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func dmListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewDmListLogic(r.Context(), ctx)
 		var req types.ListRequest

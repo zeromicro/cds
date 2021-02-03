@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func DmDeleteHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func dmDeleteHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewDmDeleteLogic(r.Context(), ctx)
 		var req types.String

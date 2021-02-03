@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
-func ConnectorListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+func connectorListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic2.NewConnectorListLogic(r.Context(), ctx)
 		var req types.ListRequest

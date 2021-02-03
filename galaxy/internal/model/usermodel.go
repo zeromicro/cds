@@ -1,9 +1,7 @@
 package model
 
 import (
-	"encoding/base64"
 	"log"
-	"strconv"
 	"time"
 
 	"github.com/tal-tech/cds/tools/mysqlx"
@@ -51,21 +49,4 @@ func (u *UserModel) Register(user User) (string, error) {
 		return "", e
 	}
 	return user.Token, nil
-}
-
-func (u *UserModel) UpdateToken(uid int) (string, error) {
-	timeString := strconv.FormatInt(time.Now().Unix(), 10)
-	token := base64.StdEncoding.EncodeToString([]byte(timeString))
-	if _, err := u.base.Update(uid, "token=?", token); err != nil {
-		return "", err
-	}
-	return token, nil
-}
-
-func (u *UserModel) FindByToken(token string) (*User, error) {
-	v, e := u.base.FindBy("token", token)
-	if e != nil {
-		return nil, e
-	}
-	return v.(*User), nil
 }
