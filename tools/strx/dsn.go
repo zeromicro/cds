@@ -52,14 +52,13 @@ func Encrypt(b []byte) string {
 func Decrypt(b []byte) ([]byte, error) {
 	dbuf := make([]byte, base64.StdEncoding.DecodedLen(len(b)))
 
-	empty := []byte{}
 	n, e := base64.StdEncoding.Decode(dbuf, b)
 	if e != nil {
-		return empty, e
+		return nil, e
 	}
 	dec, e := cryptox.DecryptAES(dbuf[:n], dsnKey)
 	if e != nil {
-		return empty, e
+		return nil, e
 	}
 	return dec, nil
 }
