@@ -16,7 +16,7 @@ import (
 	table2 "github.com/tal-tech/cds/tools/table"
 )
 
-func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string, error) {
+func ToClickhouseTable(dsn string, db, tablename, indexes string) ([]string, string, error) {
 	info, e := connstring.Parse(dsn)
 	if e != nil {
 		logx.Error(e)
@@ -27,7 +27,7 @@ func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string,
 		logx.Error(e)
 		return nil, "", e
 	}
-	c, e := cli.Database(info.Database).Collection(table).EstimatedDocumentCount(context.TODO())
+	c, e := cli.Database(info.Database).Collection(tablename).EstimatedDocumentCount(context.TODO())
 	if e != nil {
 		logx.Error(e)
 		return nil, "", e
@@ -37,18 +37,23 @@ func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string,
 	}
 	data := &table2.TableMeta{
 		DB:      db,
-		Table:   table,
+		Table:   tablename,
 		Indexes: indexes,
 		M:       make(map[string]int),
 	}
 
-	err := getColumns(cli, info.Database, table, data, true)
+	err := getColumns(cli, info.Database, tablename, data, true)
 	if err != nil {
 		return nil, "", err
 	}
-	err = getColumns(cli, info.Database, table, data, false)
+	err = getColumns(cli, info.Database, tablename, data, false)
 	if err != nil {
 		return nil, "", err
+	}
+	for i := range data.Columns {
+		if data.Columns[i].Type == "" {
+			data.Columns[i].Type = "String"
+		}
 	}
 
 	if data.QueryKey == "" {
@@ -149,7 +154,7 @@ func getColumnNameAndTypeFromBsonM(v *bson.M, data *table2.TableMeta) error {
 			if k == "updateTime" {
 				column.Type = "DateTime"
 			} else {
-				return errors.New(column.Name + " field is nil")
+				column.Type = ""
 			}
 		} else {
 			column.Type = toClickhouseType(reflect.TypeOf(v))
@@ -167,7 +172,11 @@ func getColumnNameAndTypeFromBsonM(v *bson.M, data *table2.TableMeta) error {
 			}
 		}
 	TYPEOK:
-		if _, ok := data.M[column.Name]; !ok {
+		if v, ok := data.M[column.Name]; ok {
+			if data.Columns[v].Type == "" && column.Type != "" {
+				data.Columns[v].Type = column.Type
+			}
+		} else {
 			data.M[column.Name] = len(data.Columns)
 			data.Columns = append(data.Columns, column)
 		}
