@@ -37,3 +37,4 @@ up:  logo docker_build
 
 down: 
 	@docker-compose -f dockercompose/app.yml   -f dockercompose/infrastructure.yml down 
+	

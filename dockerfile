@@ -14,7 +14,7 @@ COPY . .
 RUN go clean && \
 	GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/rtu      rtu/cmd/sync/rtu.go && \
 	GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/dm        dm/cmd/sync/dm.go && \
-	GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/galaxy    galaxy/cmd/api/galaxy.go
+	GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/galaxy    galaxy/galaxy.go
 
 FROM alpine as cds
 WORKDIR /cds
