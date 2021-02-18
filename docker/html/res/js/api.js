@@ -55,6 +55,7 @@ function apiGet(url, ok, fail, ev) {
         }
     }
     xhr.open('GET', `api/${url}`)
+    xhr.setRequestHeader('Authorization', 'Bearer ' + getCookie("auth"));
     xhr.send(null)
 }
 
