@@ -2,7 +2,7 @@
 
 ```bash
 git clone https://github.com/tal-tech/cds.git
-cd cds/sit
+cd cds
 make up
 ```
 
@@ -89,6 +89,6 @@ MongoDB同步使用方式类似MySQL
 要清理所有上面启动的docker容器还原初始状态可以
 
 ```
-cd cds/sit
-make up
+cd cds
+make down
 ```
