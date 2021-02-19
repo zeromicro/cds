@@ -2,12 +2,12 @@
 
 ```bash
 git clone https://github.com/tal-tech/cds.git
-cd cds
-sh ./start.sh
+cd cds/sit
+make up
 ```
 
-当 start.sh 脚本执行结束后，检查是否有 contain 出现退出。
-这时可以打开控制台，如图
+构建结束后，注意检查是否有 container 异常退出。
+下面可以打开控制台，如图
 
 ![image-20201118113750898](cds.png)
 
@@ -70,7 +70,7 @@ MongoDB 输入连接串 mongodb://mongo:27017/test_mongo
 再次执行初始化数据库脚本，重新插入100000条数据。
 
 ```
-cd docker/init
+cd sit/dockercompose/init
 sh ./init.sh
 或者
 python3 -m pip install -r requirement.txt
@@ -85,3 +85,10 @@ MongoDB:  `test_mongo`.`example`
 ![image-20201118135503830](image-20201118135503830.png)
 
 MongoDB同步使用方式类似MySQL
+
+要清理所有上面启动的docker容器还原初始状态可以
+
+```
+cd cds/sit
+make up
+```
