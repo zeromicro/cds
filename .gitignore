@@ -16,3 +16,5 @@ logs
 component/etcd
 *.swp
 .idea
+.DS_Store
+.bashrc
