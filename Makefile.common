@@ -68,3 +68,27 @@ print_all:
 	@echo DATE=$(DATE)
 	@echo USER=$(USER)
 
+define write_build_info
+	@echo PROJECT= $(PROJECT) > docker_build
+	@echo GIT_BRANCH= $(GIT_BRANCH) >> docker_build
+	@echo GIT_COMMIT=$(GIT_COMMIT) >> docker_build
+	@echo GIT_STATUS_HASH=$(GIT_STATUS_HASH) >> docker_build
+	@echo GIT_STATUS=$(GIT_STATUS) >> docker_build
+	@echo GIT_DIRTY=$(GIT_DIRTY) >> docker_build
+	@echo GOPATH=$(GOPATH) >> docker_build
+	@echo GO_VERSION=$(GO_VERSION) >> docker_build
+	@echo GO=$(GO) >> docker_build
+	@echo GO_BUILD=$(GO_BUILD) >> docker_build
+	@echo GO_TEST=$(GO_TEST) >> docker_build
+	@echo ROOT_URL=$(ROOT_URL) >> docker_build
+	@echo PACKAGE_LIST=$(PACKAGE_LIST) >> docker_build
+	@echo PACKAGE_URIS=$(PACKAGE_URIS) >> docker_build
+	@echo PACKAGE_RELATIVE_PATHS=$(PACKAGE_RELATIVE_PATHS) >> docker_build
+	@echo GO_FILES=$(GO_FILES) >> docker_build
+	@echo VERSION=$(VERSION) >> docker_build
+	@echo GO_BUILD_VERSION_PKG=$(GO_BUILD_VERSION_PKG) >> docker_build
+	@echo LD_FLAGS=$(LD_FLAGS) >> docker_build
+	@echo ARCH=$(ARCH) >> docker_build
+	@echo DATE=$(DATE) >> docker_build
+	@echo USER=$(USER) >> docker_build
+endef 

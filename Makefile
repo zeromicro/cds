@@ -18,7 +18,8 @@ logo:
 docker_build: ${GO_FILES}
 	@echo "================= build ======================"
 	docker build -t cds .
-	echo $(DATE) > docker_build
+	@$(call write_build_info)
+
 .PHONY : docker_run
 docker_run:
 	@echo "================= run ==============================="
