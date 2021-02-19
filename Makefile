@@ -3,22 +3,19 @@
 # Example:
 #   make up -- start whole staff
 #   make down -- stop and clean whole staff
-#   make docker-clean
-#   make docker-start
-#   make docker-kill
-#   make docker-remove
+
 
 PROJECT="CDS"
 include Makefile.common
 
-src =$(wildcard galaxy/*.go)  $(wildcard dm/*.go)  $(wildcard rtu/*.go)  $(wildcard tools/*.go)  $(wildcard tube/*.go)
+# src =$(wildcard galaxy/*.go)  $(wildcard dm/*.go)  $(wildcard rtu/*.go)  $(wildcard tools/*.go)  $(wildcard tube/*.go)
 
 .PHONY : logo
 logo:
 	@cat sit/logo
-	echo $(src)
+
 .PHONY :
-docker_build: $(src)
+docker_build: ${GO_FILES}
 	@echo "================= build ======================"
 	docker build -t cds .
 	echo $(DATE) > docker_build
