@@ -18,3 +18,4 @@ component/etcd
 .idea
 .DS_Store
 .bashrc
+docker_build
