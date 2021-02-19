@@ -1,0 +1,70 @@
+PROJECT=cds
+
+#=======================================================================================================================
+# git info
+GIT_BRANCH =$(shell git name-rev --name-only HEAD)
+GIT_COMMIT =$(shell git rev-parse --short HEAD)
+GIT_STATUS_HASH =$(shell git status -s -uno | shasum | awk '{ print $$1 }')
+GIT_STATUS =$(shell git status -s -uno )
+GIT_STATUS ?=no change
+GIT_DIRTY =$(shell git describe --tags --dirty --always)
+#=======================================================================================================================
+# go build info
+GOPATH 		?= $(shell go env GOPATH)
+# Ensure GOPATH is set before running build process.
+ifeq "$(GOPATH)" ""
+  $(error Please set the environment variable GOPATH before running `make`)
+endif
+GO_VERSION =$(shell go version | sed 's|go version ||')
+GO   		:= GO111MODULE=on go
+GO_BUILD    := $(GO) build $(BUILD_FLAG) -tags codes
+GO_TEST		:= $(GO) test -p $(P)
+ROOT_URL	:=$(shell head -n 1 go.mod | sed  "s|module ||")
+PACKAGE_LIST  := go list ./...| grep -vE "cmd"
+PACKAGE_URIS  := $$($(PACKAGE_LIST))
+PACKAGE_RELATIVE_PATHS := $(PACKAGE_LIST) | sed 's|$(ROOT_URL)/||'
+GO_FILES     := $$(find $$($(PACKAGE_RELATIVE_PATHS)) -name "*.go")
+GO_BUILD_VERSION_PKG := $(shell $(PACKAGE_LIST) | grep buildver)
+
+VERSION =$(shell cat VERSION)
+GO_BUILD_VERSION_PKG := $(shell $(PACKAGE_LIST) | grep buildver)
+LD_FLAGS = -X '$(GO_BUILD_VERSION_PKG).Version=$(VERSION)'
+LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).Branch=$(GIT_BRANCH)'
+LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).Commit=$(GIT_COMMIT)'
+LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).StatusHash=$(GIT_STATUS_HASH)'
+LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).User=$(USER)'
+LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).Time=$(DATE)'
+LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).Status=$(GIT_STATUS)'
+LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).GoVersion=$(GO_VERSION)'
+
+#=======================================================================================================================
+# env info
+ARCH      := "`uname -s`"
+DATE := $(shell date "+%Y-%m-%d %H:%M")
+USER := $(shell id -u -n)
+
+.PHONY : print_all
+print_all:
+	@echo PROJECT= $(PROJECT)
+	@echo GIT_BRANCH= $(GIT_BRANCH)
+	@echo GIT_COMMIT=$(GIT_COMMIT)
+	@echo GIT_STATUS_HASH=$(GIT_STATUS_HASH)
+	@echo GIT_STATUS=$(GIT_STATUS)
+	@echo GIT_DIRTY=$(GIT_DIRTY)
+	@echo GOPATH=$(GOPATH)
+	@echo GO_VERSION=$(GO_VERSION)
+	@echo GO=$(GO)
+	@echo GO_BUILD=$(GO_BUILD)
+	@echo GO_TEST=$(GO_TEST)
+	@echo ROOT_URL=$(ROOT_URL)
+	@echo PACKAGE_LIST=$(PACKAGE_LIST)
+	@#echo PACKAGE_URIS=$(PACKAGE_URIS)
+	@echo PACKAGE_RELATIVE_PATHS=$(PACKAGE_RELATIVE_PATHS)
+	@#echo GO_FILES=$(GO_FILES)
+	@echo VERSION=$(VERSION)
+	@echo GO_BUILD_VERSION_PKG=$(GO_BUILD_VERSION_PKG)
+	@echo LD_FLAGS=$(LD_FLAGS)
+	@echo ARCH=$(ARCH)
+	@echo DATE=$(DATE)
+	@echo USER=$(USER)
+
