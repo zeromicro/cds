@@ -1,4 +1,4 @@
-version: '3.5'
+version: '2.4'
 # networks:
 #   bridge:
 #     external: true
