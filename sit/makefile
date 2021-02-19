@@ -33,8 +33,8 @@ up:  logo docker_build
 	@echo "==================== launch ========================="
 	@docker-compose -f dockercompose/infrastructure.yml  up -d
 	@docker-compose -f dockercompose/app.yml up -d
+	cd dockercompose/init && sh ./init.sh
 	@cat ./info
 
 down: 
 	@docker-compose -f dockercompose/app.yml   -f dockercompose/infrastructure.yml down 
-	

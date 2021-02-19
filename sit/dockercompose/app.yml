@@ -1,4 +1,4 @@
-version: '3.4'
+version: '2.4'
 # networks:
 #   bridge:
 #     external: true
@@ -38,7 +38,7 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ../logs:/var/log/nginx
-      - ../../docker/html:/usr/local/html
+      - ../../galaxy/html:/usr/local/html
 #    entrypoint:
 #      - /bin/bash
 #      - -c
