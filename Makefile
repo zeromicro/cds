@@ -3,9 +3,9 @@
 # Example:
 #   make up -- start whole staff
 #   make down -- stop and clean whole staff
+SHELL:=bash
 
 PROJECT="CDS"
-
 
 .PHONY : logo
 logo:
@@ -13,8 +13,10 @@ logo:
 
 make_build.info: ${GO_FILES}
 	@echo "=================docker build ======================"
-	info=$$(docker build -t cds .| tee /dev/tty)  && echo "$$info"  > make_build.info
-	# @$(call write_build_info)
+	docker build -t cds . > docker_build.log
+	cat docker_build.log > make_build.info
+	rm docker_build.log
+# @$(call write_build_info)
 
 .PHONY : docker_build
 docker_build: make_build.info
