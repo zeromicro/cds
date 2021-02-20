@@ -4,11 +4,8 @@
 #   make up -- start whole staff
 #   make down -- stop and clean whole staff
 
-
 PROJECT="CDS"
-include Makefile.common
 
-# src =$(wildcard galaxy/*.go)  $(wildcard dm/*.go)  $(wildcard rtu/*.go)  $(wildcard tools/*.go)  $(wildcard tube/*.go)
 
 .PHONY : logo
 logo:
@@ -16,8 +13,8 @@ logo:
 
 make_build.info: ${GO_FILES}
 	@echo "=================docker build ======================"
-	docker build -t cds .
-	@$(call write_build_info)
+	info=$$(docker build -t cds .| tee /dev/tty)  && echo "$$info"  > make_build.info
+	# @$(call write_build_info)
 
 .PHONY : docker_build
 docker_build: make_build.info
@@ -39,12 +36,6 @@ docker_infrastructrue_up:
 docker_infrastructrue_down:
 	docker-compose -f dockercompose/infrastructure.yml  down
 
-.PHONY : sit
-sit: docker_build_run docker_infrastructrue_up
-
-.PHONY : sit_down
-sit_down: docker_infrastructrue_down
-	docker-compose -f dockercompose/app.yml  down
 
 .PHONY : app_down
 app_down:
@@ -62,6 +53,5 @@ up:  logo docker_build
 .PHONY : down
 down:
 	@docker-compose -f sit/dockercompose/app.yml   -f sit/dockercompose/infrastructure.yml down
-
 
 

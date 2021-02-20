@@ -17,7 +17,7 @@ GOPATH 		?= $(shell go env GOPATH)
 ifeq "$(GOPATH)" ""
   $(error Please set the environment variable GOPATH before running `make`)
 endif
-$(info ---- make sure host machine GOPROXY is right. now GOPROXY=$(GOPROXY) ---)
+$(info ----  Host machine GOPROXY now is :$(GOPROXY) ---)
 
 GO_VERSION 				=$(shell go version | sed 's|go version ||')
 GO_VERSION_NUMBER 		?= $(word 3, $(GO_VERSION))

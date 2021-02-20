@@ -7,15 +7,16 @@ ENV GOOS linux
 WORKDIR /go/cache 
 COPY go.mod go.sum ./
 RUN go mod download
+RUN apk add --no-cache make git
 
 WORKDIR /cds
 COPY . .
 # RUN make build
 RUN go clean && \
-	GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/rtu      rtu/cmd/sync/rtu.go && \
-	GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/dm        dm/cmd/sync/dm.go && \
-	GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/galaxy    galaxy/galaxy.go
-
+	# GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/rtu      rtu/cmd/sync/rtu.go && \
+	# GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/dm        dm/cmd/sync/dm.go && \
+	# GO111MODULE=on GOARCH=amd64 go build -ldflags="-s -w"  -o docker/build/galaxy    galaxy/galaxy.go
+	make -f Makefile.docker build
 FROM alpine as cds
 WORKDIR /cds
 RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
