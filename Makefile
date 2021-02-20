@@ -24,7 +24,7 @@ docker_build: make_build.info
 
 .PHONY : docker_run
 docker_run:
-	@echo "================= run ==============================="
+	@echo "================ docker run ========================"
 	@docker-compose -f dockercompose/app.yml  up -d
 
 .PHONY : docker_build_run
@@ -52,8 +52,9 @@ app_down:
 
 .PHONY : up
 up:  logo docker_build
-	@echo "==================== launch ========================="
+	@echo "==================== launch infrastructure========================="
 	@docker-compose -f sit/dockercompose/infrastructure.yml  up -d
+	@echo "==================== launch app ===================================="
 	@docker-compose -f sit/dockercompose/app.yml up -d
 	cd sit/dockercompose/init && sh ./init.sh
 	@cat sit/info

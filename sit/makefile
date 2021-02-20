@@ -22,10 +22,6 @@ docker_infrastructrue_up:
 docker_infrastructrue_down:
 	docker-compose -f dockercompose/infrastructure.yml  down
 
-sit: docker_build_run docker_infrastructrue_up 
-
-sit_down: docker_infrastructrue_down 
-	docker-compose -f dockercompose/app.yml  down 
 app_down:
 	docker-compose -f dockercompose/app.yml  down  
 
