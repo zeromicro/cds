@@ -9,6 +9,7 @@ GIT_STATUS_HASH =$(shell git status -s -uno | shasum | awk '{ print $$1 }')
 GIT_STATUS =$(shell git status -s -uno )
 GIT_STATUS ?=no change
 GIT_DIRTY =$(shell git describe --tags --dirty --always)
+GIT_LAST_DATE=$(shell  echo $$(git log -1 --format=%cd))
 #=======================================================================================================================
 # go build info
 GOPATH 		?= $(shell go env GOPATH)
@@ -55,6 +56,7 @@ print_all:
 	@echo GIT_STATUS_HASH=$(GIT_STATUS_HASH)
 	@echo GIT_STATUS=$(GIT_STATUS)
 	@echo GIT_DIRTY=$(GIT_DIRTY)
+	@echo GIT_LAST_DATE=$(GIT_LAST_DATE)
 	@echo GOPATH=$(GOPATH)
 	@echo GO_VERSION=$(GO_VERSION)
 	@echo GO=$(GO)
@@ -79,6 +81,7 @@ define write_build_info
 	@echo GIT_STATUS_HASH=$(GIT_STATUS_HASH) >> make_build.info
 	@echo GIT_STATUS=$(GIT_STATUS) >> make_build.info
 	@echo GIT_DIRTY=$(GIT_DIRTY) >> make_build.info
+	@echo GIT_LAST_DATE=$(GIT_LAST_DATE) >> make_build.info
 	@echo GOPATH=$(GOPATH) >> make_build.info
 	@echo GO_VERSION=$(GO_VERSION) >> make_build.info
 	@echo GO=$(GO) >> make_build.info
