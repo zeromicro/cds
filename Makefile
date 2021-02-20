@@ -9,13 +9,22 @@ PROJECT="CDS"
 
 .PHONY : logo
 logo:
+	@cat VERSION
 	@cat sit/logo
 
-make_build.info: ${GO_FILES}
+make_build.info:
 	@echo "=================docker build ======================"
-	docker build -t cds . > docker_build.log
-	cat docker_build.log > make_build.info
-	rm docker_build.log
+	docker build --target builder -t my/cds_builder:latest .
+#	docker build --target builder -t my/cds_builder:latest .  > cds_builder.log || cat cds_builder.log #for docker cache,in order not be docker rmi
+	docker build  -t cds .
+#	docker build --target cds -t cds . > cds.log || cat cds.log #for image
+#	# cat cds_builder.log > make_build.info && cat cds.log >>make_build.info
+#	 rm cds_builder.log cds.log
+
+	@if [[ -n "$$(docker images -f "dangling=true" -q)" ]]; then \
+	docker rmi $$(docker images -f "dangling=true" -q) ; \
+	fi
+
 # @$(call write_build_info)
 
 .PHONY : docker_build
@@ -37,7 +46,6 @@ docker_infrastructrue_up:
 .PHONY : docker_infrastructrue_down
 docker_infrastructrue_down:
 	docker-compose -f dockercompose/infrastructure.yml  down
-
 
 .PHONY : app_down
 app_down:
