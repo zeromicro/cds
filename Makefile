@@ -14,11 +14,13 @@ include Makefile.common
 logo:
 	@cat sit/logo
 
-.PHONY :
-docker_build: ${GO_FILES}
-	@echo "================= build ======================"
+make_build.info: ${GO_FILES}
+	@echo "=================docker build ======================"
 	docker build -t cds .
 	@$(call write_build_info)
+
+.PHONY : docker_build
+docker_build: make_build.info
 
 .PHONY : docker_run
 docker_run:
