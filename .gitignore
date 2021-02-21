@@ -20,3 +20,4 @@ component/etcd
 .bashrc
 docker_build.log
 docker_build.info
+make_build.info
