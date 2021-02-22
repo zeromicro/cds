@@ -14,9 +14,9 @@
 
 ![同步drawio](https://gitee.com/kevwan/static/raw/master/doc/images/cds/同步drawio.png)
 
-#### 快速开始
+#### 快速预览
 
-[快速开始](doc/quickstart.md)
+[操作文档](doc/quickstart.md)
 
 ### todo list
  - 优化前端用户体验
