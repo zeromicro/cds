@@ -15,20 +15,30 @@ import (
 
 var configFile = flag.String("f", "service/hera/base/tube/examples/config.yml", "The configure file")
 
+type subscriberConf struct {
+	Brokers      []string `json:"Brokers"`
+	Topic        string
+	Group        string
+	SliceSize    int
+	WorkerNum    int `json:",default=32"`
+	TimerPeriod  int
+	ThrottleSize int `json:",default=209715200"`
+}
+
 func handler(s []byte) (interface{}, error) {
-	//return s + "-handled", errors.New("fdsfasdfsfdsfds")
+	// return s + "-handled", errors.New("fdsfasdfsfdsfds")
 	return string(s) + "-handled", nil
 }
 
 func main() {
 	flag.Parse()
-	config := tube.SubscriberConf{}
+	config := subscriberConf{}
 	err := conf.LoadConfig(*configFile, &config)
 	if err != nil {
 		log.Println(err)
 	}
 
-	//==================================================================================================================
+	// ==================================================================================================================
 	//1
 	sc := tube.MustNewKfkStreamConsumer(config.Topic, config.Group, config.WorkerNum, config.Brokers)
 	if sc == nil {
