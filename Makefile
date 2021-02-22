@@ -3,7 +3,7 @@
 # Example:
 #   make up -- start whole staff
 #   make down -- stop and clean whole staff
-SHELL:=bash
+include common.mk
 
 PROJECT="CDS"
 
@@ -12,11 +12,17 @@ logo:
 	@cat VERSION
 	@cat sit/logo
 
+.PHONY : build
+build:
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o docker/build/rtu      	rtu/cmd/sync/rtu.go
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o docker/build/dm        	dm/cmd/sync/dm.go
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o docker/build/galaxy    	galaxy/galaxy.go
+
 make_build.info:
 	@echo "=================docker build ======================"
 	docker build --target builder -t my/cds_builder:latest .
 #	docker build --target builder -t my/cds_builder:latest .  > cds_builder.log || cat cds_builder.log #for docker cache,in order not be docker rmi
-	docker build  -t cds .
+	docker build  --target cds  -t cds .
 #	docker build --target cds -t cds . > cds.log || cat cds.log #for image
 #	# cat cds_builder.log > make_build.info && cat cds.log >>make_build.info
 #	 rm cds_builder.log cds.log
@@ -24,8 +30,6 @@ make_build.info:
 	@if [[ -n "$$(docker images -f "dangling=true" -q)" ]]; then \
 	docker rmi $$(docker images -f "dangling=true" -q) ; \
 	fi
-
-# @$(call write_build_info)
 
 .PHONY : docker_build
 docker_build: make_build.info

@@ -4,6 +4,7 @@
 
 # env info
 VARS_OLD	:= $(.VARIABLES)
+SHELL		:= sh
 DATE 		:= $(shell date "+%Y-%m-%d %H:%M")
 USER 		:= $(shell id -u -n)
 ARCH      	:= $(shell uname)
@@ -22,8 +23,7 @@ GIT_BRANCH =$(shell git name-rev --name-only HEAD)
 GIT_COMMIT =$(shell git rev-parse --short HEAD)
 
 #GIT_STATUS =$(shell echo"$$( git status -s -uno) ")
-content=$(shell  git status -s -uno)
-GIT_STATUS=$(shell if [ -n "$(content)" ]; then echo  "$(content) "; fi)
+GIT_STATUS=$(shell git status -s -uno)
 GIT_STATUS_HASH =$(shell git status -s -uno | $(SHA) | awk '{ print $$1 }')
 GIT_STATUS ?=no change
 GIT_DIRTY =$(shell git describe --tags --dirty --always)
@@ -49,7 +49,6 @@ PACKAGE_RELATIVE_PATHS 	:= $(PACKAGE_LIST) | sed 's|$(ROOT_URL)/||'
 
 # values --
 GO_VERSION 				=$(shell go version | sed 's|go version ||')
-GO_VERSION_NUMBER 		?= $(word 3, $(GO_VERSION))
 ROOT_URL				:=$(shell head -n 1 go.mod | sed  "s|module ||")
 VERSION =$(shell cat VERSION)
 #GO_FILES     			:=$(shell echo $$(find $$($(PACKAGE_RELATIVE_PATHS)) -name "*.go"))
@@ -68,36 +67,11 @@ endif #version_go_file
 
 endif #($(go_installed),yes)
 #=======================================================================================================================
-
-
 ifndef no_print_vars
 $(foreach v,                                        \
   $(filter-out $(VARS_OLD) VARS_OLD,$(.VARIABLES)), \
   $(info $(v) = $($(v))))
 endif
-.PHONY : print_all
-print_all:
-	@echo GIT_BRANCH: $(GIT_BRANCH)
-	@echo GIT_COMMIT: $(GIT_COMMIT)
-	@echo GIT_STATUS_HASH: $(GIT_STATUS_HASH)
-	@echo GIT_STATUS: $(GIT_STATUS)
-	@echo GIT_DIRTY: $(GIT_DIRTY)
-	@echo GIT_LAST_DATE: $(GIT_LAST_DATE)
-	@if [ ` command -v go ` ];then \
-	echo GOPATH: $(GOPATH); \
-	echo GO_VERSION: $(GO_VERSION); \
-	echo GO: $(GO); \
-	echo GO_BUILD: $(GO_BUILD); \
-	fi
-	@echo VERSION: $(VERSION)
-	@echo ARCH: $(ARCH)
-	@echo DATE: $(DATE)
-	@echo USER: $(USER)
-	@if [ -n "$(version_go_file)" ]; then \
-	echo GO_BUILD_VERSION_PKG: $(GO_BUILD_VERSION_PKG); \
-	echo LD_FLAGS: $(LD_FLAGS); \
-	fi
-
 
 
 .PHONY: common-style
