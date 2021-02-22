@@ -3,6 +3,7 @@
 # include Makefile.common
 #=======================================================================================================================
 # git info
+VARS_OLD := $(.VARIABLES)
 git_installed= $(shell if [ ` command -v git ` ];then echo 'yes'; fi)
 ifeq "$(git_installed)" ""
   $(error Please install git before running `make`)
@@ -56,6 +57,11 @@ ARCH      := "`uname -s`"
 DATE := $(shell date "+%Y-%m-%d %H:%M")
 USER := $(shell id -u -n)
 
+ifndef no_print_vars
+$(foreach v,                                        \
+  $(filter-out $(VARS_OLD) VARS_OLD,$(.VARIABLES)), \
+  $(info $(v) = $($(v))))
+endif
 .PHONY : print_all
 print_all:
 	@echo GIT_BRANCH: $(GIT_BRANCH)
@@ -78,6 +84,8 @@ print_all:
 	echo GO_BUILD_VERSION_PKG: $(GO_BUILD_VERSION_PKG); \
 	echo LD_FLAGS: $(LD_FLAGS); \
 	fi
+
+
 define write_build_info
 	@echo PROJECT= $(PROJECT) > make_build.info
 	@echo GIT_BRANCH= $(GIT_BRANCH) >> make_build.info
