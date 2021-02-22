@@ -3,6 +3,8 @@ package tube
 import (
 	"context"
 	"errors"
+	"fmt"
+	"io"
 	"log"
 	"sync"
 	"time"
@@ -10,17 +12,6 @@ import (
 	"github.com/segmentio/kafka-go"
 	"github.com/tal-tech/go-zero/core/logx"
 )
-
-//配置文件
-type SubscriberConf struct {
-	Brokers      []string `json:"Brokers"`
-	Topic        string
-	Group        string
-	SliceSize    int
-	WorkerNum    int `json:",default=32"`
-	TimerPeriod  int
-	ThrottleSize int `json:",default=209715200"`
-}
 
 type partitionMessages struct {
 	lastCommitMsg kafka.Message
@@ -40,6 +31,7 @@ type kfkStreamConsumer struct {
 	producer    *kafka.Writer // error backup
 	workerNum   int
 	pm          messages
+	closeFlag   chan struct{}
 }
 
 // MustNewKfkStreamConsumer constructor of KfkStreamConsumer
@@ -59,19 +51,19 @@ func MustNewKfkStreamConsumer(Topic, Group string, workerNum int, Brokers []stri
 		RebalanceTimeout: 5 * 60 * time.Second,
 	}
 	r := kafka.NewReader(config)
-	cw := kafka.WriterConfig{
-		Brokers:  Brokers,
+	w := &kafka.Writer{
+		Addr:     kafka.TCP(Brokers...),
 		Topic:    Topic + "-failed",
 		Balancer: &kafka.LeastBytes{},
 		Async:    true,
 	}
-	w := kafka.NewWriter(cw)
 	ptm := make(map[int]partitionMessages)
 	return &kfkStreamConsumer{
 		pm:          messages{data: ptm},
 		kafkaReader: r,
 		producer:    w,
 		workerNum:   workerNum,
+		closeFlag:   make(chan struct{}),
 	}
 }
 
@@ -86,9 +78,11 @@ func checkConnect(Topic string, Brokers []string) bool {
 			0); err != nil {
 			logx.Error(err)
 			return true
-		} else if _, err := c.ReadFirstOffset(); err != nil {
-			logx.Error(err)
-			return true
+		} else {
+			if _, err := c.ReadFirstOffset(); err != nil {
+				logx.Error(err)
+				return true
+			}
 		}
 	}
 	return false
@@ -109,6 +103,7 @@ func (ks *kfkStreamConsumer) Commit() error {
 }
 
 func (ks *kfkStreamConsumer) Close() error {
+	ks.closeFlag <- struct{}{}
 	return ks.kafkaReader.Close()
 }
 
@@ -135,7 +130,7 @@ func (ks *kfkStreamConsumer) commit() error {
 	for partition, msges := range ks.pm.data {
 		if msges.commitMsg.Offset == msges.lastCommitMsg.Offset {
 			//logx.Info(msges.commitMsg)
-			logx.Infof("partition %d has committed", partition)
+			logx.Infof("[%s] partition %d has committed", msges.commitMsg.Topic, partition)
 			continue
 		}
 		retry := 0
@@ -146,7 +141,7 @@ func (ks *kfkStreamConsumer) commit() error {
 				time.Sleep(time.Second)
 				retry++
 				if retry > 3 {
-					return errors.New("can not commit")
+					return errors.New(fmt.Sprintf("[%s] [part%d] [offset %d]can not commit", msges.commitMsg.Topic, msges.commitMsg.Partition, msges.commitMsg.Offset))
 				}
 			} else {
 				logx.Infof("commit [topic]: %s, [partition]: %d, [offset]: %d\n", msges.commitMsg.Topic, msges.commitMsg.Partition, msges.commitMsg.Offset)
@@ -166,7 +161,6 @@ func (ks *kfkStreamConsumer) findCommitPoint() {
 	defer ks.pm.Unlock()
 	for p, pmp := range ks.pm.data {
 		// 某分区
-		km := ks.pm.data[p].lastCommitMsg
 		i := pmp.commitMsg.Offset + 1
 		//查找被应用层连续消费的消息的最大offset
 		for {
@@ -176,16 +170,16 @@ func (ks *kfkStreamConsumer) findCommitPoint() {
 				//则更新恢复点的offset
 				//因为找到它了，为了节省内存，加速查找，所以删除它
 				delete(pmp.outputted, i)
-				km = m
+				pmp.commitMsg = m
 				//去找下一个
 				i++
 			} else {
 				//没找到或是不再能找到了
-				pmp.commitMsg = km
 				ks.pm.data[p] = pmp
 				break
 			}
 		}
+
 	}
 }
 
@@ -251,13 +245,18 @@ func (ks *kfkStreamConsumer) fetchWithRetry(ctx context.Context) (kafka.Message,
 	fetchRetryCnt := 0
 fetch:
 	for {
+		select {
+		case <-ks.closeFlag:
+			return kafkaMsg, true
+		default:
+		}
 		kafkaMsg, err = ks.kafkaReader.FetchMessage(ctx)
 		if err != nil {
 			if err == ctx.Err() {
 				return kafkaMsg, true
 			}
 			logx.Error(err)
-			if fetchRetryCnt++; fetchRetryCnt >= 3 {
+			if fetchRetryCnt++; fetchRetryCnt >= 3 || err == io.EOF {
 				return kafkaMsg, true
 			}
 			time.Sleep(1 * time.Second)
