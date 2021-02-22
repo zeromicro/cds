@@ -12,12 +12,14 @@ GIT_DIRTY =$(shell git describe --tags --dirty --always)
 GIT_LAST_DATE=$(shell  echo $$(git log -1 --format=%cd))
 #=======================================================================================================================
 # go build info
+go_installed= $(shell if [ ` command -v go ` ];then echo 'yes'; fi)
+ifeq ($(go_installed),yes)
 GOPATH 		?= $(shell go env GOPATH)
 # Ensure GOPATH is set before running build process.
 ifeq "$(GOPATH)" ""
   $(error Please set the environment variable GOPATH before running `make`)
 endif
-$(info ----  Host machine GOPROXY now is :$(GOPROXY) ---)
+$(info ----  GOPROXY now is :$(GOPROXY) ---)
 
 GO_VERSION 				=$(shell go version | sed 's|go version ||')
 GO_VERSION_NUMBER 		?= $(word 3, $(GO_VERSION))
@@ -29,10 +31,10 @@ PACKAGE_LIST  			:= go list ./...| grep -vE "cmd"
 PACKAGE_URIS  			:= $$($(PACKAGE_LIST))
 PACKAGE_RELATIVE_PATHS 	:= $(PACKAGE_LIST) | sed 's|$(ROOT_URL)/||'
 GO_FILES     			:=$(shell echo $$(find $$($(PACKAGE_RELATIVE_PATHS)) -name "*.go"))
-GO_BUILD_VERSION_PKG 	:= $(shell $(PACKAGE_LIST) | grep buildver)
-
 VERSION =$(shell cat VERSION)
-GO_BUILD_VERSION_PKG := $(shell $(PACKAGE_LIST) | grep buildver)
+
+ifdef version_go_file
+GO_BUILD_VERSION_PKG := $(shell $(PACKAGE_LIST) | grep )
 LD_FLAGS = -X '$(GO_BUILD_VERSION_PKG).Version=$(VERSION)'
 LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).Branch=$(GIT_BRANCH)'
 LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).Commit=$(GIT_COMMIT)'
@@ -41,7 +43,9 @@ LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).User=$(USER)'
 LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).Time=$(DATE)'
 LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).Status=$(GIT_STATUS)'
 LD_FLAGS += -X '$(GO_BUILD_VERSION_PKG).GoVersion=$(GO_VERSION)'
+endif
 
+endif
 #=======================================================================================================================
 # env info
 ARCH      := "`uname -s`"
@@ -50,30 +54,32 @@ USER := $(shell id -u -n)
 
 .PHONY : print_all
 print_all:
-	@echo PROJECT= $(PROJECT)
 	@echo GIT_BRANCH= $(GIT_BRANCH)
 	@echo GIT_COMMIT=$(GIT_COMMIT)
 	@echo GIT_STATUS_HASH=$(GIT_STATUS_HASH)
 	@echo GIT_STATUS=$(GIT_STATUS)
 	@echo GIT_DIRTY=$(GIT_DIRTY)
 	@echo GIT_LAST_DATE=$(GIT_LAST_DATE)
-	@echo GOPATH=$(GOPATH)
-	@echo GO_VERSION=$(GO_VERSION)
-	@echo GO=$(GO)
-	@echo GO_BUILD=$(GO_BUILD)
-	@echo GO_TEST=$(GO_TEST)
-	@echo ROOT_URL=$(ROOT_URL)
-	@echo PACKAGE_LIST=$(PACKAGE_LIST)
-	@echo PACKAGE_URIS=$(PACKAGE_URIS)
-	@echo PACKAGE_RELATIVE_PATHS=$(PACKAGE_RELATIVE_PATHS)
-	@echo GO_FILES=$(GO_FILES)
+	@if [ ` command -v go ` ];then \
+	@echo GOPATH=$(GOPATH) \
+	@echo GO_VERSION=$(GO_VERSION) \
+	@echo GO=$(GO) \
+	@echo GO_BUILD=$(GO_BUILD) \
+	@echo GO_TEST=$(GO_TEST) \
+	@echo ROOT_URL=$(ROOT_URL) \
+	@echo PACKAGE_LIST=$(PACKAGE_LIST) \
+	@echo PACKAGE_URIS=$(PACKAGE_URIS) \
+	@echo PACKAGE_RELATIVE_PATHS=$(PACKAGE_RELATIVE_PATHS) \
+	@echo GO_FILES=$(GO_FILES) \
+	;fi;
 	@echo VERSION=$(VERSION)
-	@echo GO_BUILD_VERSION_PKG=$(GO_BUILD_VERSION_PKG)
-	@echo LD_FLAGS=$(LD_FLAGS)
 	@echo ARCH=$(ARCH)
 	@echo DATE=$(DATE)
 	@echo USER=$(USER)
-
+#	@if [ -n "$(version_go_file)" ]; then \
+#	@echo GO_BUILD_VERSION_PKG=$(GO_BUILD_VERSION_PKG) \
+#	@echo LD_FLAGS=$(LD_FLAGS) \
+#	;fi
 define write_build_info
 	@echo PROJECT= $(PROJECT) > make_build.info
 	@echo GIT_BRANCH= $(GIT_BRANCH) >> make_build.info
