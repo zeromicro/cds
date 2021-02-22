@@ -1,4 +1,4 @@
-include Makefile.common
+include common.mk
 PROJECT="CDS"
 
 .PHONY : build 

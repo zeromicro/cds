@@ -11,7 +11,7 @@ RUN apk add --no-cache make git
 
 WORKDIR /cds
 COPY . .
-RUN go clean && make -f Makefile.docker build
+RUN go clean && make -f cds_build.mk build
 FROM alpine as cds
 WORKDIR /cds
 RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
