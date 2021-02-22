@@ -3,6 +3,10 @@
 # include Makefile.common
 #=======================================================================================================================
 # git info
+git_installed= $(shell if [ ` command -v git ` ];then echo 'yes'; fi)
+ifeq "$(git_installed)" ""
+  $(error Please install git before running `make`)
+endif
 GIT_BRANCH =$(shell git name-rev --name-only HEAD)
 GIT_COMMIT =$(shell git rev-parse --short HEAD)
 GIT_STATUS_HASH =$(shell git status -s -uno | shasum | awk '{ print $$1 }')
