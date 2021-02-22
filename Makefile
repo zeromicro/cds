@@ -14,9 +14,9 @@ logo:
 
 .PHONY : build
 build:
-	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o docker/build/rtu      	rtu/cmd/sync/rtu.go
-	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o docker/build/dm        	dm/cmd/sync/dm.go
-	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o docker/build/galaxy    	galaxy/galaxy.go
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/rtu      	rtu/cmd/sync/rtu.go
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/dm        	dm/cmd/sync/dm.go
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/galaxy    	galaxy/galaxy.go
 
 make_build.info:
 	@echo "=================docker build ======================"

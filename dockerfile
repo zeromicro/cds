@@ -15,7 +15,7 @@ FROM alpine as cds
 WORKDIR /cds
 RUN apk update --no-cache && apk add --no-cache ca-certificates tzdata
 ENV TZ Asia/Shanghai
-COPY --from=builder /cds/docker/build/rtu      /cds/docker/build/
-COPY --from=builder /cds/docker/build/dm       /cds/docker/build/
-COPY --from=builder /cds/docker/build/galaxy   /cds/docker/build/
+COPY --from=builder /cds/build/dm       /cds/build/
+COPY --from=builder /cds/build/rtu      /cds/build/
+COPY --from=builder /cds/build/galaxy   /cds/build/
 # COPY --from=build /go/release/conf.yaml /
