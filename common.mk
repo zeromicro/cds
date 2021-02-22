@@ -10,8 +10,9 @@ ifeq "$(git_installed)" ""
 endif
 GIT_BRANCH =$(shell git name-rev --name-only HEAD)
 GIT_COMMIT =$(shell git rev-parse --short HEAD)
-GIT_STATUS_HASH =$(shell git status -s -uno | shasum | awk '{ print $$1 }')
-GIT_STATUS =$(shell git status -s -uno )
+GIT_STATUS_HASH =$(shell git status -s -uno | sha256sum | awk '{ print $$1 }')
+#GIT_STATUS =$(shell echo"$$( git status -s -uno) ")
+$(shell echo"$$( git status -s -uno) ")
 GIT_STATUS ?=no change
 GIT_DIRTY =$(shell git describe --tags --dirty --always)
 GIT_LAST_DATE=$(shell  echo $$(git log -1 --format=%cd))
@@ -35,7 +36,7 @@ ROOT_URL				:=$(shell head -n 1 go.mod | sed  "s|module ||")
 PACKAGE_LIST  			:= go list ./...| grep -vE "cmd"
 PACKAGE_URIS  			:= $$($(PACKAGE_LIST))
 PACKAGE_RELATIVE_PATHS 	:= $(PACKAGE_LIST) | sed 's|$(ROOT_URL)/||'
-GO_FILES     			:=$(shell echo $$(find $$($(PACKAGE_RELATIVE_PATHS)) -name "*.go"))
+#GO_FILES     			:=$(shell echo $$(find $$($(PACKAGE_RELATIVE_PATHS)) -name "*.go"))
 VERSION =$(shell cat VERSION)
 
 ifdef version_go_file
@@ -86,31 +87,6 @@ print_all:
 	fi
 
 
-define write_build_info
-	@echo PROJECT= $(PROJECT) > make_build.info
-	@echo GIT_BRANCH= $(GIT_BRANCH) >> make_build.info
-	@echo GIT_COMMIT=$(GIT_COMMIT) >> make_build.info
-	@echo GIT_STATUS_HASH=$(GIT_STATUS_HASH) >> make_build.info
-	@echo GIT_STATUS=$(GIT_STATUS) >> make_build.info
-	@echo GIT_DIRTY=$(GIT_DIRTY) >> make_build.info
-	@echo GIT_LAST_DATE=$(GIT_LAST_DATE) >> make_build.info
-	@echo GOPATH=$(GOPATH) >> make_build.info
-	@echo GO_VERSION=$(GO_VERSION) >> make_build.info
-	@echo GO=$(GO) >> make_build.info
-	@echo GO_BUILD=$(GO_BUILD) >> make_build.info
-	@echo GO_TEST=$(GO_TEST) >> make_build.info
-	@echo ROOT_URL=$(ROOT_URL) >> make_build.info
-	@echo PACKAGE_LIST=$(PACKAGE_LIST) >> make_build.info
-	@echo PACKAGE_URIS=$(PACKAGE_URIS) >> make_build.info
-	@echo PACKAGE_RELATIVE_PATHS=$(PACKAGE_RELATIVE_PATHS) >> make_build.info
-	@echo GO_FILES=$(GO_FILES) >> make_build.info
-	@echo VERSION=$(VERSION) >> make_build.info
-	@echo GO_BUILD_VERSION_PKG=$(GO_BUILD_VERSION_PKG) >> make_build.info
-	@echo LD_FLAGS=$(LD_FLAGS) >> make_build.info
-	@echo ARCH=$(ARCH) >> make_build.info
-	@echo DATE=$(DATE) >> make_build.info
-	@echo USER=$(USER) >> make_build.info
-endef
 
 .PHONY: common-style
 common-style:
