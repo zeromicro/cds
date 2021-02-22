@@ -8,7 +8,8 @@ RUN apk add --no-cache make git
 RUN go mod download
 WORKDIR /cds
 COPY . .
-RUN go clean && make  build
+RUN mkdir /cds/build
+RUN go clean && make  build > /cds/build/make.log
 
 
 FROM alpine as cds
@@ -18,4 +19,5 @@ ENV TZ Asia/Shanghai
 COPY --from=builder /cds/build/dm       /cds/build/
 COPY --from=builder /cds/build/rtu      /cds/build/
 COPY --from=builder /cds/build/galaxy   /cds/build/
+COPY --from=builder /cds/build/make.log /cds/build/
 # COPY --from=build /go/release/conf.yaml /
