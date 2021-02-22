@@ -54,32 +54,26 @@ USER := $(shell id -u -n)
 
 .PHONY : print_all
 print_all:
-	@echo GIT_BRANCH= $(GIT_BRANCH)
-	@echo GIT_COMMIT=$(GIT_COMMIT)
-	@echo GIT_STATUS_HASH=$(GIT_STATUS_HASH)
-	@echo GIT_STATUS=$(GIT_STATUS)
-	@echo GIT_DIRTY=$(GIT_DIRTY)
-	@echo GIT_LAST_DATE=$(GIT_LAST_DATE)
+	@echo GIT_BRANCH: $(GIT_BRANCH)
+	@echo GIT_COMMIT: $(GIT_COMMIT)
+	@echo GIT_STATUS_HASH: $(GIT_STATUS_HASH)
+	@echo GIT_STATUS: $(GIT_STATUS)
+	@echo GIT_DIRTY: $(GIT_DIRTY)
+	@echo GIT_LAST_DATE: $(GIT_LAST_DATE)
 	@if [ ` command -v go ` ];then \
-	@echo GOPATH=$(GOPATH) \
-	@echo GO_VERSION=$(GO_VERSION) \
-	@echo GO=$(GO) \
-	@echo GO_BUILD=$(GO_BUILD) \
-	@echo GO_TEST=$(GO_TEST) \
-	@echo ROOT_URL=$(ROOT_URL) \
-	@echo PACKAGE_LIST=$(PACKAGE_LIST) \
-	@echo PACKAGE_URIS=$(PACKAGE_URIS) \
-	@echo PACKAGE_RELATIVE_PATHS=$(PACKAGE_RELATIVE_PATHS) \
-	@echo GO_FILES=$(GO_FILES) \
-	;fi;
-	@echo VERSION=$(VERSION)
-	@echo ARCH=$(ARCH)
-	@echo DATE=$(DATE)
-	@echo USER=$(USER)
-#	@if [ -n "$(version_go_file)" ]; then \
-#	@echo GO_BUILD_VERSION_PKG=$(GO_BUILD_VERSION_PKG) \
-#	@echo LD_FLAGS=$(LD_FLAGS) \
-#	;fi
+	echo GOPATH: $(GOPATH); \
+	echo GO_VERSION: $(GO_VERSION); \
+	echo GO: $(GO); \
+	echo GO_BUILD: $(GO_BUILD); \
+	fi
+	@echo VERSION: $(VERSION)
+	@echo ARCH: $(ARCH)
+	@echo DATE: $(DATE)
+	@echo USER: $(USER)
+	@if [ -n "$(version_go_file)" ]; then \
+	echo GO_BUILD_VERSION_PKG: $(GO_BUILD_VERSION_PKG); \
+	echo LD_FLAGS: $(LD_FLAGS); \
+	fi
 define write_build_info
 	@echo PROJECT= $(PROJECT) > make_build.info
 	@echo GIT_BRANCH= $(GIT_BRANCH) >> make_build.info
