@@ -2,8 +2,6 @@ package config
 
 import (
 	"time"
-
-	"github.com/tal-tech/cds/tube"
 )
 
 // Job 任务配置
@@ -27,7 +25,7 @@ type Job struct {
 		Db      string
 	}
 
-	Kafka tube.SubscriberConf
+	Kafka subscriberConf
 
 	CreateTime time.Time //任务创建时间戳
 }
@@ -53,10 +51,10 @@ type Status struct {
 const (
 	TYPE_CLICKHOUSE = "clickhouse"
 	//status
-	STATUS_PENDING  = "pending"
-	STATUS_RUNNING  = "running"
+	STATUS_PENDING = "pending"
+	STATUS_RUNNING = "running"
 
-	STATUS_ERROR    = "error"
+	STATUS_ERROR = "error"
 
-	STATUS_STOPPED  = "stopped"
+	STATUS_STOPPED = "stopped"
 )

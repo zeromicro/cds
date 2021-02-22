@@ -1,12 +1,19 @@
 package config
 
 import (
-	"github.com/tal-tech/cds/tube"
-
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/prometheus"
 )
 
+type subscriberConf struct {
+	Brokers      []string `json:"Brokers"`
+	Topic        string
+	Group        string
+	SliceSize    int
+	WorkerNum    int `json:",default=32"`
+	TimerPeriod  int
+	ThrottleSize int `json:",default=209715200"`
+}
 type Config struct {
 	Log  logx.LogConf
 	Etcd struct {
@@ -24,5 +31,5 @@ type Config struct {
 
 	Prometheus prometheus.Config
 
-	Kafka tube.SubscriberConf `json:"kafka"`
+	Kafka subscriberConf `json:"kafka"`
 }
