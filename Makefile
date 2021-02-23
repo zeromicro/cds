@@ -38,7 +38,7 @@ make_build.info:
 	docker build --target builder -t my/cds_builder:latest . 
 	docker build  --target cds  -t cds . 
 	@echo "================= docker clean ================================================="
-	@if [[ -n "$$(docker images -f "dangling=true" -q)" ]]; then \
+	@if test -n "$$(docker images -f "dangling=true" -q)" ; then \
 	docker rmi $$(docker images -f "dangling=true" -q) ; \
 	fi
 
