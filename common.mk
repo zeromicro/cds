@@ -9,6 +9,7 @@ DATE 		:= $(shell date "+%Y-%m-%d %H:%M")
 USER 		:= $(shell id -u -n)
 ARCH      	:= $(shell uname)
 UNAMEA      := $(shell uname -a)
+WORKDIR		:= $(shell basename $$(pwd))
 ifeq ($(ARCH),Darwin)
     SHA=shasum -a 256
 else
@@ -40,19 +41,17 @@ ifeq "$(GOPATH)" ""
 endif
 
 
-# command --
 GO   					:= GO111MODULE=on go
 GO_BUILD    			:= $(GO) build $(BUILD_FLAG) -tags codes
 GO_TEST					:= $(GO) test -p $(P)
 PACKAGE_LIST  			:= go list ./...| grep -vE "cmd"
 PACKAGE_URIS  			:= $$($(PACKAGE_LIST))
+ROOT_URL				:=$(shell head -n 1 go.mod | sed  "s|module ||")
 PACKAGE_RELATIVE_PATHS 	:= $(PACKAGE_LIST) | sed 's|$(ROOT_URL)/||'
 
-# values --
-GO_VERSION 				=$(shell go version | sed 's|go version ||')
-ROOT_URL				:=$(shell head -n 1 go.mod | sed  "s|module ||")
-VERSION =$(shell cat VERSION)
-#GO_FILES     			:=$(shell echo $$(find $$($(PACKAGE_RELATIVE_PATHS)) -name "*.go"))
+GO_VERSION 				:=$(shell go version | sed 's|go version ||')
+VERSION 				:=$(shell cat VERSION)
+GO_FILES     			:=$(shell echo $$(find $$($(PACKAGE_RELATIVE_PATHS)) -name "*.go"))
 
 ifdef version_go_file
 GO_BUILD_VERSION_PKG := $(shell $(PACKAGE_LIST) | grep )
@@ -73,6 +72,7 @@ $(info ==== make in [$(UNAMEA)] ====)
 $(foreach v,                                        \
   $(filter-out $(VARS_OLD) VARS_OLD,$(.VARIABLES)), \
   $(info $(v) = $($(v))))
+$(info ================================================================ end common.mk ========================================================================)
 endif
 
 
