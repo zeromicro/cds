@@ -9,7 +9,7 @@ RUN go mod download
 WORKDIR /cds
 COPY . .
 RUN mkdir /cds/build
-RUN go clean && make  build > /cds/build/make.log
+RUN go clean && make  build
 
 
 FROM alpine as cds
@@ -19,5 +19,5 @@ ENV TZ Asia/Shanghai
 COPY --from=builder /cds/build/dm       /cds/build/
 COPY --from=builder /cds/build/rtu      /cds/build/
 COPY --from=builder /cds/build/galaxy   /cds/build/
-COPY --from=builder /cds/build/make.log /cds/build/
+# COPY --from=builder /cds/build/make.log /cds/build/
 # COPY --from=build /go/release/conf.yaml /
