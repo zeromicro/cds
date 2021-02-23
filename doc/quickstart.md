@@ -22,7 +22,7 @@ password: 123456
 1. 点击右上角 "+"
 2. MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
 或
-MongoDB 输入连接串 mongodb://mongo:27017/test_mongo
+MongoDB 输入连接串 mongodb://mongo1:30001/test_mongo
 3. 点连接
 4. 选择表,如默认的 example_mysql (MySQL) 或 example (MongoDB)
 5. 点击"目标库"，
