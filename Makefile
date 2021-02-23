@@ -15,6 +15,7 @@ logo:
 
 .PHONY : build
 build:
+	@echo "================= build ======================"
 	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/rtu      	rtu/cmd/sync/rtu.go
 	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/dm        	dm/cmd/sync/dm.go
 	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/galaxy    	galaxy/galaxy.go
@@ -23,6 +24,7 @@ make_build.info:
 	@echo "=================docker build ======================"
 	docker build --target builder -t my/cds_builder:latest . 
 	docker build  --target cds  -t cds . 
+	@echo "================= docker clean ================================================="
 	@if [[ -n "$$(docker images -f "dangling=true" -q)" ]]; then \
 	docker rmi $$(docker images -f "dangling=true" -q) ; \
 	fi
