@@ -8,7 +8,7 @@ services:
     volumes:
       - ../../dm/cmd/sync/etc/dm.json:/cds/dm/cmd/sync/etc/dm.json
     command:
-       /cds/docker/build/dm -f /cds/dm/cmd/sync/etc/dm.json
+       /cds/build/dm -f /cds/dm/cmd/sync/etc/dm.json
   galaxy:
     image: cds
     container_name: galaxy
@@ -19,13 +19,13 @@ services:
       - ../../galaxy/etc/galaxy-api.json:/cds/galaxy/etc/galaxy-api.json
     working_dir: /cds/galaxy
     command:
-      /cds/docker/build/galaxy -f /cds/galaxy/etc/galaxy-api.json
+      /cds/build/galaxy -f /cds/galaxy/etc/galaxy-api.json
   rtu:
     image: cds
     volumes:
       - ../../rtu/conf.json:/cds/rtu/conf.json
     command:
-      /cds/docker/build/rtu -f /cds/rtu/conf.json
+      /cds/build/rtu -f /cds/rtu/conf.json
   nginx:
     image: nginx
     restart: always

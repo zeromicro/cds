@@ -8,6 +8,7 @@ SHELL		:= sh
 DATE 		:= $(shell date "+%Y-%m-%d %H:%M")
 USER 		:= $(shell id -u -n)
 ARCH      	:= $(shell uname)
+UNAMEA      := $(shell uname -a)
 ifeq ($(ARCH),Darwin)
     SHA=shasum -a 256
 else
@@ -37,7 +38,7 @@ GOPATH 		?= $(shell go env GOPATH)
 ifeq "$(GOPATH)" ""
   $(error Please set the environment variable GOPATH before running `make`)
 endif
-$(info ----  GOPROXY now is :$(GOPROXY) ---)
+
 
 # command --
 GO   					:= GO111MODULE=on go
@@ -68,6 +69,7 @@ endif #version_go_file
 endif #($(go_installed),yes)
 #=======================================================================================================================
 ifndef no_print_vars
+$(info ==== make in [$(UNAMEA)] ====)
 $(foreach v,                                        \
   $(filter-out $(VARS_OLD) VARS_OLD,$(.VARIABLES)), \
   $(info $(v) = $($(v))))

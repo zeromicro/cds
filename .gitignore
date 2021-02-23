@@ -11,6 +11,7 @@
 *.out
 *.log
 
+build
 vendor
 logs
 component/etcd
