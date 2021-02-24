@@ -9,7 +9,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./mysql/init/init.sql:/docker-entrypoint-initdb.d/test.sql
+      - ../../component/mysql/init/init.sql:/docker-entrypoint-initdb.d/test.sql
       - ./mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
     restart: always
     environment:
