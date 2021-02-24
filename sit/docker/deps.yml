@@ -5,6 +5,7 @@ version: '2.4'
 services:
   mysql:
     image: mysql:8
+    container_name: mysql
     ports:
       - "3307:3306"
     volumes:
@@ -22,6 +23,7 @@ services:
       retries: 30
   etcd:
     image: bitnami/etcd:3.4.13
+    container_name: etcd
     ports:
       - "2379:2379"
       - "2380:2380"
@@ -35,6 +37,7 @@ services:
       retries: 30
   redis:
     image: redis:latest
+    container_name: redis
     ports:
       - 6379:6379
     healthcheck:
@@ -44,6 +47,7 @@ services:
       retries: 30
   zookeeper:
     image: zookeeper:3.5
+    container_name: zookeeper
     ports:
       - 2181:2181
     healthcheck:
@@ -53,6 +57,7 @@ services:
       retries: 30
   ch-server-1:
       image: yandex/clickhouse-server
+      container_name: ch-server-1
       volumes:
         - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
         - ./clickhouse/macros1.xml:/etc/clickhouse-server/config.d/macros.xml
@@ -72,6 +77,7 @@ services:
           condition: service_healthy
   ch-server-2:
     image: yandex/clickhouse-server
+    container_name: ch-server-2
     volumes:
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
       - ./clickhouse/macros2.xml:/etc/clickhouse-server/config.d/macros.xml
@@ -91,6 +97,7 @@ services:
         condition: service_healthy
   ch-server-3:
     image: yandex/clickhouse-server
+    container_name: ch-server-3
     volumes:
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
       - ./clickhouse/macros3.xml:/etc/clickhouse-server/config.d/macros.xml
@@ -110,6 +117,7 @@ services:
         condition: service_healthy
   ch-server-4:
     image: yandex/clickhouse-server
+    container_name: ch-server-4
     volumes:
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
       - ./clickhouse/macros4.xml:/etc/clickhouse-server/config.d/macros.xml
@@ -176,6 +184,7 @@ services:
       retries: 30
   kafka-connector:
     image: liliankasem/kafka-connect:1.1.0
+    container_name: kafka-connector
     hostname: connect
     container_name: connect
     restart: always
@@ -210,6 +219,7 @@ services:
         condition: service_healthy
   canal-server:
     image: canal/canal-server
+    container_name: canal-server
     restart: always
     environment:
       canal.admin.user: admin
@@ -218,6 +228,7 @@ services:
       canal.admin.manager: canal-admin:8089
   canal-admin:
     image: canal/canal-admin
+    container_name: canal-admin
     ports:
       - 8089:8089
     healthcheck:
@@ -230,4 +241,3 @@ services:
       - canal-server
     volumes:
       - ./canal_admin_conf/canal-template.properties:/home/admin/canal-admin/conf/canal-template.properties
-

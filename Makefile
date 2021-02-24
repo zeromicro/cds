@@ -48,25 +48,25 @@ docker_build: make_build.info
 .PHONY : docker_app_run
 docker_app_run:
 	@echo "=================== launch docker app ===================================="
-	@docker-compose -f sit/dockercompose/app.yml  up -d
+	@docker-compose -f sit/docker/app.yml  up -d
 
 .PHONY : docker_build_run
 docker_build_run: docker_build docker_run
 
 .PHONY : docker_infrastructrue_up
 docker_infrastructrue_up:
-	@echo "==================== launch docker infrastructure ========================="
-	@docker-compose -f sit/dockercompose/infrastructure.yml  up -d
+	@echo "==================== launch docker deps ========================="
+	@docker-compose -f sit/docker/deps.yml  up -d
 
 .PHONY : docker_infrastructrue_down
 docker_infrastructrue_down:
-	docker-compose -f sit/dockercompose/infrastructure.yml  down
+	docker-compose -f sit/docker/deps.yml  down
 
 .PHONY : up
 up:  logo docker_build docker_infrastructrue_up docker_app_run
-	cd sit/dockercompose/init && sh ./init.sh
+	cd sit/docker/init && sh ./init.sh
 	@cat sit/info
 
 .PHONY : down
 down:
-	@docker-compose -f sit/dockercompose/app.yml   -f sit/dockercompose/infrastructure.yml down
+	@docker-compose -f sit/docker/app.yml   -f sit/docker/deps.yml down
