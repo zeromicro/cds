@@ -31,17 +31,11 @@ services:
     restart: always
     ports:
       - 3414:80
-    depends_on:
-      - rtu
-      - galaxy
-      - dm 
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ../logs:/var/log/nginx
-      - ../../galaxy/html:/usr/local/html
-#    entrypoint:
-#      - /bin/bash
-#      - -c
-#      - |
-#        sleep 6
-#        nginx
+      - ./nginx/:/var/log/nginx
+      - ../../web/static:/usr/local/html
+    depends_on:
+      - galaxy
+      - rtu
+      - dm 

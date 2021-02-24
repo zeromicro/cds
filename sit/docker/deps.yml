@@ -230,4 +230,3 @@ services:
       - canal-server
     volumes:
       - ./canal_admin_conf/canal-template.properties:/home/admin/canal-admin/conf/canal-template.properties
-
