@@ -7,7 +7,7 @@ services:
     image: cds
     container_name: dm
     volumes:
-      - ../../dm/cmd/sync/etc/dm.json:/cds/dm/cmd/sync/etc/dm.json
+      - ../../cmd/dm/cmd/sync/etc/dm.json:/cds/dm/cmd/sync/etc/dm.json
     command:
        /cds/build/dm -f /cds/dm/cmd/sync/etc/dm.json
   galaxy:
@@ -17,7 +17,7 @@ services:
     ports:
       - "8080:8080" # for debuging
     volumes:
-      - ../../galaxy/etc/galaxy-api.json:/cds/galaxy/etc/galaxy-api.json
+      - ../../cmd/galaxy/etc/galaxy-api.json:/cds/galaxy/etc/galaxy-api.json
     working_dir: /cds/galaxy
     command:
       /cds/build/galaxy -f /cds/galaxy/etc/galaxy-api.json
@@ -25,7 +25,7 @@ services:
     image: cds
     container_name: rtu
     volumes:
-      - ../../rtu/conf.json:/cds/rtu/conf.json
+      - ../../cmd/rtu/conf.json:/cds/rtu/conf.json
     command:
       /cds/build/rtu -f /cds/rtu/conf.json
   nginx:

@@ -24,9 +24,9 @@ logo:
 
 .DELETE_ON_ERROR: build/build.log
 build/build.log: $(GO_FILES)
-	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/rtu      	rtu/cmd/sync/rtu.go
-	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/dm        	dm/cmd/sync/dm.go
-	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/galaxy    	galaxy/galaxy.go
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/rtu		cmd/rtu/cmd/sync/rtu.go
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/dm		cmd/dm/cmd/sync/dm.go
+	$(GO_BUILD)  -ldflags  "$(LD_FLAGS)" -o build/galaxy	cmd/galaxy/galaxy.go
 	echo done >build/build.log
 
 .PHONY : build
@@ -88,3 +88,6 @@ end:
 .PHONY : down
 down: end docker_clean
 
+.PHONY :clean
+clean:
+	rm -rf build
