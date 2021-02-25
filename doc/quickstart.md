@@ -70,7 +70,7 @@ MongoDB 输入连接串 mongodb://mongo1:30001/test_mongo
 再次执行初始化数据库脚本，重新插入100000条数据。
 
 ```
-cd sit/dockercompose/init
+cd sit/docker/
 sh ./init.sh
 或者
 python3 -m pip install -r requirement.txt
