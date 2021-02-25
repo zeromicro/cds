@@ -3,7 +3,7 @@
 package ckgroup
 
 import (
-	"github.com/tal-tech/cds/tools/ckgroup/dbtesttool/dbtool"
+	"github.com/tal-tech/cds/pkg/ckgroup/dbtesttool/dbtool"
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
 	"testing"
 	"time"

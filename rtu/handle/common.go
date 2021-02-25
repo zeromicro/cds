@@ -12,7 +12,7 @@ import (
 
 	"github.com/tal-tech/cds/rtu/cmd/sync/config"
 	"github.com/tal-tech/cds/rtu/monitor"
-	"github.com/tal-tech/cds/tools/ckgroup"
+	"github.com/tal-tech/cds/pkg/ckgroup"
 )
 
 // prometheus vec

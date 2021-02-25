@@ -4,10 +4,10 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/tal-tech/cds/tools/strx"
+	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
 
-	table2 "github.com/tal-tech/cds/tools/table"
+	table2 "github.com/tal-tech/cds/pkg/table"
 )
 
 func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string, error) {

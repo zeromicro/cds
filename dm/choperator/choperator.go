@@ -4,8 +4,8 @@ import (
 	"github.com/tal-tech/go-zero/core/logx"
 
 	"github.com/tal-tech/cds/dm/util"
-	"github.com/tal-tech/cds/tools/ckgroup"
-	ckcfg "github.com/tal-tech/cds/tools/ckgroup/config"
+	"github.com/tal-tech/cds/pkg/ckgroup"
+	ckcfg "github.com/tal-tech/cds/pkg/ckgroup/config"
 )
 
 type ChOperator interface {

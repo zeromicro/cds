@@ -17,7 +17,7 @@ import (
 	"github.com/tal-tech/cds/dm/choperator"
 	"github.com/tal-tech/cds/dm/cmd/sync/config"
 	"github.com/tal-tech/cds/dm/util"
-	"github.com/tal-tech/cds/tools/mongodbx"
+	"github.com/tal-tech/cds/pkg/mongodbx"
 )
 
 type (

@@ -10,7 +10,7 @@ import (
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
 	"github.com/tal-tech/cds/rtu/cmd/sync/config"
-	"github.com/tal-tech/cds/tools/strx"
+	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 

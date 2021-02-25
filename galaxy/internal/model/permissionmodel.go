@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/tal-tech/cds/tools/mysqlx"
+	"github.com/tal-tech/cds/pkg/mysqlx"
 )
 
 type (

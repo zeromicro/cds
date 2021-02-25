@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
 
-	table2 "github.com/tal-tech/cds/tools/table"
+	table2 "github.com/tal-tech/cds/pkg/table"
 )
 
 func ToClickhouseTable(dsn string, db, tablename, indexes string) ([]string, string, error) {
