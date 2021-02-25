@@ -6,8 +6,8 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ../../component/mysql/init/init.sql:/docker-entrypoint-initdb.d/test.sql
-      - ../../component/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ../../third_party/mysql/init/init.sql:/docker-entrypoint-initdb.d/test.sql
+      - ../../third_party/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
     restart: always
     environment:
        MYSQL_ROOT_PASSWORD: root
@@ -210,7 +210,7 @@ services:
       timeout: 5s
       retries: 30
     volumes:
-      - ../../component/mongo-kafka-1.2.0-all.jar:/usr/share/java/mongo-kafka-1.2.0-all.jar
+      - ../../third_party/mongo-kafka-1.2.0-all.jar:/usr/share/java/mongo-kafka-1.2.0-all.jar
     depends_on:
       kafka:
         condition: service_healthy
@@ -237,4 +237,4 @@ services:
     depends_on: 
       - canal-server
     volumes:
-      - ../../component/canal_admin_conf/canal-template.properties:/home/admin/canal-admin/conf/canal-template.properties
+      - ../../third_party/canal_admin_conf/canal-template.properties:/home/admin/canal-admin/conf/canal-template.properties

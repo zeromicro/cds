@@ -14,7 +14,7 @@
 build
 vendor
 logs
-component/etcd
+third_party/etcd
 *.swp
 .idea
 .DS_Store
