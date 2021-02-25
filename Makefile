@@ -64,7 +64,7 @@ docker_infrastructrue_down:
 
 .PHONY : up
 up:  logo docker_build docker_infrastructrue_up docker_app_run
-	cd sit/docker/init && sh ./init.sh
+	cd  sit/docker && sh ./init.sh
 	@cat sit/info
 
 .PHONY : down
