@@ -4,7 +4,7 @@ package ckgroup
 
 import (
 	_ "github.com/ClickHouse/clickhouse-go"
-	"github.com/tal-tech/cds/tools/ckgroup/config"
+	"github.com/tal-tech/cds/pkg/ckgroup/config"
 	"testing"
 )
 

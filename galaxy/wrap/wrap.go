@@ -2,7 +2,7 @@ package wrap
 
 import (
 	"flag"
-	"github.com/tal-tech/cds/tools/strx"
+	"github.com/tal-tech/cds/pkg/strx"
 
 	"github.com/tal-tech/cds/galaxy/internal/config"
 	"github.com/tal-tech/cds/galaxy/internal/handler"

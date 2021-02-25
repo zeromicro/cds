@@ -11,8 +11,8 @@ import (
 	"github.com/tal-tech/cds/galaxy/internal/model"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
-	"github.com/tal-tech/cds/tools/mongodbx"
-	"github.com/tal-tech/cds/tools/strx"
+	"github.com/tal-tech/cds/pkg/mongodbx"
+	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 

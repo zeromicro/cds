@@ -5,7 +5,7 @@ package ckgroup
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"github.com/tal-tech/cds/tools/ckgroup/dbtesttool/dbtool"
+	"github.com/tal-tech/cds/pkg/ckgroup/dbtesttool/dbtool"
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
 	"testing"

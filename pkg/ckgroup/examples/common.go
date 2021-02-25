@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/tal-tech/cds/tools/ckgroup/config"
+	"github.com/tal-tech/cds/pkg/ckgroup/config"
 )
 
 var (

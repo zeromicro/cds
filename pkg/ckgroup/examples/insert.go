@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/tal-tech/cds/tools/ckgroup"
+	"github.com/tal-tech/cds/pkg/ckgroup"
 )
 
 func insert2(group ckgroup.DBGroup) {

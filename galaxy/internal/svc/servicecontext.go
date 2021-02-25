@@ -5,8 +5,8 @@ import (
 
 	"github.com/tal-tech/cds/galaxy/internal/config"
 	"github.com/tal-tech/cds/galaxy/internal/model"
-	"github.com/tal-tech/cds/tools/canalx"
-	"github.com/tal-tech/cds/tools/debeziumx"
+	"github.com/tal-tech/cds/pkg/canalx"
+	"github.com/tal-tech/cds/pkg/debeziumx"
 	"go.etcd.io/etcd/clientv3"
 )
 

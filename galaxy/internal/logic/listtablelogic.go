@@ -8,8 +8,8 @@ import (
 
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
-	"github.com/tal-tech/cds/tools/mongodbx"
-	"github.com/tal-tech/cds/tools/mysqlx"
+	"github.com/tal-tech/cds/pkg/mongodbx"
+	"github.com/tal-tech/cds/pkg/mysqlx"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 

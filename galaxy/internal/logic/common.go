@@ -8,8 +8,8 @@ import (
 	config2 "github.com/tal-tech/cds/dm/cmd/sync/config"
 	"github.com/tal-tech/cds/galaxy/internal/model"
 	"github.com/tal-tech/cds/rtu/cmd/sync/config"
-	"github.com/tal-tech/cds/tools/mysqlx"
-	"github.com/tal-tech/cds/tools/strx"
+	"github.com/tal-tech/cds/pkg/mysqlx"
+	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
 	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
 )

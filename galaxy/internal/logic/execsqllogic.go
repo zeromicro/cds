@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/tal-tech/cds/galaxy/internal/svc"
-	"github.com/tal-tech/cds/tools/clickhousex"
+	"github.com/tal-tech/cds/pkg/clickhousex"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 

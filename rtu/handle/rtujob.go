@@ -12,8 +12,8 @@ import (
 	"github.com/tal-tech/cds/rtu/cmd/sync/config"
 	"github.com/tal-tech/cds/rtu/model"
 	"github.com/tal-tech/cds/rtu/monitor"
-	"github.com/tal-tech/cds/tools/ckgroup"
-	groupcfg "github.com/tal-tech/cds/tools/ckgroup/config"
+	"github.com/tal-tech/cds/pkg/ckgroup"
+	groupcfg "github.com/tal-tech/cds/pkg/ckgroup/config"
 )
 
 type runEngine struct {
