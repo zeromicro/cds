@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/tal-tech/cds/dm/cmd/sync/config"
+	"github.com/tal-tech/cds/cmd/dm/cmd/sync/config"
 	"github.com/tal-tech/cds/galaxy/internal/model"
 	"github.com/tal-tech/cds/galaxy/internal/svc"
 	"github.com/tal-tech/cds/galaxy/internal/types"
