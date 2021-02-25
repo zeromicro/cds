@@ -20,7 +20,7 @@ usg:
 .PHONY : logo
 logo:
 	@cat VERSION
-	@cat sit/logo
+	@cat logo
 
 .DELETE_ON_ERROR: build/build.log
 build/build.log: $(GO_FILES)
