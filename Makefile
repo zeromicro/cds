@@ -1,9 +1,4 @@
 # run from repository root
-
-# Example:
-#   make up -- start whole staff
-#   make down -- stop and clean whole staff
-#	make docker_infrastructrue_up  -- start infrastructrue like etcd kafka clickhouse etc..
 include common.mk
 
 PROJECT="CDS"

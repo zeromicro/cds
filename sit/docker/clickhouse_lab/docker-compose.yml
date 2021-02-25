@@ -1,0 +1,12 @@
+version: '3.1'
+
+services:
+  ch-lab:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./override.xml:/etc/clickhouse-server/config.d/local.xml
+    ports:
+      - 8123:8123
+      - 9000:9000
+    environment:
+      TZ: "Asia/Shanghai"
