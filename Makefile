@@ -20,7 +20,7 @@ usg:
 .PHONY : logo
 logo:
 	@cat VERSION
-	@cat sit/logo
+	@cat logo
 
 .DELETE_ON_ERROR: build/build.log
 build/build.log: $(GO_FILES)
@@ -37,10 +37,6 @@ make_build.info:
 	@echo "=================docker build ======================"
 	docker build --target builder -t my/cds_builder:latest . 
 	docker build  --target cds  -t cds . 
-	@echo "================= docker clean ================================================="
-	@if test -n "$$(docker images -f "dangling=true" -q)" ; then \
-	docker rmi $$(docker images -f "dangling=true" -q) ; \
-	fi
 
 .PHONY : docker_build
 docker_build: make_build.info
@@ -57,16 +53,38 @@ docker_build_run: docker_build docker_run
 docker_infrastructrue_up:
 	@echo "==================== launch docker deps ========================="
 	@docker-compose -f sit/docker/deps.yml  up -d
+	@if test -n "$$(docker volume ls -qf dangling=true)" ; then \
+	docker volume rm $$(docker volume ls -qf dangling=true) ; \
+	fi
 
 .PHONY : docker_infrastructrue_down
 docker_infrastructrue_down:
 	docker-compose -f sit/docker/deps.yml  down
 
-.PHONY : up
-up:  logo docker_build docker_infrastructrue_up docker_app_run
-	cd sit/docker/init && sh ./init.sh
+.PHONY : init 
+init :  logo docker_build docker_infrastructrue_up docker_app_run
+	cd  sit/docker && sh ./init.sh
 	@cat sit/info
 
-.PHONY : down
-down:
+.PHONY : docker_clean
+docker_clean :
+	@echo "================= docker clean ================================================="
+	@if test -n "$$(docker images -f "dangling=true" -q)" ; then \
+	docker rmi $$(docker images -f "dangling=true" -q) ; \
+	else echo no dangling image to clean ;\
+	fi
+	@if test -n "$$(docker volume ls -qf dangling=true)" ; then \
+	docker volume rm $$(docker volume ls -qf dangling=true) ; \
+	else echo no dangling volume  to clean; \
+	fi
+
+.PHONY : up
+up: logo docker_build docker_clean docker_infrastructrue_up docker_app_run init 
+
+.PHONY : end
+end:
 	@docker-compose -f sit/docker/app.yml   -f sit/docker/deps.yml down
+
+.PHONY : down
+down: end docker_clean
+
