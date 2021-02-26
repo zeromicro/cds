@@ -9,7 +9,7 @@ import (
 	"github.com/tal-tech/go-zero/core/logx"
 )
 
-//Kfk2Db  simple pull kafka data to clickhouse
+// Kfk2Db  simple pull kafka data to clickhouse
 func Kfk2Db(ctx context.Context, sc KfkStreamConsumer, db *sql.DB, num int, h HandleFunc, query string) error {
 	err := errors.New("outoff loop")
 	stream := sc.Subscribe(ctx, h)

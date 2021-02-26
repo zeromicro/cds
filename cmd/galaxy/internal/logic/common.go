@@ -41,7 +41,7 @@ func buildJob(dsn, id, sourceType, table, queryKey, targetDb string, shard []str
 	job.Source.Type = sourceType
 	job.Source.Table = table
 	job.Source.Dsn = dsn
-	//job.Source.QueryKey = req.Source.QueryKey[k]
+	// job.Source.QueryKey = req.Source.QueryKey[k]
 	job.Source.QueryKey = queryKey
 	job.Source.Topic = topic
 

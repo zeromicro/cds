@@ -121,10 +121,10 @@ func (ie *insertEngine) insert(items []interface{}) {
 	}
 	if len(res) == 0 {
 		ie.manager.monitorVec.db.Inc(ie.manager.labels.insertOkLabel)
-		//ie.insertOkChan <- 1
+		// ie.insertOkChan <- 1
 
 		logx.Errorf("[%s] shoud not be empty, block here", ie.manager.conf.Source.Topic)
-		// will block
+		//  will block
 		return
 	}
 	errCnt := 1

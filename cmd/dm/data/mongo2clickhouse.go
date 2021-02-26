@@ -97,7 +97,7 @@ func (mg *Mongo2ClickHouseModel) MongoInertIntoClickHouse(job *config.Job, table
 				logx.Info("Task ID:" + job.ID + " has been stopped manually")
 				return "stopped", nil
 			default:
-				//如果到了窗口期 记录一下预备写入的第一条ID 并停止
+				// 如果到了窗口期 记录一下预备写入的第一条ID 并停止
 				if job.WindowPeriod.EndHour == 0 && job.WindowPeriod.StartHour == 0 {
 				} else if time.Now().Hour() > job.WindowPeriod.EndHour || time.Now().Hour() < job.WindowPeriod.StartHour {
 					if firstID, ok := insertData[0][indexOfID].(string); ok {

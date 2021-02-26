@@ -42,7 +42,7 @@ func (q *TaskQueue) Take() (*Service, bool) {
 	var result *Service
 	for i := 0; i < len(q.elements); i++ {
 		window := q.elements[i].Job.WindowPeriod
-		//没有窗口期 移除元素
+		// 没有窗口期 移除元素
 		if window.StartHour == 0 && window.EndHour == 0 || (time.Now().Hour() >= window.StartHour && time.Now().Hour() <= window.EndHour) {
 			result = q.elements[i]
 			q.elements = append(q.elements[:i], q.elements[i+1:]...)

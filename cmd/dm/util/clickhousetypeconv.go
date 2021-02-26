@@ -31,7 +31,7 @@ func RepairData(mp map[string]interface{}, name2Type map[string]string) ([]inter
 	return pic, tp, id, nil
 }
 
-//根据desc clickhouse的结果制造 字段名2默认值映射
+// 根据desc clickhouse的结果制造 字段名2默认值映射
 func getDefaultValue(name2Type map[string]string) map[string]interface{} {
 	result := make(map[string]interface{}, len(name2Type))
 	for k, v := range name2Type {

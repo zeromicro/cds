@@ -6,10 +6,10 @@ import "database/sql"
 type SQLTable struct {
 	DbName              string
 	Table               string
-	Types               map[string]DataType //列名和类型的映射
+	Types               map[string]DataType // 列名和类型的映射
 	PrimaryKey          string
-	Columns             []string      //列信息（有序）
-	ColumnsDefaultValue []interface{} // 用作nil填充
+	Columns             []string      // 列信息（有序）
+	ColumnsDefaultValue []interface{} //  用作nil填充
 	PrimaryKeyIndex     int
 
 	InsertSQL string

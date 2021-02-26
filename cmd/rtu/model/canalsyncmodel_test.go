@@ -39,7 +39,7 @@ var (
 func TestCanalCreate(t *testing.T) {
 	obj := &CanalMysql{}
 	err := obj.UnmarshalFromByte(createData, pool)
-	//err := json.Unmarshal(createData, obj)
+	// err := json.Unmarshal(createData, obj)
 	if err != nil {
 		t.Error(err)
 	}

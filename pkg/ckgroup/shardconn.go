@@ -10,13 +10,13 @@ type ShardConn interface {
 	GetAllConn() []CKConn
 	GetReplicaConn() []CKConn
 	GetShardConn() CKConn
-	//所有节点执行
+	// 所有节点执行
 	Exec(ignoreErr bool, query string, args ...interface{}) []hostErr
-	//所有副本节点执行
+	// 所有副本节点执行
 	ExecReplica(ignoreErr bool, query string, args ...interface{}) []hostErr
-	//在主节点上执行,如果失败在副本节点上执行
+	// 在主节点上执行,如果失败在副本节点上执行
 	ExecAuto(query string, args ...interface{}) error
-	//在主节点上插入,如果失败在副本节点上插入
+	// 在主节点上插入,如果失败在副本节点上插入
 	InsertAuto(query string, sliceData interface{}) error
 	Close()
 }
@@ -36,7 +36,7 @@ type hostErr struct {
 }
 
 func NewShardConn(shardIndex int, conf config.ShardGroupConfig) (ShardConn, error) {
-	//失败时,close 所有数据库连接
+	// 失败时,close 所有数据库连接
 	isClean := false
 	shard := shardConn{}
 	shard.ShardIndex = shardIndex

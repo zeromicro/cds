@@ -51,7 +51,7 @@ func newInput(manager *runEngine) *inputEngine {
 
 func (inpe *inputEngine) commitOrNext(data *[]*parseStruct, size *int) {
 	if len(*data) == 0 {
-		//logx.Info("commit exit (reason len(data) = 0)")
+		// logx.Info("commit exit (reason len(data) = 0)")
 		return
 	}
 	inpe.manager.monitorVec.runtime.Set(inpe.manager.labels.batchLengthLable, len(*data))

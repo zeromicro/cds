@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"log"
-	_ "net/http/pprof" // #nosec
+	_ "net/http/pprof" //  #nosec
 	"os"
 	"os/signal"
 	"runtime"
@@ -87,7 +87,7 @@ func await(exit chan struct{}, wg *sync.WaitGroup) {
 
 	close(exit)
 
-	//time.Sleep(conf.BATCH_TIME * 5)
+	// time.Sleep(conf.BATCH_TIME * 5)
 	logx.Info("waiting...")
 	wg.Wait()
 

@@ -10,10 +10,10 @@ import (
 )
 
 const (
-	baseInsertNum          = 10
-	transactionNum         = 10
-	benchmarkInsertNum int = 1e4
-	benchmarkThreadNum     = 100
+	baseInsertNum int = 10
+	// transactionNum         = 10
+	benchmarkInsertNum = 10000
+	benchmarkThreadNum = 100
 )
 
 const insertMySQL = "insert into test.test_data (pk,int_value,float_value,double_value,char_value,varchar_value,time_value) values(?,?,?,?,?,?,?)"

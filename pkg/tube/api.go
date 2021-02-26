@@ -17,16 +17,16 @@ type AsyncProducer interface {
 // HandleFunc receive kafka message ,return result
 type HandleFunc func([]byte) (interface{}, error)
 
-//KfkStreamConsumer  aim to accelerate process speed per consumer
+// KfkStreamConsumer  aim to accelerate process speed per consumer
 type KfkStreamConsumer interface {
 	// start to async fetch the messages .
 	// when the amount of received message is up to the config num,
-	//the caller can get the slice of subscribe messages
+	// the caller can get the slice of subscribe messages
 	Subscribe(ctx context.Context, handle HandleFunc) chan interface{}
 
-	//Commit the continuously outputted messages' offset
+	// Commit the continuously outputted messages' offset
 	Commit() error
 
-	//stop  fetching  message
+	// stop  fetching  message
 	Close() error
 }
