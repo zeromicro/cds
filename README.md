@@ -2,7 +2,7 @@
   <img width ="200px" src="https://gitee.com/kevwan/static/raw/master/doc/images/cds/logo.png">
 </p>
 
-# ClickHouse Data System
+# ClickHouse Data Synchromesh
 
 基于 [go-zero](https://github.com/tal-tech/go-zero) 构建的 `ClickHouse` 的大数据数据同步、存储、计算系统。
 
