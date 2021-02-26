@@ -26,11 +26,12 @@ require (
 	github.com/segmentio/kafka-go v0.4.8
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/stretchr/testify v1.6.1
-	github.com/tal-tech/go-zero v1.0.26
+	github.com/tal-tech/go-zero v1.1.4
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5 // indirect
 	go.etcd.io/etcd v3.3.4+incompatible
 	go.mongodb.org/mongo-driver v1.4.3
 	go.uber.org/atomic v1.7.0
+	go.uber.org/automaxprocs v1.4.0 // indirect
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 	golang.org/x/sys v0.0.0-20201119102817-f84b799fce68 // indirect
@@ -38,7 +39,6 @@ require (
 	golang.org/x/tools v0.0.0-20201125231158-b5590deeca9b // indirect
 	gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b // indirect
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 	honnef.co/go/tools v0.0.1-2020.1.6 // indirect
 )
