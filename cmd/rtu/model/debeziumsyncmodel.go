@@ -169,7 +169,7 @@ func (mongo *DebeziumMongo) setValueMap(vm, tmp ValueMap, table *SQLTable) {
 			case "_id":
 				// 插入/更新的主键
 				for idk, idv := range v {
-					tmpIdk := strings.Replace(idk, "$", "", -1)
+					tmpIdk := strings.ReplaceAll(idk, "$", "")
 					if tmpIdk == "oid" {
 						vm["_id"] = idv
 					} else {
@@ -179,7 +179,7 @@ func (mongo *DebeziumMongo) setValueMap(vm, tmp ValueMap, table *SQLTable) {
 			case "$set":
 				// 更新的具体内容
 				for idk, idv := range v {
-					vm[strings.Replace(idk, "$", "", -1)] = idv
+					vm[strings.ReplaceAll(idk, "$", "")] = idv
 				}
 			default:
 				res, err := json.Marshal(v)

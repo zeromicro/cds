@@ -24,8 +24,8 @@ type (
 		Indexes   []string
 
 		DBs               []string
-		MutableFieldDBs   []string //字段的tag里面的db:""
-		MutableFieldNames []string //字段的名字
+		MutableFieldDBs   []string // 字段的tag里面的db:""
+		MutableFieldNames []string // 字段的名字
 
 		sqlCreateTable string
 		sqlInsert      string

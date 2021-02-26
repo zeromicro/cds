@@ -119,7 +119,7 @@ func (mc *Mysql2ClickHouse) MysqlInertIntoClickHouse(job *config.Job) (string, e
 }
 
 func formatToInsert(rows *sql.Rows, ckMap map[string]string, indexOfFlag, indexOfInsertID int, insertData *[][]interface{}) error {
-	countOfColumn := len(ckMap) - 2 //字段数量为Ck字段数减2 (flag和insert_id)
+	countOfColumn := len(ckMap) - 2 //  字段数量为Ck字段数减2 (flag和insert_id)
 	temp := make([]interface{}, countOfColumn)
 	tempPointer := make([]interface{}, countOfColumn)
 	for i := 0; i < countOfColumn; i++ {
@@ -130,7 +130,7 @@ func formatToInsert(rows *sql.Rows, ckMap map[string]string, indexOfFlag, indexO
 		logx.Error(err)
 		return err
 	}
-	//先填 Flag Insert_ID 进去 然后把Mysql的数据再塞进去
+	// 先填 Flag Insert_ID 进去 然后把Mysql的数据再塞进去
 	allData, err := combineData(temp, indexOfFlag, indexOfInsertID)
 	if err != nil {
 		logx.Error(err)
@@ -140,11 +140,11 @@ func formatToInsert(rows *sql.Rows, ckMap map[string]string, indexOfFlag, indexO
 	return nil
 }
 
-//This func create the sql which 1.get data from mysql 2.insert data to clickhouse
+// This func create the sql which 1.get data from mysql 2.insert data to clickhouse
 func combineSQL(ckTypeMap map[string]string, sourceTable, targetTable, targetDB string, pks map[string]int, batchCnt int) (string, string, int, int, map[string]int) {
 	var selectSqlBuilder, insertSqlBuilder strings.Builder
 	indexOfFlag, indexOfInertID := -1, -1
-	//prepare the query
+	// prepare the query
 	selectSqlBuilder.WriteString("SELECT ")
 	insertSqlBuilder.WriteString("INSERT INTO " + targetDB + "." + targetTable + " (")
 	var suffix string
@@ -158,7 +158,7 @@ func combineSQL(ckTypeMap map[string]string, sourceTable, targetTable, targetDB 
 	pksIndex := make(map[string]int, len(pks))
 	for i := 0; i < len(kt); i++ {
 		if _, ok := pks[kt[i]]; ok {
-			//pksIndex = append(pksIndex, i)
+			// pksIndex = append(pksIndex, i)
 			pksIndex[kt[i]] = i
 		}
 		switch {
@@ -206,7 +206,7 @@ func combineData(data []interface{}, indexOfFlag int, indexOfInsertID int) ([]in
 	}
 	result[indexOfInsertID] = uint64(intNum)
 	var i, j int
-	//俩指针 一个扫描data 当遇到j=flag | insertID 时，i不动 j++
+	// 俩指针 一个扫描data 当遇到j=flag | insertID 时，i不动 j++
 	for i < len(data) {
 		switch {
 		case j == indexOfFlag || j == indexOfInsertID:

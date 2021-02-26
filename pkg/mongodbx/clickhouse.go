@@ -124,7 +124,7 @@ func getMongoDataCursor(cli *mongo.Client, db, table string, reverse bool) (*mon
 		order = -1
 	}
 	opts := options.Find()
-	opts.SetSort(bson.D{{"$natural", order}})
+	opts.SetSort(bson.D{{Key: "$natural", Value: order}})
 	opts.SetLimit(1000)
 
 	cur, err := cli.Database(db).Collection(table).Find(context.TODO(), bson.M{}, opts)
@@ -146,7 +146,7 @@ func getColumnNameAndTypeFromBsonM(v *bson.M, data *table2.TableMeta) error {
 		if k == "updateTime" || k == "update_time" || k == "insert_id" {
 			data.UpdateTime = k
 		}
-		//type converter
+		// type converter
 		column := table2.Column{
 			Name: k,
 		}

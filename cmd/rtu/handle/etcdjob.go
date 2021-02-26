@@ -108,7 +108,7 @@ func createNewTask(wg *sync.WaitGroup, exit chan struct{}, client *clientv3.Clie
 		job.Kafka = conf.Kafka
 		job.Kafka.Topic = job.Source.Topic
 		logx.Info(job.Kafka.Topic)
-		//todo . from etcd
+		// todo . from etcd
 		job.Kafka.Group = job.Kafka.Topic + "_rtu"
 
 		// 运行任务
@@ -148,11 +148,11 @@ func getLatestValue(client *clientv3.Client, key string) []byte {
 // false 不存在，true 存在
 func checkJobExists(client *clientv3.Client, jobID string, prefix string) bool {
 	b := getLatestValue(client, prefix+jobID)
-	//logx.Infof("[debug] jobid%s result:(%s)", jobID, string(b))
+	// logx.Infof("[debug] jobid%s result:(%s)", jobID, string(b))
 	if b == nil {
 		return false
 	}
-	//logx.Infof("exists1: %s", string(b))
+	// logx.Infof("exists1: %s", string(b))
 	jobStatus := &config.Status{}
 	err := json.Unmarshal(b, jobStatus)
 	if err != nil {

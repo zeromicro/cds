@@ -74,7 +74,7 @@ func (cpo *ChProxyOperator) ObtainClickHouseKV(targetDB, targetTable string) (ma
 			logx.Error(err)
 			continue
 		}
-		//所有的字段
+		// 所有的字段
 		name2Type[clDescType.Name] = clDescType.Type
 	}
 	return name2Type, nil

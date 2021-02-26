@@ -13,7 +13,7 @@ import (
 )
 
 var (
-//json = jsoniter.ConfigCompatibleWithStandardLibrary
+// json = jsoniter.ConfigCompatibleWithStandardLibrary
 )
 
 type (

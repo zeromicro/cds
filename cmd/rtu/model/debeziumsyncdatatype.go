@@ -62,7 +62,7 @@ func ParseTypeByCkType(ckType string) DataType {
 // Data 关系型数据的一条记录
 type Data struct {
 	Keys                  []string
-	Values                []interface{} //不用map是因为数据量少的情况下，slice性能更高
+	Values                []interface{} // 不用map是因为数据量少的情况下，slice性能更高
 	CheckPoint, Operation string
 }
 
@@ -145,7 +145,7 @@ func ParseSQLValueByType(typ DataType, str string) (interface{}, error) {
 		if len(str) < len(SQLDateCanalTimeLayout) {
 			return nil, errors.New("invalid time format:" + str)
 		}
-		t, e := time.Parse(SQLDateCanalTimeLayout+" MST", strings.Replace(str[:len(SQLDateCanalTimeLayout)], "T", " ", -1)+" CST")
+		t, e := time.Parse(SQLDateCanalTimeLayout+" MST", strings.ReplaceAll(str[:len(SQLDateCanalTimeLayout)], "T", " ")+" CST")
 		if e != nil {
 			return nil, e
 		}

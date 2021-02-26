@@ -5,5 +5,5 @@ const (
 	KeyStopJob = "/hera/dm/stop-job/"
 	KeyStatus  = "/hera/dm/status/"
 
-	RtuKeyStatus  = "/hera/rtu/status/"
+	RtuKeyStatus = "/hera/rtu/status/"
 )

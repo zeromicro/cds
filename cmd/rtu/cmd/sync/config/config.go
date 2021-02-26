@@ -20,7 +20,7 @@ type Config struct {
 		Hosts []string
 		Key   string
 	}
-	//Etcd etcd.EtcdConf //etcd的配置。每个rtu节点的Etcd.Key不一样，按照`/hera/rtu/01/`格式顺序排列
+	// Etcd etcd.EtcdConf //etcd的配置。每个rtu节点的Etcd.Key不一样，按照`/hera/rtu/01/`格式顺序排列
 
 	Redis struct {
 		Host string

@@ -20,14 +20,14 @@ var (
 	f               = flag.String("f", "etc/dm.json", "The config file")
 	c               config.Config
 	cli             *clientv3.Client
-	taskQueue       module.TaskQueue      //任务队列
-	controllerMap   map[string]*chan bool //运行任务的控制开关
-	countManager    chan int              //运行任务的数量锁
-	manager         *module.Manager       //管理者
-	prometheusOnOff chan bool             //prometheus开关
+	taskQueue       module.TaskQueue      // 任务队列
+	controllerMap   map[string]*chan bool // 运行任务的控制开关
+	countManager    chan int              // 运行任务的数量锁
+	manager         *module.Manager       // 管理者
+	prometheusOnOff chan bool             // prometheus开关
 	dmPrometheus    *module.DmPrometheus
-	session         *concurrency.Session //etcd锁会话
-	statueHelper    *module.StatusHelper //状态修改器
+	session         *concurrency.Session // etcd锁会话
+	statueHelper    *module.StatusHelper // 状态修改器
 )
 
 func main() {

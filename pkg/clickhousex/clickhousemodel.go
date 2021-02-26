@@ -54,7 +54,7 @@ func NewClickHouseClusterModel(appName, dsn, cluster string, data interface{}, s
 	}
 	model.Database = dsnInfo.Query().Get("database")
 
-	//database
+	// database
 	e = CreateDbClusterIne(dsn, cluster)
 	if e != nil {
 		logx.Error(e)
@@ -103,7 +103,7 @@ func MustNewClickHouseClusterModel(appName, dsn, cluster string, data interface{
 	}
 	model.Database = dsnInfo.Query().Get("database")
 
-	//database
+	// database
 	e = CreateDbClusterIne(dsn, cluster)
 	if e != nil {
 		logx.Error(e)
@@ -269,7 +269,7 @@ func (c *ClickHouseClusterModel) createTableIfNotExists() error {
 		logx.Error(e)
 		return e
 	}
-	_, e = c.Conn.Exec(strings.Replace(c.sqlAllCreateTable, "on cluster "+c.Cluster, " ", -1))
+	_, e = c.Conn.Exec(strings.ReplaceAll(c.sqlAllCreateTable, "on cluster "+c.Cluster, " "))
 	if e != nil {
 		logx.Error(e)
 		return e
@@ -279,7 +279,7 @@ func (c *ClickHouseClusterModel) createTableIfNotExists() error {
 		logx.Error(e)
 		return e
 	}
-	_, e = c.Conn.Exec(strings.Replace(c.sqlNowCreateView, "on cluster "+c.Cluster, " ", -1))
+	_, e = c.Conn.Exec(strings.ReplaceAll(c.sqlNowCreateView, "on cluster "+c.Cluster, " "))
 	if e != nil {
 		logx.Error(e)
 		return e
@@ -299,7 +299,7 @@ func (c *ClickHouseClusterModel) DropTableIfExists() error {
 		logx.Error(e)
 		return e
 	}
-	_, e = c.Conn.Exec(strings.Replace(all, "on cluster "+c.Cluster, " ", -1))
+	_, e = c.Conn.Exec(strings.ReplaceAll(all, "on cluster "+c.Cluster, " "))
 	if e != nil {
 		logx.Error(e)
 		return e
@@ -310,7 +310,7 @@ func (c *ClickHouseClusterModel) DropTableIfExists() error {
 		logx.Error(e)
 		return e
 	}
-	_, e = c.Conn.Exec(strings.Replace(now, "on cluster "+c.Cluster, " ", -1))
+	_, e = c.Conn.Exec(strings.ReplaceAll(now, "on cluster "+c.Cluster, " "))
 	if e != nil {
 		logx.Error(e)
 		return e

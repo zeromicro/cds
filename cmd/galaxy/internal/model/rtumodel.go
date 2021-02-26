@@ -104,7 +104,7 @@ func (r *RtuModel) GetCountByDb(db string) (int64, error) {
 }
 
 func (r *RtuModel) GetAllDb() ([]*Rtu, error) {
-	//result, err := r.base.QueryWhere("1 = 1 group by source_db")
+	// result, err := r.base.QueryWhere("1 = 1 group by source_db")
 	var result []*Rtu
 	err := r.base.Conn.QueryRowsPartial(&result, "select source_db from "+r.base.TableName+" group by source_db")
 	if err != nil {
