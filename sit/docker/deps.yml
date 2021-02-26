@@ -43,7 +43,7 @@ services:
       timeout: 3s
       retries: 30
   zookeeper:
-    image: zookeeper:3.5
+    image: zookeeper:3.6
     container_name: zookeeper
     ports:
       - 2181:2181
@@ -52,6 +52,38 @@ services:
       interval: 2s
       timeout: 5s
       retries: 30
+    environment:
+      # The number of milliseconds of each tick
+      - ZOO_TICK_TIME=2000
+      # The number of ticks that the initial
+      # synchronization phase can take
+      # This value is not quite motivated
+      - ZOO_INIT_LIMIT=300 
+      # The number of ticks that can pass between
+      # sending a request and getting an acknowledgement
+      - ZOO_SYNC_LIMIT=10
+      - ZOO_MAX_CLIENT_CNXNS=2000
+      - ZOO_AUTOPURGE_SNAPRETAINCOUNT=10
+      - ZOO_AUTOPURGE_PURGEINTERVAL=1
+      # To avoid seeks ZooKeeper allocates space in the transaction log file in
+      # blocks of preAllocSize kilobytes. The default block size is 64M. One reason
+      # for changing the size of the blocks is to reduce the block size if snapshots
+      # are taken more often. (Also, see snapCount).
+      - ZOO_PRE_ALLOC_SIZE=131072
+      # Clients can submit requests faster than ZooKeeper can process them,
+      # especially if there are a lot of clients. To prevent ZooKeeper from running
+      # out of memory due to queued requests, ZooKeeper will throttle clients so that
+      # there is no more than globalOutstandingLimit outstanding requests in the
+      # system. The default limit is 1,000.ZooKeeper logs transactions to a
+      # transaction log. After snapCount transactions are written to a log file a
+      # snapshot is started and a new transaction log file is started. The default
+      # snapCount is 10,000.
+      - ZOO_SNAP_COUNT=3000000
+      # - ZOO_STANDALONE_ENABLED
+      # - ZOO_ADMINSERVER_ENABLED
+      # - ZOO_4LW_COMMANDS_WHITELIST
+      # - ZOO_ADMINSERVER_ENABLED
+
   ch-server-1:
       image: yandex/clickhouse-server
       container_name: ch-server-1
@@ -133,7 +165,7 @@ services:
       zookeeper:
         condition: service_healthy
   mongo1:
-    image: mongo:4.2
+    image: mongo:4.4
     container_name: mongo1
     command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30001"]
     # volumes:
@@ -146,7 +178,7 @@ services:
       start_period: 30s
 
   mongo2:
-    image: mongo:4.2
+    image: mongo:4.4
     container_name: mongo2
     command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30002"]
     # volumes:
@@ -155,7 +187,7 @@ services:
       - 30002:30002
 
   mongo3:
-    image: mongo:4.2
+    image: mongo:4.4
     container_name: mongo3
     command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30003"]
     # volumes:
