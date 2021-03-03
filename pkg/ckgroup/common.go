@@ -11,6 +11,7 @@ import (
 	"unsafe"
 
 	"github.com/dchest/siphash"
+	"github.com/tal-tech/go-zero/core/logx"
 )
 
 const (
@@ -74,17 +75,6 @@ func findFieldValueByTagCache(value reflect.Value, tag, tagValue string) (reflec
 	t := value.Type()
 	tagMap, ok := indexCache[t]
 
-	commonFunc := func(innerMap map[string]int) (reflect.Value, error) {
-		index, err := findFieldIndexByTag(t, tag, tagValue)
-		if err == nil {
-			innerMap[tag+tagValue] = index
-			return value.Field(index), nil
-		} else {
-			innerMap[tag+tagValue] = -1
-			return reflect.Value{}, err
-		}
-	}
-
 	if ok {
 		fieldIndex, b := tagMap[tag+tagValue]
 		if b {
@@ -94,13 +84,27 @@ func findFieldValueByTagCache(value reflect.Value, tag, tagValue string) (reflec
 				return value.Field(fieldIndex), nil
 			}
 		} else {
-			return commonFunc(tagMap)
+			index, err := findFieldIndexByTag(t, tag, tagValue)
+			if err == nil {
+				tagMap[tag+tagValue] = index
+				return value.Field(index), nil
+			} else {
+				tagMap[tag+tagValue] = -1
+				return reflect.Value{}, err
+			}
 		}
 	} else {
 		tagMap = map[string]int{}
 		indexCache[t] = tagMap
 
-		return commonFunc(tagMap)
+		index, err := findFieldIndexByTag(t, tag, tagValue)
+		if err == nil {
+			tagMap[tag+tagValue] = index
+			return value.Field(index), nil
+		} else {
+			tagMap[tag+tagValue] = -1
+			return reflect.Value{}, err
+		}
 	}
 }
 
@@ -180,11 +184,21 @@ func saveData(db *sql.DB, insertSql string, values []rowValue) error {
 
 	stmt, err := tx.Prepare(insertSql)
 	if err != nil {
+		if err := tx.Rollback(); err != nil {
+			logx.Error("tx rollback error:", err.Error())
+		}
 		return err
 	}
-	defer stmt.Close()
+	defer func() {
+		if err := stmt.Close(); err != nil {
+			logx.Error("stmt close error:", err.Error())
+		}
+	}()
 	for _, value := range values {
 		if _, err := stmt.Exec(value...); err != nil {
+			if err := tx.Rollback(); err != nil {
+				logx.Error("tx rollback error:", err.Error())
+			}
 			return err
 		}
 	}
