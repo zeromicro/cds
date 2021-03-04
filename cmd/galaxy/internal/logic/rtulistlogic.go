@@ -52,7 +52,9 @@ func (l *RtuListLogic) RtuList(req types.ListRequest) (*types.RtuList, error) {
 		logx.Error(e)
 		return nil, e
 	}
-	rp := &types.RtuList{}
+	rp := &types.RtuList{
+		RtuList: make([]types.Rtu, 0, len(vs)),
+	}
 
 	cnt, err := l.svcCtx.RtuModel.GetCountByDb(req.DbName)
 	if err != nil {
