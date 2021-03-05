@@ -3,6 +3,7 @@ package ckgroup
 import (
 	"reflect"
 	"testing"
+	"time"
 )
 
 func Test_panicIfErr(t *testing.T) {
@@ -72,13 +73,13 @@ func Test_fieldByTag(t *testing.T) {
 	for _, tt := range tests {
 		v := tt
 		t.Run(v.name, func(t *testing.T) {
-			got, err := fieldByTag(v.args.value, v.args.tag, v.args.tagValue)
+			got, err := findFieldValueByTag(v.args.value, v.args.tag, v.args.tagValue)
 			if (err != nil) != v.wantErr {
-				t.Errorf("fieldByTag() error = %v, wantErr %v", err, v.wantErr)
+				t.Errorf("findFieldValueByTag() error = %v, wantErr %v", err, v.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, v.want) {
-				t.Errorf("fieldByTag() got = %v, want %v", got, v.want)
+				t.Errorf("findFieldValueByTag() got = %v, want %v", got, v.want)
 			}
 		})
 	}
@@ -209,6 +210,76 @@ func Test_isChanClosed(t *testing.T) {
 		t.Run(v.name, func(t *testing.T) {
 			if got := isChanClosed(v.args.ch); got != v.want {
 				t.Errorf("isChanClosed() = %v, want %v", got, v.want)
+			}
+		})
+	}
+}
+
+type benchmarkStruct struct {
+	A string    `json:"a"`
+	B int64     `json:"b"`
+	C bool      `json:"c"`
+	D time.Time `json:"d"`
+	E string    `json:"e"`
+}
+
+func Benchmark_findFieldValueByTag(b *testing.B) {
+	obj := benchmarkStruct{}
+	val := reflect.ValueOf(obj)
+	for i := 0; i < b.N; i++ {
+		_, _ = findFieldValueByTag(val, "json", "d")
+		_, _ = findFieldValueByTag(val, "json", "e")
+	}
+}
+
+func Benchmark_findFieldValueByTagCache(b *testing.B) {
+	obj := benchmarkStruct{}
+	val := reflect.ValueOf(obj)
+	for i := 0; i < b.N; i++ {
+		_, _ = findFieldValueByTagCache(val, "json", "d")
+		_, _ = findFieldValueByTagCache(val, "json", "e")
+	}
+}
+
+func Test_findFieldValueByTagCache(t *testing.T) {
+	testStruct := struct {
+		F1 string `db:"f1"`
+		F2 int    `json:"f2"`
+		F3 string `xx:"f3"`
+	}{}
+	testVal := reflect.ValueOf(testStruct)
+	f1Val := testVal.FieldByName(`F1`)
+	f2Val := testVal.FieldByName(`F2`)
+	f3Val := testVal.FieldByName(`F3`)
+	type args struct {
+		value    reflect.Value
+		tag      string
+		tagValue string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    reflect.Value
+		wantErr bool
+	}{
+		{args: args{testVal, `db`, `f1`}, want: f1Val, wantErr: false},
+		{args: args{testVal, `db`, `f1`}, want: f1Val, wantErr: false},
+		{args: args{testVal, `json`, `f2`}, want: f2Val, wantErr: false},
+		{args: args{testVal, `xx`, `f3`}, want: f3Val, wantErr: false},
+		{args: args{testVal, `aa`, `f3`}, want: reflect.Value{}, wantErr: true},
+		{args: args{testVal, `json`, `f1`}, want: reflect.Value{}, wantErr: true},
+		{args: args{testVal, `json`, `f1`}, want: reflect.Value{}, wantErr: true},
+	}
+	for _, tt := range tests {
+		v := tt
+		t.Run(v.name, func(t *testing.T) {
+			got, err := findFieldValueByTagCache(v.args.value, v.args.tag, v.args.tagValue)
+			if (err != nil) != v.wantErr {
+				t.Errorf("findFieldValueByTag() error = %v, wantErr %v", err, v.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, v.want) {
+				t.Errorf("findFieldValueByTag() got = %v, want %v", got, v.want)
 			}
 		})
 	}

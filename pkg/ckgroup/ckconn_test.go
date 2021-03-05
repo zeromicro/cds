@@ -89,7 +89,9 @@ func Test_ckConn_Insert(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	dbtool.DumpSelectInfo(statMap)
+	if !dbtool.DumpSelectInfo(statMap) {
+		t.Error("data not same !")
+	}
 }
 
 func Test_ckConn_QueryRow(t *testing.T) {

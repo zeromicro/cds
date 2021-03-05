@@ -64,7 +64,9 @@ func Test_shardConn_InsertAuto(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	dbtool.DumpSelectInfo(statMap)
+	if !dbtool.DumpSelectInfo(statMap) {
+		t.Error("data not same !")
+	}
 }
 
 func Test_shardConn_ExecReplica(t *testing.T) {

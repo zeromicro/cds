@@ -11,6 +11,7 @@ import (
 	"unsafe"
 
 	"github.com/dchest/siphash"
+	"github.com/tal-tech/go-zero/core/logx"
 )
 
 const (
@@ -25,6 +26,7 @@ var (
 	queryRowsTypeErr = errors.New("data type must be *[]*struct{} . ")
 	insertTypeErr    = errors.New("data type must be  []*sturct or []struct ")
 	ckDnsErr         = errors.New("parse clickhosue connect string fail . ")
+	indexCache       = map[reflect.Type]map[string]int{}
 )
 
 func panicIfErr(err error) {
@@ -46,19 +48,64 @@ func parseHostAndUser(str string) (string, string, error) {
 	return host, user, nil
 }
 
-func fieldByTag(value reflect.Value, tag, tagValue string) (reflect.Value, error) {
+func findFieldValueByTag(value reflect.Value, tag, tagValue string) (reflect.Value, error) {
 	t := value.Type()
-	for i := 0; i < value.NumField(); i++ {
+	index, err := findFieldIndexByTag(t, tag, tagValue)
+	if err != nil {
+		return reflect.Value{}, err
+	}
+	return value.Field(index), nil
+}
+
+func findFieldIndexByTag(t reflect.Type, tag, tagValue string) (int, error) {
+	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
 		tv, ok := field.Tag.Lookup(tag)
 		if !ok {
 			continue
 		}
 		if tv == tagValue {
-			return value.Field(i), nil
+			return i, nil
 		}
 	}
-	return reflect.Value{}, errors.New("field with tag '" + tag + "' not found")
+	return -1, errors.New("field with tag '" + tag + "' not found")
+}
+
+func findFieldValueByTagCache(value reflect.Value, tag, tagValue string) (reflect.Value, error) {
+	t := value.Type()
+	tagMap, ok := indexCache[t]
+
+	if ok {
+		fieldIndex, b := tagMap[tag+tagValue]
+		if b {
+			if fieldIndex == -1 {
+				return reflect.Value{}, errors.New("field with tag '" + tag + "' not found")
+			} else {
+				return value.Field(fieldIndex), nil
+			}
+		} else {
+			index, err := findFieldIndexByTag(t, tag, tagValue)
+			if err == nil {
+				tagMap[tag+tagValue] = index
+				return value.Field(index), nil
+			} else {
+				tagMap[tag+tagValue] = -1
+				return reflect.Value{}, err
+			}
+		}
+	} else {
+		tagMap = map[string]int{}
+		indexCache[t] = tagMap
+
+		index, err := findFieldIndexByTag(t, tag, tagValue)
+		if err == nil {
+			tagMap[tag+tagValue] = index
+			return value.Field(index), nil
+		} else {
+			tagMap[tag+tagValue] = -1
+			return reflect.Value{}, err
+		}
+	}
 }
 
 func generateInsertSQL(query string) (string, []string) {
@@ -80,9 +127,9 @@ func generateInsertSQL(query string) (string, []string) {
 // dest 是指针的 interface
 func span(dest interface{}, idx []int) rowValue {
 	var result []interface{}
+	structVal := reflect.ValueOf(dest).Elem()
 	for _, fieldIdx := range idx {
 		if fieldIdx != -1 {
-			structVal := reflect.ValueOf(dest).Elem()
 			if structVal.NumField() < fieldIdx+1 {
 				result = append(result, new(interface{}))
 			} else {
@@ -137,11 +184,21 @@ func saveData(db *sql.DB, insertSql string, values []rowValue) error {
 
 	stmt, err := tx.Prepare(insertSql)
 	if err != nil {
+		if err := tx.Rollback(); err != nil {
+			logx.Error("tx rollback error:", err.Error())
+		}
 		return err
 	}
-	defer stmt.Close()
+	defer func() {
+		if err := stmt.Close(); err != nil {
+			logx.Error("stmt close error:", err.Error())
+		}
+	}()
 	for _, value := range values {
 		if _, err := stmt.Exec(value...); err != nil {
+			if err := tx.Rollback(); err != nil {
+				logx.Error("tx rollback error:", err.Error())
+			}
 			return err
 		}
 	}
@@ -153,7 +210,7 @@ func saveData(db *sql.DB, insertSql string, values []rowValue) error {
 func generateRowValue(val reflect.Value, tags []string) (rowValue, error) {
 	args := make(rowValue, 0, len(tags))
 	for _, tagVal := range tags {
-		fieldVal, err := fieldByTag(val, DbTag, tagVal)
+		fieldVal, err := findFieldValueByTagCache(val, DbTag, tagVal)
 		if err != nil {
 			return args, err
 		}
