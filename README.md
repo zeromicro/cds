@@ -5,7 +5,7 @@
 # ClickHouse Data Synchromesh
 围绕`ClickHouse` 的自动化数据同步组件。
 
-控制台后端服务galaxy基于 [go-zero](https://github.com/tal-tech/go-zero) 构建。 
+galaxy控制台服务基于 [go-zero](https://github.com/tal-tech/go-zero) 构建。 
 
 ### 系统架构
 
