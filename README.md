@@ -3,7 +3,7 @@
 </p>
 
 # ClickHouse Data Synchromesh
-Data syncing, storing in golang for ClickHouse.
+Data syncing in golang for ClickHouse.
 
 围绕`ClickHouse` 的自动化数据同步组件。
 
