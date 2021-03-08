@@ -77,7 +77,7 @@ func (l *DmListLogic) DmList(req types.ListRequest) (*types.DmListResponse, erro
 			CreateTime:      v.CreateTime.Format(timex.StandardLayout),
 		}
 		if v.TargetShards != "" {
-			vs := []string{}
+			var vs []string
 			shards, e := strx.DecryptDsn(v.TargetShards)
 			if e != nil {
 				logx.Error(e)
