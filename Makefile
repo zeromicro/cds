@@ -3,8 +3,6 @@ include common.mk
 
 PROJECT="CDS"
 
-WATCH_NPM_DICT=$(shell du -ah $$(ls ./web | grep -v 'node_modules' | awk '{printf "web/%s\n",$$1}') | awk '{print $$2}')
-
 .DEFAULT: usg
 .PHONY : usg
 usg:
@@ -75,13 +73,8 @@ docker_clean :
 	else echo no dangling volume  to clean; \
 	fi
 
-
-web/dist: $(WATCH_NPM_DICT)
-	@echo "================= npm build ================================================="
-	@cd web ; npm run build:prod --report
-
 .PHONY : up
-up: logo web/dist docker_build docker_clean docker_infrastructrue_up docker_app_run init
+up: logo docker_build docker_clean docker_infrastructrue_up docker_app_run init 
 
 .PHONY : end
 end:
