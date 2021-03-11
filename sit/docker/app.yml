@@ -17,10 +17,10 @@ services:
     ports:
       - "8080:8080" # for debuging
     volumes:
-      - ../../cmd/galaxy/etc/galaxy-api.json:/cds/galaxy/etc/galaxy-api.json
+      - ../../cmd/galaxy/etc/galaxy-api.yaml:/cds/galaxy/etc/galaxy-api.yaml
     working_dir: /cds/galaxy
     command:
-      /cds/build/galaxy -f /cds/galaxy/etc/galaxy-api.json
+      /cds/build/galaxy -f /cds/galaxy/etc/galaxy-api.yaml
   rtu:
     image: cds
     container_name: rtu
