@@ -37,7 +37,7 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/:/var/log/nginx
-      - ../../web/static:/usr/local/html
+      - ../../web/dist:/usr/local/html
     depends_on:
       - galaxy
       - rtu

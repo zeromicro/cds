@@ -1,3 +1,26 @@
-Name: galaxy-api
+---
+Log:
+  Mode: console
+  Path: logs
+Name: cds.api
 Host: 0.0.0.0
 Port: 8080
+Timeout: 10000
+EtcdConfig:
+  - etcd:2379
+Mysql: root:root@tcp(mysql:3306)/galaxy?parseTime=true&loc=Local
+HeraCk: tcp://127.0.0.1:9000?username=default&password=
+CkDataNodes:
+  - tcp://ch-server-1:9000?username=default&password=
+  - tcp://ch-server-1:9000?username=default&password=,tcp://ch-server-2:9000?username=default&password=
+  - tcp://ch-server-3:9000?username=default&password=,tcp://ch-server-4:9000?username=default&password=
+Debezium: kafka-connector:8083
+CanalConfig:
+  UserName: admin
+  Password: '123456'
+  IP: canal-admin
+  Port: '8089'
+  ServerID: '1'
+DsnKey: '123456'
+Auth:
+  AccessSecret: '12345678'
