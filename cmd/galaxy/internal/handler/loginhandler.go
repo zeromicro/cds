@@ -21,10 +21,6 @@ func loginHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		resp, err := l.Login(req)
-		if err != nil {
-			httpx.Error(w, err)
-			return
-		}
-		httpx.OkJson(w, resp)
+		formatFullResponse(resp, err, w, r)
 	}
 }

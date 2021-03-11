@@ -123,6 +123,11 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/galaxy/user/login",
 				Handler: loginHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/accesscenter/get-user-info",
+				Handler: getUserInfoHandler(serverCtx),
+			},
 		},
 	)
 }

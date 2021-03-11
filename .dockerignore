@@ -6,3 +6,4 @@ docker
 # doc
 .idea
 build
+web/node_modules

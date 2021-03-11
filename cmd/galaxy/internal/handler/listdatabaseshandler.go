@@ -5,7 +5,6 @@ import (
 
 	logic2 "github.com/tal-tech/cds/cmd/galaxy/internal/logic"
 	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func listDatabasesHandler(ctx *svc.ServiceContext) http.HandlerFunc {
@@ -18,8 +17,8 @@ func listDatabasesHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 
 func formatFullResponse(resp interface{}, err error, w http.ResponseWriter, r *http.Request) {
 	if err != nil {
-		httpx.Error(w, err)
+		HttpError(w, http.StatusOK, 10001, err.Error(), nil)
 		return
 	}
-	httpx.WriteJson(w, http.StatusOK, resp)
+	HttpOk(w, resp)
 }
