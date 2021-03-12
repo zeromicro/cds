@@ -17,11 +17,6 @@
             </router-link>
           </el-col>
           <el-col :span="4" class="text-center">
-            <router-link class="pan-btn pink-btn" to="/excel/export-excel">
-              Excel
-            </router-link>
-          </el-col>
-          <el-col :span="4" class="text-center">
             <router-link class="pan-btn green-btn" to="/table/complex-table">
               Table
             </router-link>

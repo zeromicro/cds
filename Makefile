@@ -78,7 +78,7 @@ docker_clean :
 
 web/dist: $(WATCH_NPM_DICT)
 	@echo "================= npm build ================================================="
-	@cd web ; npm run build:prod --report
+	@cd web ;npm install; npm run build:prod --report
 
 .PHONY : up
 up: logo web/dist docker_build docker_clean docker_infrastructrue_up docker_app_run init
