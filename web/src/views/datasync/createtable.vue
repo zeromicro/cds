@@ -28,13 +28,13 @@
               />
             </el-select>
           </el-form-item>
-          <el-input
-            v-for="(item, index) in model.source.createTableSql"
-            :key="index"
-            type="textarea"
-            :value="item"
-            :rows="10"
-          />
+          <el-form-item>
+            <el-input
+              v-model="model.source.createTableSql"
+              type="textarea"
+              :rows="20"
+            />
+          </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="Target Clickhouse Database Info" name="dmAddTarget">
