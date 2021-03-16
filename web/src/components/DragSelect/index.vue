@@ -54,7 +54,7 @@ export default {
     .sortable-ghost {
       opacity: .8;
       color: #303133 !important;
-      background: #E6A23C !important;
+      background: #fc0 !important;
     }
 
     .el-tag {

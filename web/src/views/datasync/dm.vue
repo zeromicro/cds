@@ -178,13 +178,13 @@
                 Send SQL To Clickhouse
               </el-button>
             </el-form-item> -->
-            <el-input
+            <!-- <el-input
               v-for="(item, index) in model.source.createTableSql"
               :key="index"
               type="textarea"
               :value="item"
               :rows="10"
-            />
+            /> -->
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="Target Clickhouse Database Info" name="dmAddTarget">

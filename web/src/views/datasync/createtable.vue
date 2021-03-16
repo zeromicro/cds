@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="defaultTab" style="width:60%">
+    <el-tabs v-model="defaultTab">
       <el-tab-pane label="Data Source Info" name="dmAddSource">
         <el-form label-position="middle">
           <el-form-item label="Connection String">
