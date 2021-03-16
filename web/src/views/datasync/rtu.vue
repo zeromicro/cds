@@ -66,7 +66,7 @@
       </el-table-column>
       <el-table-column label="Operation" align="center">
         <template slot-scope="{ row }">
-          <el-tooltip effect="light" placement="bottom" content="redo">
+          <el-tooltip effect="light" placement="bottom" content="start">
             <el-button
               v-if="row.status !== 'running'"
               type="text"

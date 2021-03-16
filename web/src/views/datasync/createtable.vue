@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="defaultTab" style="width:60%">
+    <el-tabs v-model="defaultTab">
       <el-tab-pane label="Data Source Info" name="dmAddSource">
         <el-form label-position="middle">
           <el-form-item label="Connection String">
@@ -105,12 +105,27 @@
         Generate Create Table SQL
       </el-button>
       <el-button
+        type="primary"
         :disabled="!model.source.createTableSql.length > 0"
-        @click="execSql()"
+        @click="showDiag()"
       >
         Send SQL To Clickhouse
       </el-button>
     </span>
+    <el-dialog
+      title="Notice"
+      style="font-size: 20px"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <div style="font-size: 15px">
+        Do you want continue and add Full Sync at the same time ?
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="jumpToDm">Yes</el-button>
+        <el-button @click="execSql">No</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -124,6 +139,7 @@ export default {
   },
   data() {
     var opt = {
+      dialogVisible: false,
       defaultTab: 'dmAddSource',
       options: [],
       database: 'all',
@@ -232,6 +248,24 @@ export default {
           console.log(error)
         })
     },
+    showDiag() {
+      this.dialogVisible = true
+    },
+    jumpToDm() {
+      this.$store
+        .dispatch('datasync/execSql', {
+          sql: this.model.source.createTableSql
+        })
+        .then((response) => {
+          localStorage.setItem('dmModel', JSON.stringify(this.model))
+          this.dialogVisible = false
+          localStorage.setItem('fromCreateTablePage', 'Yes')
+          window.location.href = '/#/datasync/dm'
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     execSql() {
       this.$store
         .dispatch('datasync/execSql', {
@@ -239,6 +273,7 @@ export default {
         })
         .then((response) => {
           localStorage.setItem('dmModel', JSON.stringify(this.model))
+          this.dialogVisible = false
           this.$message({
             message: 'Your sql has been executed by clickhouse.',
             type: 'success',
