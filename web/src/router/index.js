@@ -36,7 +36,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/datasync'
+    redirect: '/login'
   },
   {
     path: '/datasync',
@@ -52,19 +52,19 @@ export const constantRoutes = [
         path: 'dm',
         component: () => import('@/views/datasync/dm'),
         name: 'Full Sync',
-        meta: { title: 'Full Sync', icon: 'table' }
+        meta: { title: 'Full Sync', icon: 'tab' }
       },
       {
         path: 'connector',
         component: () => import('@/views/datasync/connector'),
         name: 'Connector',
-        meta: { title: 'Connector', icon: 'guide' }
+        meta: { title: 'Connector', icon: 'tab' }
       },
       {
         path: 'rtu',
         component: () => import('@/views/datasync/rtu'),
         name: 'Incremental Sync',
-        meta: { title: 'Incremental Sync', icon: 'edit' }
+        meta: { title: 'Incremental Sync', icon: 'tab' }
       }
     ]
   },

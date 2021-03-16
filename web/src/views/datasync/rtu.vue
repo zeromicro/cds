@@ -5,7 +5,7 @@
       <el-select
         v-model="database"
         style="margin-bottom: 20px"
-        @change="refresh(1)"
+        @change="setDbAndReflesh()"
       >
         <el-option
           v-for="item in options"
@@ -220,7 +220,7 @@ export default {
     var opt = {
       defaultTab: 'rtuAddSource',
       options: [],
-      database: '',
+      database: 'all',
       list: [],
       listLoading: false,
       tableKey: 0,
@@ -255,8 +255,13 @@ export default {
       })
       .then((response) => {
         opt.options = response
-        if (response.length > 0) {
+        if (opt.options == null) {
+          opt.options = ['all']
+        } else {
           opt.options.unshift('all')
+          if (localStorage.getItem('rtudb')) {
+            opt.database = localStorage.getItem('rtudb')
+          }
         }
       })
       .catch((error) => {
@@ -264,10 +269,17 @@ export default {
       })
     return opt
   },
+  mounted: function() {
+    this.refresh(1)
+  },
   methods: {
+    setDbAndReflesh() {
+      localStorage.setItem('rtudb', this.database)
+      this.refresh(1)
+    },
     refresh(page) {
       this.listLoading = true
-      if (this.database == '') {
+      if (this.database === '') {
         this.$message({
           message: 'Choose a database before refresh!',
           type: 'error',
@@ -366,7 +378,7 @@ export default {
           model: this.model
         })
         .then((response) => {
-          if (this.database == '') {
+          if (this.database === '') {
             this.database = 'all'
           }
           this.refresh(this.pager.page)

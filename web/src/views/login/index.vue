@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container" style="background-color: #6c757d">
+  <div class="login-container" style="background-color: #283433">
     <el-form
       ref="loginForm"
       :model="loginForm"
@@ -80,7 +80,6 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
-import errorLog from '@/store/modules/errorLog'
 
 export default {
   name: 'Login',
