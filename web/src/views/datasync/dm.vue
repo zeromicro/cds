@@ -335,7 +335,12 @@ export default {
     return opt
   },
   mounted: function() {
-    this.refresh(1)
+    if (localStorage.getItem('fromCreateTablePage') === 'Yes') {
+      this.dialogVisible = true
+      localStorage.setItem('fromCreateTablePage', 'No')
+    } else {
+      this.refresh(1)
+    }
   },
   methods: {
     setDbAndReflesh() {
