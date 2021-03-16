@@ -49,6 +49,12 @@ export const constantRoutes = [
     },
     children: [
       {
+        path: 'createtable',
+        component: () => import('@/views/datasync/createtable'),
+        name: 'Create Table',
+        meta: { title: 'Create Table', icon: 'tab' }
+      },
+      {
         path: 'dm',
         component: () => import('@/views/datasync/dm'),
         name: 'Full Sync',

@@ -53,8 +53,8 @@ export default {
   ::v-deep {
     .sortable-ghost {
       opacity: .8;
-      color: #fff !important;
-      background: #42b983 !important;
+      color: #303133 !important;
+      background: #E6A23C !important;
     }
 
     .el-tag {
