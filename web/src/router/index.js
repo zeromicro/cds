@@ -36,7 +36,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/login'
+    redirect: '/datasync/dm'
   },
   {
     path: '/datasync',
