@@ -160,7 +160,7 @@
                 :max="23"
               />
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
               <el-button
                 :disabled="
                   model.source.dsn == '' ||
@@ -177,7 +177,7 @@
               >
                 Send SQL To Clickhouse
               </el-button>
-            </el-form-item>
+            </el-form-item> -->
             <el-input
               v-for="(item, index) in model.source.createTableSql"
               :key="index"
