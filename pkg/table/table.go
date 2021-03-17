@@ -1,6 +1,7 @@
 package table
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -85,16 +86,20 @@ func (meta *TableMeta) buildHead(category int, buf *strings.Builder) {
 }
 
 func (meta *TableMeta) buildEnd(category int, buf *strings.Builder) {
+	var partitionString string
 	dbTable := meta.DB + "." + meta.Table
 	partitionKey := meta.UpdateTime
 	if len(partitionKey) == 0 && len(meta.CreateTime) != 0 {
 		partitionKey = meta.CreateTime
 	}
+	if len(partitionKey) != 0 {
+		partitionString = fmt.Sprintf("PARTITION BY toYYYYMM(%s)", partitionKey)
+	}
 	switch category {
 	case MTLocal:
 		buf.WriteString(
 			`ENGINE = ReplicatedMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_` + dbTable + `', '{replica}')
-		PARTITION BY toYYYYMM(` + partitionKey + `)
+		` + partitionString + `
 		ORDER BY (` + meta.QueryKey + `)
 		SETTINGS index_granularity = 8192`)
 	case Distribute:
@@ -104,7 +109,7 @@ func (meta *TableMeta) buildEnd(category int, buf *strings.Builder) {
 	case MvLocal:
 		buf.WriteString(
 			`ENGINE = ReplicatedReplacingMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_` + dbTable + `_mv', '{replica}')
-		PARTITION BY toYYYYMM(` + partitionKey + `)
+		` + partitionString + `
 		ORDER BY ` + meta.QueryKey + `
 		SETTINGS index_granularity = 8192 AS `)
 		buf.WriteString("SELECT * FROM " + dbTable)

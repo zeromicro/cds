@@ -93,7 +93,7 @@ func (r *DmModel) FindByDb(db string, page, pageSize int) ([]*Dm, error) {
 	var vs interface{}
 	var e error
 	if db != "all" {
-		vs, e = r.base.QueryWhere("source_db = ? order by id asc limit ? offset ?", db, pageSize, (page-1)*pageSize)
+		vs, e = r.base.QueryWhere("target_db = ? order by id asc limit ? offset ?", db, pageSize, (page-1)*pageSize)
 	} else {
 		vs, e = r.base.QueryWhere("1=1 order by id asc limit ? offset ?", pageSize, (page-1)*pageSize)
 	}

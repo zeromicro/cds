@@ -21,10 +21,6 @@ func dmDeleteHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		err := l.DmDelete(req)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		httpx.Ok(w)
+		formatFullResponse(nil, err, w, r)
 	}
 }
