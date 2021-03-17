@@ -310,7 +310,7 @@ export default {
         })
         .then((response) => {
           this.$message({
-            message: 'Job has been redo successfully!',
+            message: 'Job has been started successfully!',
             type: 'success',
             duration: 1500
           })

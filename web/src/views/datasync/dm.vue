@@ -338,6 +338,7 @@ export default {
     if (localStorage.getItem('fromCreateTablePage') === 'Yes') {
       this.dialogVisible = true
       localStorage.setItem('fromCreateTablePage', 'No')
+      this.loadModel()
     } else {
       this.refresh(1)
     }
