@@ -29,11 +29,12 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-input
-              v-model="model.source.createTableSql"
-              type="textarea"
-              :rows="20"
-            />
+            <div
+              v-for="(table,index) in model.source.createTableSql"
+              :key="index"
+            >
+              <el-input v-model="model.source.createTableSql[index]" type="textarea" rows="20" />
+            </div>
           </el-form-item>
         </el-form>
       </el-tab-pane>
