@@ -7,7 +7,7 @@ Data syncing in golang for ClickHouse.
 
 围绕`ClickHouse` 的自动化数据同步组件。
 
-galaxy控制台服务基于 [go-zero](https://github.com/tal-tech/go-zero) 构建。 
+基于 [go-zero](https://github.com/tal-tech/go-zero) 构建。 
 
 ### 系统架构
 
