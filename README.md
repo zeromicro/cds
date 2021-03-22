@@ -25,10 +25,9 @@ galaxy控制台服务基于 [go-zero](https://github.com/tal-tech/go-zero) 构�
 
 [快速开始](doc/quickstart.md)
 
-### todo list
+### 数据模型
+[CDS中ClickHouse使用的建表方案](doc/CDS中ClickHouse使用的建表方案.md)
 
-- 优化前端用户体验
-- 更详细的文档如部署方式
 
 欢迎大家使用和 `star` 🤝
 
