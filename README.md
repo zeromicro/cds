@@ -33,4 +33,6 @@ Data syncing in golang for ClickHouse.
 
 交流群
 
+[关于提问](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md)
+
 <img src="https://gitee.com/zyz01/cds/raw/master/doc/weichat.JPG" alt="cds" width="310" />
