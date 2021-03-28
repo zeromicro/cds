@@ -27,6 +27,7 @@ Data syncing in golang for ClickHouse.
 
 ### 数据模型
 [CDS中ClickHouse使用的建表方案](doc/CDS中ClickHouse使用的建表方案.md)
+[如何有效的报告bug](https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html)
 
 
 欢迎大家使用和 `star` 🤝
