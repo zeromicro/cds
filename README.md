@@ -32,7 +32,7 @@ Data syncing in golang for ClickHouse.
 
 [如何有效的报告bug](https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html)
 
-欢迎大家使用和 `star` 🤝
+如果喜欢并想要支持我们的项目，请点 `star` 🤝
 
 交流群
 
