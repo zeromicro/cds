@@ -28,9 +28,13 @@ Data syncing in golang for ClickHouse.
 ### 数据模型
 [CDS中ClickHouse使用的建表方案](doc/CDS中ClickHouse使用的建表方案.md)
 
+## 帮助
+
 [提问的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md)
 
 [如何有效的报告bug](https://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html)
+
+---
 
 如果喜欢并想要支持我们的项目，请点 `star` 🤝
 
