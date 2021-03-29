@@ -36,7 +36,7 @@ Data syncing in golang for ClickHouse.
 
 ---
 
-如果喜欢并想要支持我们的项目，请点 `star` 🤝
+如果喜欢并想要支持我们的项目，可以点击 `star` 🤝
 
 交流群
 
