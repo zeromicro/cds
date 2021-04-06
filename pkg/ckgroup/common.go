@@ -26,7 +26,6 @@ var (
 	queryRowsTypeErr = errors.New("data type must be *[]*struct{} . ")
 	insertTypeErr    = errors.New("data type must be  []*sturct or []struct ")
 	ckDnsErr         = errors.New("parse clickhosue connect string fail . ")
-	indexCache       = map[reflect.Type]map[string]int{}
 )
 
 func panicIfErr(err error) {
@@ -69,43 +68,6 @@ func findFieldIndexByTag(t reflect.Type, tag, tagValue string) (int, error) {
 		}
 	}
 	return -1, errors.New("field with tag '" + tag + "' not found")
-}
-
-func findFieldValueByTagCache(value reflect.Value, tag, tagValue string) (reflect.Value, error) {
-	t := value.Type()
-	tagMap, ok := indexCache[t]
-
-	if ok {
-		fieldIndex, b := tagMap[tag+tagValue]
-		if b {
-			if fieldIndex == -1 {
-				return reflect.Value{}, errors.New("field with tag '" + tag + "' not found")
-			} else {
-				return value.Field(fieldIndex), nil
-			}
-		} else {
-			index, err := findFieldIndexByTag(t, tag, tagValue)
-			if err == nil {
-				tagMap[tag+tagValue] = index
-				return value.Field(index), nil
-			} else {
-				tagMap[tag+tagValue] = -1
-				return reflect.Value{}, err
-			}
-		}
-	} else {
-		tagMap = map[string]int{}
-		indexCache[t] = tagMap
-
-		index, err := findFieldIndexByTag(t, tag, tagValue)
-		if err == nil {
-			tagMap[tag+tagValue] = index
-			return value.Field(index), nil
-		} else {
-			tagMap[tag+tagValue] = -1
-			return reflect.Value{}, err
-		}
-	}
 }
 
 func generateInsertSQL(query string) (string, []string) {
@@ -210,7 +172,7 @@ func saveData(db *sql.DB, insertSql string, values []rowValue) error {
 func generateRowValue(val reflect.Value, tags []string) (rowValue, error) {
 	args := make(rowValue, 0, len(tags))
 	for _, tagVal := range tags {
-		fieldVal, err := findFieldValueByTagCache(val, DbTag, tagVal)
+		fieldVal, err := findFieldValueByTag(val, DbTag, tagVal)
 		if err != nil {
 			return args, err
 		}
