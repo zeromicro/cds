@@ -65,7 +65,7 @@ func NewShardConn(shardIndex int, conf config.ShardGroupConfig) (ShardConn, erro
 		shard.ReplicaConns = append(shard.ReplicaConns, conn)
 		shard.AllConn = append(shard.AllConn, conn)
 	}
-	if failCount == len(conf.ReplicaNodes)+1 {
+	if failCount >= len(conf.ReplicaNodes)+1 {
 		return nil, errors.New(fmt.Sprintf("shard[%d] all node connection fail", shardIndex))
 	}
 	return &shard, nil
