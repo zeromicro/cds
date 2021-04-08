@@ -1,6 +1,9 @@
 package ckgroup
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/tal-tech/go-zero/core/logx"
 
 	"github.com/tal-tech/cds/pkg/ckgroup/config"
@@ -36,31 +39,34 @@ type hostErr struct {
 }
 
 func NewShardConn(shardIndex int, conf config.ShardGroupConfig) (ShardConn, error) {
-	// 失败时,close 所有数据库连接
-	isClean := false
+	failCount := 0
 	shard := shardConn{}
 	shard.ShardIndex = shardIndex
 
-	defer func() {
-		if isClean {
-			shard.Close()
-		}
-	}()
-
 	shardNode, err := NewCKConn(conf.ShardNode)
 	if err != nil {
-		return nil, err
+		if err == hostParseErr {
+			return nil, err
+		}
+		logx.Errorf("shard[%d] new primary node fail error:%s", shardIndex, err.Error())
+		failCount++
 	}
 	shard.ShardConn = shardNode
 	shard.AllConn = append(shard.AllConn, shardNode)
 	for _, dns := range conf.ReplicaNodes {
 		conn, err := NewCKConn(dns)
 		if err != nil {
-			isClean = true
-			return nil, err
+			if err == hostParseErr {
+				return nil, err
+			}
+			logx.Errorf("shard[%d] new  node fail error:%s", shardIndex, err.Error())
+			failCount++
 		}
 		shard.ReplicaConns = append(shard.ReplicaConns, conn)
 		shard.AllConn = append(shard.AllConn, conn)
+	}
+	if failCount >= len(conf.ReplicaNodes)+1 {
+		return nil, errors.New(fmt.Sprintf("shard[%d] all node connection fail", shardIndex))
 	}
 	return &shard, nil
 }

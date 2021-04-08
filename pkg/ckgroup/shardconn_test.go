@@ -4,12 +4,14 @@ package ckgroup
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/tal-tech/cds/pkg/ckgroup/config"
-	"github.com/tal-tech/cds/pkg/ckgroup/dbtesttool/dbtool"
-	"github.com/tal-tech/go-zero/core/stores/sqlx"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/tal-tech/go-zero/core/stores/sqlx"
+
+	"github.com/tal-tech/cds/pkg/ckgroup/config"
+	"github.com/tal-tech/cds/pkg/ckgroup/dbtesttool/dbtool"
 )
 
 var shardGroupConfig = config.ShardGroupConfig{ShardNode: "tcp://localhost:9000", ReplicaNodes: []string{"tcp://localhost:9001"}}
@@ -170,5 +172,22 @@ func Test_shardConn_ExecAuto(t *testing.T) {
 	if cnt.Cnt != 0 {
 		fmt.Println(cnt.Cnt)
 		t.Fatal(`ckConn.Exec is error ! `)
+	}
+}
+
+func Test_shardConn_New(t *testing.T) {
+	if _, err := NewShardConn(1, shardGroupConfig); err != nil {
+		t.Fatal(err)
+		return
+	}
+
+	_, err := NewShardConn(1, config.ShardGroupConfig{ShardNode: "thost:9000", ReplicaNodes: []string{"tcp://localhost:9001"}})
+	if err != hostParseErr {
+		t.Fatal("err must be hostParseErr")
+		return
+	}
+	if _, err := NewShardConn(1, config.ShardGroupConfig{ShardNode: "tcp://localhost:100000", ReplicaNodes: []string{"tcp://localhost:9001"}}); err != nil {
+		t.Fatal(err)
+		return
 	}
 }
