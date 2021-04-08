@@ -35,7 +35,10 @@ type ckConn struct {
 
 var hostParseErr = errors.New("parse clickhouse dsn error")
 
-const connMaxLifetime = 30 * time.Minute
+const (
+	maxConn         = 50
+	connMaxLifetime = 30 * time.Minute
+)
 
 func NewCKConn(dns string) (CKConn, error) {
 	db, err := sql.Open(DRIVER, dns)
@@ -43,6 +46,7 @@ func NewCKConn(dns string) (CKConn, error) {
 		return nil, err
 	}
 	db.SetConnMaxLifetime(connMaxLifetime)
+	db.SetMaxOpenConns(maxConn)
 	host, user, err := parseHostAndUser(dns)
 	if err != nil {
 		return nil, hostParseErr
