@@ -2,10 +2,11 @@ package ckgroup
 
 import (
 	"database/sql"
+	"errors"
+	"reflect"
+	"time"
 
 	"github.com/tal-tech/go-zero/core/logx"
-
-	"reflect"
 )
 
 type CKConn interface {
@@ -32,23 +33,30 @@ type ckConn struct {
 	Conn *sql.DB
 }
 
+var hostParseErr = errors.New("parse clickhouse dsn error")
+
+const connMaxLifetime = 30 * time.Minute
+
 func NewCKConn(dns string) (CKConn, error) {
 	db, err := sql.Open(DRIVER, dns)
 	if err != nil {
 		return nil, err
 	}
+	db.SetConnMaxLifetime(connMaxLifetime)
 	host, user, err := parseHostAndUser(dns)
 	if err != nil {
-		return nil, err
+		return nil, hostParseErr
 	}
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
-	return &ckConn{
+	conn := &ckConn{
 		Host: host,
 		Conn: db,
 		User: user,
-	}, nil
+	}
+	if err := db.Ping(); err != nil {
+		// 依然返回，防止一个 shard 只有一个节点可用的情况
+		return conn, err
+	}
+	return conn, nil
 }
 
 func MustCKConn(dns string) CKConn {
