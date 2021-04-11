@@ -25,6 +25,8 @@ type (
 		// hashTag  struct 分片字段 `db` tag 的值
 		// sliceData  要输入的数组 , 类型只能是 []*sturct 或 []struct
 		InsertAuto(query string, hashTag string, sliceData interface{}) error
+		// InsertAutoDetail 第一个返回值是详细的错误，第二返回值是参数校验的错误。这两个必定有一个为空
+		InsertAutoDetail(query string, hashTag string, sliceData interface{}) ([]InsertErrDetail, error)
 		ExecAuto(query string, hashIdx int, args [][]interface{}) error
 		ExecAll(query string, args [][]interface{}) error
 		Close()
