@@ -1,4 +1,4 @@
-# 启动
+# start up
 
 ```bash
 git clone https://github.com/tal-tech/cds.git
