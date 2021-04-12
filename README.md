@@ -5,30 +5,29 @@
 # ClickHouse Data Synchromesh
 Data syncing in golang for ClickHouse.
 
-围绕`ClickHouse` 的自动化数据同步组件。
 
-基于 [go-zero](https://github.com/tal-tech/go-zero) 构建。 
+based on [go-zero](https://github.com/tal-tech/go-zero) 
 
-### 系统架构
+### ARCH
 
-下图展示了以clickhouse为存储和计算引擎的数仓架构。
+A typical data warehouse structure
 
 ![avatar](https://gitee.com/kevwan/static/raw/master/doc/images/cds/clickhouse_arch1.png)
 
-### 数据同步设计
+### design of data sync
 
-该部分实现了从MySQL/MongoDB数据源自动实时同步数据到ClickHouse集群的功能。
+Automatically synchronizing data from MySQL/MongoDB data source to ClickHouse cluster in real time.
 
 ![同步drawio](https://gitee.com/kevwan/static/raw/master/doc/images/cds/同步drawio.png)
 
-#### 快速开始
+#### quick start
 
-[快速开始](doc/quickstart.md)
+[demo by docker](doc/quickstart.md)
 
-### 数据模型
+### data model in clickhouse
 [CDS中ClickHouse使用的建表方案](doc/CDS中ClickHouse使用的建表方案.md)
 
-## 帮助
+## help
 
 [提问的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md)
 
@@ -36,9 +35,9 @@ Data syncing in golang for ClickHouse.
 
 ---
 
-如果喜欢并想要支持我们的项目，可以点击 `star` 🤝
+if you like this project and want to support it，please `star` 🤝
 
-交流群
+wechat
 
 
 
