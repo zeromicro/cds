@@ -18,7 +18,7 @@ A typical data warehouse structure
 
 Automatically synchronizing data from MySQL/MongoDB data source to ClickHouse cluster in real time.
 
-![同步drawio](https://gitee.com/kevwan/static/raw/master/doc/images/cds/同步drawio.png)
+![同步drawio](https://github.com/tal-tech/cds/raw/master/doc/%E5%90%8C%E6%AD%A5drawio.png)
 
 #### quick start
 
