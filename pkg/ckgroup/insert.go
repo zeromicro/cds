@@ -4,18 +4,90 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"sort"
+	"sync"
 
 	"github.com/dchest/siphash"
 	"github.com/tal-tech/go-zero/core/logx"
 	"golang.org/x/sync/errgroup"
 )
 
-func (g *dbGroup) InsertAuto(query string, hashTag string, sliceData interface{}) error {
-	typeErr := errors.New("sliceData type must be []*sturct or []struct ")
+var typeErr = errors.New("sliceData type must be []*sturct or []struct ")
 
+func (g *dbGroup) InsertAuto(query string, hashTag string, sliceData interface{}) error {
+	shardDatas, err := cutData2ShardData(sliceData, len(g.ShardNodes), hashTag)
+	if err != nil {
+		return err
+	}
+
+	var eg errgroup.Group
+	for i, shardConn := range g.ShardNodes {
+
+		shardData := shardDatas[i].Elem().Interface()
+		innerShardConn := shardConn
+		innerShardIndex := i + 1
+
+		eg.Go(func() error {
+			var err error
+			for j := 1; j <= g.opt.RetryNum; j++ {
+				err = innerShardConn.InsertAuto(query, shardData)
+				if err == nil {
+					return nil
+				} else {
+					logx.Errorf("[attempt %d/%d] shard[%d] all node exec failed. Last fail reason: %v, query: %s", j, g.opt.RetryNum, innerShardIndex, err, query)
+				}
+			}
+			return err
+		})
+	}
+	return eg.Wait()
+}
+
+type InsertErrDetail struct {
+	Err        error
+	ShardIndex int
+	Datas      interface{}
+}
+
+func (g *dbGroup) InsertAutoDetail(query string, hashTag string, sliceData interface{}) ([]InsertErrDetail, error) {
+	shardDatas, err := cutData2ShardData(sliceData, len(g.ShardNodes), hashTag)
+	if err != nil {
+		return nil, err
+	}
+	var errDetail []InsertErrDetail
+	waitGroup := sync.WaitGroup{}
+	waitGroup.Add(len(g.ShardNodes))
+
+	for i, shardConn := range g.ShardNodes {
+		shardData := shardDatas[i].Elem().Interface()
+		innerShardConn := shardConn
+		innerShardIndex := i + 1
+
+		go func() {
+			defer waitGroup.Done()
+			for j := 1; j <= g.opt.RetryNum; j++ {
+				if err := innerShardConn.InsertAuto(query, shardData); err == nil {
+					return
+				} else {
+					logx.Errorf("[attempt %d/%d] shard[%d] all node exec failed. Last fail reason: %v, query: %s", j, g.opt.RetryNum, innerShardIndex, err, query)
+					if j == g.opt.RetryNum {
+						errDetail = append(errDetail, InsertErrDetail{Err: err, ShardIndex: innerShardIndex, Datas: shardData})
+					}
+				}
+			}
+		}()
+	}
+	waitGroup.Wait()
+	sort.Slice(errDetail, func(i, j int) bool {
+		return errDetail[i].ShardIndex < errDetail[j].ShardIndex
+	})
+	return errDetail, nil
+}
+
+func cutData2ShardData(sliceData interface{}, shardLen int, hashTag string) ([]reflect.Value, error) {
 	outerType := reflect.TypeOf(sliceData)
 	if outerType.Kind() != reflect.Slice {
-		return typeErr
+		return nil, typeErr
 	}
 	sliceType := outerType.Elem()
 	isPtr := false
@@ -23,16 +95,16 @@ func (g *dbGroup) InsertAuto(query string, hashTag string, sliceData interface{}
 	case reflect.Ptr:
 		isPtr = true
 		if sliceType.Elem().Kind() != reflect.Struct {
-			return typeErr
+			return nil, typeErr
 		}
 	case reflect.Struct:
 	default:
-		return typeErr
+		return nil, typeErr
 	}
 
 	// 数组的元素是的类型 : *[]struct 或 *[]*struct
-	shardDatas := make([]reflect.Value, 0, len(g.ShardNodes))
-	for range g.ShardNodes {
+	shardDatas := make([]reflect.Value, 0, shardLen)
+	for i := 0; i < shardLen; i++ {
 		shardDatas = append(shardDatas, reflect.New(reflect.SliceOf(sliceType)))
 	}
 
@@ -47,34 +119,13 @@ func (g *dbGroup) InsertAuto(query string, hashTag string, sliceData interface{}
 		}
 		hashVal, err := findFieldValueByTag(findTagVal, DbTag, hashTag)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		shardIndex := siphash.Hash(0, 0, []byte(fmt.Sprint(hashVal))) % uint64(len(g.ShardNodes))
+		shardIndex := siphash.Hash(0, 0, []byte(fmt.Sprint(hashVal))) % uint64(shardLen)
 
 		shardDataSliceVal := shardDatas[shardIndex]
 		shardDataSliceVal.Elem().Set(reflect.Append(shardDataSliceVal.Elem(), interVal))
 		shardDatas[shardIndex] = shardDataSliceVal
 	}
-
-	var eg errgroup.Group
-	for i, shardConn := range g.ShardNodes {
-
-		shardData := shardDatas[i].Elem().Interface()
-		innerShardConn := shardConn
-		innerShardIndex := i + 1
-
-		eg.Go(func() error {
-			var err error
-			for j := 1; j <= g.opt.RetryNum; j++ {
-				err = innerShardConn.InsertAuto(query, shardData)
-				if err != nil {
-					logx.Errorf(
-						"[attempt %d/%d] shard[%d] all node exec failed. Last fail reason: %v, query: %s",
-						j, g.opt.RetryNum, innerShardIndex, err, query)
-				}
-			}
-			return err
-		})
-	}
-	return eg.Wait()
+	return shardDatas, nil
 }
