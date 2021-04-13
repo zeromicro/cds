@@ -12,7 +12,7 @@ based on [go-zero](https://github.com/tal-tech/go-zero)
 
 A typical data warehouse structure
 
-![avatar](https://gitee.com/kevwan/static/raw/master/doc/images/cds/clickhouse_arch1.png)
+![avatar](https://github.com/tal-tech/cds/raw/master/doc/clickhouse_arch.png)
 
 ### design of data sync
 
