@@ -1,5 +1,5 @@
 <p align="left">
-  <img width ="200px" src="https://gitee.com/kevwan/static/raw/master/doc/images/cds/logo.png">
+  <img width ="200px" src="https://github.com/tal-tech/cds/raw/master/doc/logo.png">
 </p>
 
 # ClickHouse Data Synchromesh
