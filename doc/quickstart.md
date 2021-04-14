@@ -6,79 +6,105 @@ cd cds
 make up
 ```
 
-构建结束后，注意检查是否有 container 异常退出。
+After the build , pay attention to check if any container exits abnormally.
 
-点击 http://localhost:3414/cds.html 打开控制台
+click http://localhost:3414/cds.html to accessing the web interface.
 
 
-使用下面的账户和密码登录
+using username and password below to login
 ```
 user: admin@email.com
 password: 123456
 ```
+## create table in ClickHouse for syncing MySQL(or MongoDB) data
 
-## 单次全量同步:
+Chose "create table" tab
+
 ```
-1. 点击右上角 "+"
-2. MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
-或
-MongoDB 输入连接串 mongodb://mongo1:30001/test_mongo
-3. 点连接
-4. 选择表,如默认的 example_mysql (MySQL) 或 example (MongoDB)
-5. 点击"目标库"，
-6. 点刷新 
-7. 选择同步至Clickhouse 的schema（"default"）
-8. 切换回"数据源"，点击 "生成建表语句"
-注意：根据需要选择 partition 字段，这里 'PARTITION BY toYYYYMM()' 可删除，或 替换成 'PARTITION BY toYYYYMM(dt)'
-9. 点击 "执行SQL" ，下方弹出执行成功
-10. 点击 "添加"，下方弹出执行成功
+1. Click "Target ClickHouse Database Info",
+2. Click “connect”
+3. Select the schema ("default") synchronized to Clickhouse
+4. switch to "Data Source" 
+5. MySQL input connection string root:root@tcp(mysql:3306)/test_mysql
+or
+MongoDB input connection string mongodb://mongo1:30001/test_mongo
+6. Click “connect”
+7. Select the table, such as the default example_mysql (MySQL) or example (MongoDB)
+8. click "Generate create Table SQL" 
+ Note: select the partition field as needed, here'PARTITION BY toYYYYMM()' can be deleted, or replaced with'PARTITION BY toYYYYMM(dt)'
+9. . Click "send SQL to ClickHouse", and the successful execution will pop up below
 ```
 
 
-### 查看任务状态
-刷新页面,选择数据库
+## One-time full data synchronization:
+Chose "full sync" tab
+```
+1. Click "+" in the upper right corner
+2. MySQL input connection string root:root@tcp(mysql:3306)/test_mysql
+or
+MongoDB input connection string mongodb://mongo1:30001/test_mongo
+3. Click “connect”
+4. Select the table, such as the default example_mysql (MySQL) or example (MongoDB)
+5. Click "Target ClickHouse Database Info"
+6. Click “connect”
+7. Select the schema ("default") synchronized in Clickhouse
+10. Click "Add", a pop-up below shows successful execution
+```
 
 
-### 在 Clickhouse 中确认数据
+### check task status
+Refresh the page 
+
+
+### Confirm data in Clickhouse
 
 ![image-20201118135156133](image-20201118135156133.png)
 
-## 开启实时增量同步
+## Turn on real-time incremental synchronization
 
-以mysql为例
-```
-1 点击“CONNECTOR监听”
-2 点击右上角“+”
-3 MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
-4 点击 “添加”
-5 点击 "RTU增量同步"-"重放"使之启动
-6 点击右上角“+”
-7 MySQL  输入连接串 root:root@tcp(mysql:3306)/test_mysql
-8 点击 “添加”
-```
-刷新页面
+Take mysql as an example
 
-### 验证增量更新
-再次执行初始化数据库脚本，可再次插入100000条数据。
+chose "Connector" tab
+```
+1. Click "+" in the upper right corner
+2. MySQL input connection string root:root@tcp(mysql:3306)/test_mysql
+3. select table 
+4. Click "Add"
+```
+chose "Incremental Sync" tab
+
+```
+1. Click "+" in the upper right corner
+2. MySQL input connection string root:root@tcp(mysql:3306)/test_mysql
+3. select table 
+4. Click "Target ClickHouse Database Info"
+5. Click “connect”
+6. Select the schema ("default") synchronized in Clickhouse
+7. Click "Add", a pop-up below shows successful execution
+```
+refresh page
+
+### Verify incremental update
+Execute the initialization database script again, you can insert 100000 rows of data again.
 
 ```
 cd sit/docker/
 sh ./init.sh
 ```
 
-验证clickhouse中的mysql的增量数据：
+Verify the incremental data of mysql in clickhouse：
 
 ![image-20201118135503830](image-20201118135503830.png)
 
-## 清理
-要清理所有上面启动的docker容器还原初始状态可以
+## clean up
+To clean up all the docker containers started above and restore the initial state, you can ：
 
 ```
 cd cds
 make down
 ```
 
-仅清理
+only clean 
 
 ```
 cd cds
