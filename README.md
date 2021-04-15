@@ -20,7 +20,14 @@ Automatically synchronizing data from MySQL/MongoDB data source to ClickHouse cl
 
 ![同步drawio](https://github.com/tal-tech/cds/raw/master/doc/%E5%90%8C%E6%AD%A5drawio.png)
 
-#### quick start
+
+### quick start
+
+```bash
+git clone https://github.com/tal-tech/cds.git
+cd cds
+make up
+```
 
 [demo by docker](doc/quickstart.md)
 
