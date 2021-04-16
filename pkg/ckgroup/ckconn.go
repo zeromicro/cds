@@ -293,13 +293,14 @@ func (client *ckConn) Insert(query string, sliceData interface{}) error {
 
 	err := saveData(client.Conn, insertSQL, argss)
 	db, table := parseInsertSQLTableName(insertSQL)
+	isSuccess := ""
 	if err == nil {
-		insertCntHis.With(getInsertLabel(db, table, client.Host, "1")).Observe(float64(len(argss)))
-		insertDuHis.With(getInsertLabel(db, table, client.Host, "1")).Observe(float64(time.Since(now).Milliseconds()))
+		isSuccess = "1"
 	} else {
-		insertCntHis.With(getInsertLabel(db, table, client.Host, "0")).Observe(float64(len(argss)))
-		insertDuHis.With(getInsertLabel(db, table, client.Host, "0")).Observe(float64(time.Since(now).Milliseconds()))
+		isSuccess = "0"
 	}
+	insertCntHis.With(getInsertLabel(db, table, client.Host, isSuccess)).Observe(float64(len(argss)))
+	insertDuHis.With(getInsertLabel(db, table, client.Host, isSuccess)).Observe(float64(time.Since(now).Milliseconds()))
 	return err
 }
 
