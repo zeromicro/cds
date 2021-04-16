@@ -231,3 +231,30 @@ func Benchmark_findFieldValueByTag(b *testing.B) {
 		_, _ = findFieldValueByTag(val, "json", "e")
 	}
 }
+
+func Test_parseInsertSQLTableName(t *testing.T) {
+	type args struct {
+		insertSQL string
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantDb    string
+		wantTable string
+	}{
+		{args: args{`insert into a.b (a,b,c) values (a,b,c)`}, wantDb: `a`, wantTable: `b`},
+		{args: args{`insert into b (a,b,c) values (a,b,c)`}, wantDb: unknowDB, wantTable: `b`},
+		{args: args{`insert into  (a,b,c) values (a,b,c)`}, wantDb: unknowDB, wantTable: unknowTable},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotDb, gotTable := parseInsertSQLTableName(tt.args.insertSQL)
+			if gotDb != tt.wantDb {
+				t.Errorf("parseInsertSQLTableName() gotDb = %v, want %v", gotDb, tt.wantDb)
+			}
+			if gotTable != tt.wantTable {
+				t.Errorf("parseInsertSQLTableName() gotTable = %v, want %v", gotTable, tt.wantTable)
+			}
+		})
+	}
+}
