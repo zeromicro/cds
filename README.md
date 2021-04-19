@@ -10,7 +10,7 @@ based on [go-zero](https://github.com/tal-tech/go-zero)
 
 ### ARCH
 
-A typical data warehouse structure
+A typical data warehouse architecture
 
 ![avatar](https://github.com/tal-tech/cds/raw/master/doc/clickhouse_arch.png)
 
