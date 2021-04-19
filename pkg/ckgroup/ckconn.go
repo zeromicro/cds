@@ -259,6 +259,7 @@ func (client *ckConn) QueryStream(dataChan interface{}, query string, args ...in
 }
 
 func (client *ckConn) Insert(query string, sliceData interface{}) error {
+	now := time.Now()
 	outerType := reflect.TypeOf(sliceData)
 	if outerType.Kind() != reflect.Slice {
 		return insertTypeErr
@@ -290,7 +291,17 @@ func (client *ckConn) Insert(query string, sliceData interface{}) error {
 		argss = append(argss, args)
 	}
 
-	return saveData(client.Conn, insertSQL, argss)
+	err := saveData(client.Conn, insertSQL, argss)
+	db, table := parseInsertSQLTableName(insertSQL)
+	isSuccess := ""
+	if err == nil {
+		isSuccess = "1"
+	} else {
+		isSuccess = "0"
+	}
+	insertCntHis.With(getInsertLabel(db, table, client.Host, isSuccess)).Observe(float64(len(argss)))
+	insertDuHis.With(getInsertLabel(db, table, client.Host, isSuccess)).Observe(float64(time.Since(now).Milliseconds()))
+	return err
 }
 
 func (client *ckConn) QueryRowNoType(query string, args ...interface{}) (map[string]interface{}, error) {

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/blastrain/vitess-sqlparser/sqlparser"
 	"net/url"
 	"reflect"
 	"regexp"
@@ -15,8 +16,10 @@ import (
 )
 
 const (
-	DRIVER = "clickhouse"
-	DbTag  = "db"
+	DRIVER      = "clickhouse"
+	DbTag       = "db"
+	unknowDB    = `unknow_db`
+	unknowTable = `unknow_table`
 )
 
 var (
@@ -84,6 +87,27 @@ func generateInsertSQL(query string) (string, []string) {
 		tags = append(tags, match)
 	}
 	return trueSQL, tags
+}
+
+func parseInsertSQLTableName(insertSQL string) (db string, table string) {
+	parser, err := sqlparser.Parse(insertSQL)
+	if err != nil {
+		return unknowDB, unknowTable
+	}
+	insertParser, isInsert := parser.(*sqlparser.Insert)
+	if !isInsert {
+		return unknowDB, unknowTable
+	}
+
+	db = insertParser.Table.Qualifier.String()
+	table = insertParser.Table.Name.String()
+	if db == "" {
+		db = unknowDB
+	}
+	if table == "" {
+		table = unknowTable
+	}
+	return db, table
 }
 
 // dest 是指针的 interface
