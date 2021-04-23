@@ -31,6 +31,11 @@ type (
 		ExecParallelAll(query string, args ...interface{}) []ExecErrDetail
 		// AlterAuto 在每个shard的一个节点上执行。一般用于alter语句
 		AlterAuto(query string, args ...interface{}) []AlterErrDetail
+
+		//// ExecAuto Deprecated
+		//ExecAuto(query string, hashIdx int, args [][]interface{}) error
+		//// ExecAll Deprecated
+		//ExecAll(query string, args [][]interface{}) error
 		Close()
 	}
 	dbGroup struct {

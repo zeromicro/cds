@@ -173,3 +173,27 @@ func Test_dbGroup_AlterAuto(t *testing.T) {
 	}
 
 }
+
+func Test_isAlterSQL(t *testing.T) {
+	type args struct {
+		sql string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{args: args{` 	 alter table user drop column a`}, want: true},
+		{args: args{`alter table user drop column a`}, want: true},
+		{args: args{`	Alter table user drop column a`}, want: true},
+		{args: args{` alter table user drop column a`}, want: true},
+		{args: args{`  table user drop column a`}, want: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isAlterSQL(tt.args.sql); got != tt.want {
+				t.Errorf("isAlterSQL() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

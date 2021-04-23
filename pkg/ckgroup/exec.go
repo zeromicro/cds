@@ -2,6 +2,7 @@ package ckgroup
 
 import (
 	"sort"
+	"strings"
 	"sync"
 )
 
@@ -50,7 +51,12 @@ func (g *dbGroup) ExecParallelAll(query string, args ...interface{}) []ExecErrDe
 	return errDetail
 }
 
+func isAlterSQL(sql string) bool {
+	return strings.HasPrefix(strings.TrimSpace(strings.ToLower(sql)), `alter`)
+}
+
 func (g *dbGroup) AlterAuto(query string, args ...interface{}) []AlterErrDetail {
+	isAlterSQL(query)
 	var errDetail []AlterErrDetail
 	waitGroup := sync.WaitGroup{}
 	waitGroup.Add(len(g.GetAllShard()))
