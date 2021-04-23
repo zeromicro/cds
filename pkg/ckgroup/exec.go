@@ -1,82 +1,74 @@
 package ckgroup
 
 import (
-	"errors"
-
-	"github.com/tal-tech/go-zero/core/logx"
-	"golang.org/x/sync/errgroup"
+	"sort"
+	"sync"
 )
 
-func (g *dbGroup) ExecAuto(query string, hashIdx int, args [][]interface{}) error {
-	if len(args) == 0 || len(args[0]) == 0 || hashIdx >= len(args[0]) {
-		return errors.New("can not get hashIdx value")
-	}
-
-	dataBatch, err := getDataBatch(hashIdx, len(g.ShardNodes), args)
-	if err != nil {
-		return err
-	}
-
-	var eg errgroup.Group
-	for idx, rows := range dataBatch {
-		if len(rows) == 0 {
-			continue
-		}
-		idxInternal := idx
-		rowsInternal := rows
-		eg.Go(func() error {
-			return g.exec(idxInternal, query, rowsInternal)
-		})
-	}
-	err = eg.Wait()
-	if err != nil {
-		return err
-	}
-	return nil
+type ExecErrDetail struct {
+	Err error
+	// 发生错误的ckconn对象
+	Conn CKConn
 }
 
-func (g *dbGroup) ExecAll(query string, args [][]interface{}) error {
-	rows := make([]rowValue, 0, len(args))
-	if len(args) == 0 {
-		rows = append(rows, rowValue{})
-	} else {
-		rows = append(rows, args...)
-	}
-
-	var eg errgroup.Group
-	for i := 0; i < len(g.ShardNodes); i++ {
-		index := i
-		eg.Go(func() error {
-			return g.exec(index, query, rows)
-		})
-	}
-	err := eg.Wait()
-	if err != nil {
-		return err
-	}
-	return nil
+type AlterErrDetail struct {
+	Err error
+	// 发生错误的shardconn对象
+	Conn       ShardConn
+	ShardIndex int
 }
 
-func (g *dbGroup) exec(idx int, query string, rows []rowValue) error {
-	var err error
-	for attempt := 1; attempt <= g.opt.RetryNum; attempt++ {
-		err = execOnNode(g.ShardNodes[idx].GetShardConn().GetRawConn(), query, rows)
+func (g *dbGroup) ExecSerialAll(onErrContinue bool, query string, args ...interface{}) []ExecErrDetail {
+	var errDetail []ExecErrDetail
+	for _, conn := range g.GetAllNodes() {
+		err := conn.Exec(query, args...)
 		if err != nil {
-			logx.Infof("[attempt %d/%d] Node[%d] primary node execute error:%v, will switch to replica node", attempt, g.opt.RetryNum, idx, err)
-		} else {
-			return nil
+			errDetail = append(errDetail, ExecErrDetail{Err: err, Conn: conn})
 		}
-		for i, replicaNode := range g.ShardNodes[idx].GetReplicaConn() {
-			err = execOnNode(replicaNode.GetRawConn(), query, rows)
-			if err != nil {
-				logx.Infof("[attempt %d/%d] Node[%d] replica[%d] execute error:%v, will switch to next replica node", attempt, g.opt.RetryNum, idx, i, err)
-			} else {
-				return nil
+		if !onErrContinue && err != nil {
+			return errDetail
+		}
+	}
+	return errDetail
+}
+
+func (g *dbGroup) ExecParallelAll(query string, args ...interface{}) []ExecErrDetail {
+	var errDetail []ExecErrDetail
+	waitGroup := sync.WaitGroup{}
+	waitGroup.Add(len(g.GetAllNodes()))
+
+	for _, conn := range g.GetAllNodes() {
+		innerConn := conn
+		go func() {
+			defer waitGroup.Done()
+			if err := innerConn.Exec(query, args...); err != nil {
+				errDetail = append(errDetail, ExecErrDetail{Err: err, Conn: innerConn})
 			}
-		}
+		}()
 	}
-	if err != nil {
-		logx.Errorf("All node exec failed. Retry num:%d. Last fail reason: %v, query: %s", g.opt.RetryNum, err, query)
+	waitGroup.Wait()
+	return errDetail
+}
+
+func (g *dbGroup) AlterAuto(query string, args ...interface{}) []AlterErrDetail {
+	var errDetail []AlterErrDetail
+	waitGroup := sync.WaitGroup{}
+	waitGroup.Add(len(g.GetAllShard()))
+
+	for i, conn := range g.GetAllShard() {
+		innerConn := conn
+		innerShardIndex := i + 1
+
+		go func() {
+			defer waitGroup.Done()
+			if err := innerConn.ExecAuto(query, args...); err != nil {
+				errDetail = append(errDetail, AlterErrDetail{Err: err, Conn: innerConn, ShardIndex: innerShardIndex})
+			}
+		}()
 	}
-	return err
+	waitGroup.Wait()
+	sort.Slice(errDetail, func(i, j int) bool {
+		return errDetail[i].ShardIndex < errDetail[j].ShardIndex
+	})
+	return errDetail
 }

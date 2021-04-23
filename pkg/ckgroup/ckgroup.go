@@ -16,8 +16,6 @@ type (
 		GetAllNodes() []CKConn
 		GetAllShard() []ShardConn
 
-		// Deprecated: Use CKConn.QueryStream instead.
-		BatchQueryRows(v interface{}, cnt int, query string, args ...interface{}) (chan interface{}, error)
 		KeepAlive(intervalSecond int)
 
 		// InsertAuto 自动把数组内的数据根据 siphash 分片插入到各个 clickhouse 节点
@@ -27,8 +25,12 @@ type (
 		InsertAuto(query string, hashTag string, sliceData interface{}) error
 		// InsertAutoDetail 第一个返回值是详细的错误，第二返回值是参数校验的错误
 		InsertAutoDetail(query string, hashTag string, sliceData interface{}) ([]InsertErrDetail, error)
-		ExecAuto(query string, hashIdx int, args [][]interface{}) error
-		ExecAll(query string, args [][]interface{}) error
+		// ExecSerialAll 串行的在所有节点上执行。onErrContinue 遇到错误后是否继续
+		ExecSerialAll(onErrContinue bool, query string, args ...interface{}) []ExecErrDetail
+		// ExecParallelAll 并行的在所有节点运行
+		ExecParallelAll(query string, args ...interface{}) []ExecErrDetail
+		// AlterAuto 在每个shard的一个节点上执行。一般用于alter语句
+		AlterAuto(query string, args ...interface{}) []AlterErrDetail
 		Close()
 	}
 	dbGroup struct {
@@ -109,15 +111,4 @@ func (g *dbGroup) Close() {
 	for _, shard := range g.ShardNodes {
 		shard.Close()
 	}
-}
-
-// Deprecated: Use QueryStream instead.
-func (g *dbGroup) BatchQueryRows(v interface{}, cnt int, query string, args ...interface{}) (chan interface{}, error) {
-	// 通过管道返回查询结果，实现类似流，边输出边处理
-	ch := make(chan interface{}, cnt)
-	err := BatchScanRows(g.QueryNode.GetRawConn(), ch, v, query, args...)
-	if err != nil {
-		return nil, err
-	}
-	return ch, nil
 }
