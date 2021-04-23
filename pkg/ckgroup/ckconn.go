@@ -37,7 +37,7 @@ var hostParseErr = errors.New("parse clickhouse dsn error")
 
 const (
 	maxConn         = 10
-	connMaxLifetime = 2 * time.Minute
+	connMaxLifetime = 5 * time.Minute
 )
 
 func NewCKConn(dns string) (CKConn, error) {
