@@ -13,7 +13,7 @@ func Test_dbGroup_ExecSerialAll(t *testing.T) {
 		shard3 := &shardConn{AllConn: []CKConn{&fakeCKConn{true, `3`}}}
 		shard4 := &shardConn{AllConn: []CKConn{&fakeCKConn{false, `4`}}}
 		group := dbGroup{ShardNodes: []ShardConn{shard1, shard2, shard3, shard4}}
-		errs := group.ExecSerialAll(false, ``, ``)
+		errs, _ := group.ExecSerialAll(false, ``, ``)
 		if len(errs) != 1 {
 			t.Fatal("length error")
 		}
@@ -28,7 +28,7 @@ func Test_dbGroup_ExecSerialAll(t *testing.T) {
 		shard3 := &shardConn{AllConn: []CKConn{&fakeCKConn{true, `3`}}}
 		shard4 := &shardConn{AllConn: []CKConn{&fakeCKConn{false, `4`}}}
 		group := dbGroup{ShardNodes: []ShardConn{shard1, shard2, shard3, shard4}}
-		errs := group.ExecSerialAll(true, ``, ``)
+		errs, _ := group.ExecSerialAll(true, ``, ``)
 		if len(errs) != 2 {
 			t.Fatal("length error")
 		}
@@ -43,7 +43,7 @@ func Test_dbGroup_ExecSerialAll(t *testing.T) {
 		shard3 := &shardConn{AllConn: []CKConn{&fakeCKConn{false, `3`}}}
 		shard4 := &shardConn{AllConn: []CKConn{&fakeCKConn{false, `4`}}}
 		group := dbGroup{ShardNodes: []ShardConn{shard1, shard2, shard3, shard4}}
-		errs := group.ExecSerialAll(true, ``, ``)
+		errs, _ := group.ExecSerialAll(true, ``, ``)
 		if len(errs) != 0 {
 			t.Fatal("length error")
 		}
@@ -105,7 +105,7 @@ func Test_dbGroup_ExecParallelAll(t *testing.T) {
 		shard3 := &shardConn{AllConn: []CKConn{&fakeCKConn{true, `3`}}}
 		shard4 := &shardConn{AllConn: []CKConn{&fakeCKConn{false, `4`}}}
 		group := dbGroup{ShardNodes: []ShardConn{shard1, shard2, shard3, shard4}}
-		errs := group.ExecParallelAll(``, ``)
+		errs, _ := group.ExecParallelAll(``, ``)
 		if len(errs) != 2 {
 			t.Fatal("length error")
 		}
@@ -121,7 +121,7 @@ func Test_dbGroup_ExecParallelAll(t *testing.T) {
 		shard3 := &shardConn{AllConn: []CKConn{&fakeCKConn{false, `3`}}}
 		shard4 := &shardConn{AllConn: []CKConn{&fakeCKConn{false, `4`}}}
 		group := dbGroup{ShardNodes: []ShardConn{shard1, shard2, shard3, shard4}}
-		errs := group.ExecParallelAll(``, ``)
+		errs, _ := group.ExecParallelAll(``, ``)
 		if len(errs) != 0 {
 			t.Fatal("length error")
 		}
@@ -133,7 +133,7 @@ func Test_dbGroup_AlterAuto(t *testing.T) {
 		group := dbGroup{
 			ShardNodes: []ShardConn{&fakeShardConn{true}, &fakeShardConn{true}, &fakeShardConn{true}},
 		}
-		errs := group.AlterAuto(``, ``)
+		errs, _ := group.AlterAuto(`alter`, ``)
 		if len(errs) != 3 {
 			t.Fatal("length error")
 		}
@@ -148,7 +148,7 @@ func Test_dbGroup_AlterAuto(t *testing.T) {
 		group := dbGroup{
 			ShardNodes: []ShardConn{&fakeShardConn{true}, &fakeShardConn{false}, &fakeShardConn{true}},
 		}
-		errs := group.AlterAuto(``, ``)
+		errs, _ := group.AlterAuto(`alter`, ``)
 		if len(errs) != 2 {
 			t.Fatal("length error")
 		}
@@ -166,7 +166,7 @@ func Test_dbGroup_AlterAuto(t *testing.T) {
 		group := dbGroup{
 			ShardNodes: []ShardConn{&fakeShardConn{false}, &fakeShardConn{false}, &fakeShardConn{false}},
 		}
-		errs := group.AlterAuto(``, ``)
+		errs, _ := group.AlterAuto(`alter`, ``)
 		if len(errs) != 0 {
 			t.Fatal("length error")
 		}
@@ -188,6 +188,7 @@ func Test_isAlterSQL(t *testing.T) {
 		{args: args{`	Alter table user drop column a`}, want: true},
 		{args: args{` alter table user drop column a`}, want: true},
 		{args: args{`  table user drop column a`}, want: false},
+		{args: args{`alter`}, want: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

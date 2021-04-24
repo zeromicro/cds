@@ -23,19 +23,27 @@ type (
 		// hashTag  struct 分片字段 `db` tag 的值
 		// sliceData  要输入的数组 , 类型只能是 []*sturct 或 []struct
 		InsertAuto(query string, hashTag string, sliceData interface{}) error
+
 		// InsertAutoDetail 第一个返回值是详细的错误，第二返回值是参数校验的错误
 		InsertAutoDetail(query string, hashTag string, sliceData interface{}) ([]InsertErrDetail, error)
-		// ExecSerialAll 串行的在所有节点上执行。onErrContinue 遇到错误后是否继续
-		ExecSerialAll(onErrContinue bool, query string, args ...interface{}) []ExecErrDetail
-		// ExecParallelAll 并行的在所有节点运行
-		ExecParallelAll(query string, args ...interface{}) []ExecErrDetail
-		// AlterAuto 在每个shard的一个节点上执行。一般用于alter语句
-		AlterAuto(query string, args ...interface{}) []AlterErrDetail
 
-		//// ExecAuto Deprecated
-		//ExecAuto(query string, hashIdx int, args [][]interface{}) error
-		//// ExecAll Deprecated
-		//ExecAll(query string, args [][]interface{}) error
+		// ExecSerialAll 串行的在所有节点上执行create,drop,kill,detach 等语句
+		// onErrContinue 遇到错误后是否继续
+		// 第一个返回值是详细的错误，第二返回值是sql校验的错误
+		ExecSerialAll(onErrContinue bool, query string, args ...interface{}) ([]ExecErrDetail, error)
+
+		// ExecParallelAll 并行的在所有节点执行create,drop,kill,detach 等语句
+		// 第一个返回值是详细的错误，第二返回值是sql校验的错误
+		ExecParallelAll(query string, args ...interface{}) ([]ExecErrDetail, error)
+
+		// AlterAuto 在每个shard的一个节点上执行alter语句
+		// 第一个返回值是详细的错误，第二返回值是sql校验的错误
+		AlterAuto(query string, args ...interface{}) ([]AlterErrDetail, error)
+
+		// Deprecated
+		ExecAuto(query string, hashIdx int, args [][]interface{}) error
+		// Deprecated
+		ExecAll(query string, args [][]interface{}) error
 		Close()
 	}
 	dbGroup struct {
