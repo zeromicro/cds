@@ -2,10 +2,106 @@ package ckgroup
 
 import (
 	"errors"
+	"sort"
+	"strings"
+	"sync"
 
 	"github.com/tal-tech/go-zero/core/logx"
 	"golang.org/x/sync/errgroup"
 )
+
+type ExecErrDetail struct {
+	Err error
+	// 发生错误的ckconn对象
+	Conn CKConn
+}
+
+type AlterErrDetail struct {
+	Err error
+	// 发生错误的shardconn对象
+	Conn       ShardConn
+	ShardIndex int
+}
+
+func (g *dbGroup) ExecSerialAll(onErrContinue bool, query string, args ...interface{}) ([]ExecErrDetail, error) {
+	if isAlterSQL(query) {
+		return nil, errors.New("is alert sql")
+	}
+	var errDetail []ExecErrDetail
+	for _, conn := range g.GetAllNodes() {
+		err := conn.Exec(query, args...)
+		if err != nil {
+			errDetail = append(errDetail, ExecErrDetail{Err: err, Conn: conn})
+		}
+		if !onErrContinue && err != nil {
+			return errDetail, nil
+		}
+	}
+	return errDetail, nil
+}
+
+func (g *dbGroup) ExecParallelAll(query string, args ...interface{}) ([]ExecErrDetail, error) {
+	if isAlterSQL(query) {
+		return nil, errors.New("is alert sql")
+	}
+	waitGroup := sync.WaitGroup{}
+	waitGroup.Add(len(g.GetAllNodes()))
+	ch := make(chan ExecErrDetail, len(g.GetAllNodes()))
+
+	for _, conn := range g.GetAllNodes() {
+		innerConn := conn
+		go func() {
+			defer waitGroup.Done()
+			if err := innerConn.Exec(query, args...); err != nil {
+				ch <- ExecErrDetail{Err: err, Conn: innerConn}
+			}
+		}()
+	}
+	waitGroup.Wait()
+
+	close(ch)
+	var errs []ExecErrDetail
+	for execErrDetail := range ch {
+		errs = append(errs, execErrDetail)
+	}
+	return errs, nil
+}
+
+func isAlterSQL(sql string) bool {
+	return strings.HasPrefix(strings.TrimSpace(strings.ToLower(sql)), `alter`)
+}
+
+func (g *dbGroup) AlterAuto(query string, args ...interface{}) ([]AlterErrDetail, error) {
+	if !isAlterSQL(query) {
+		return nil, errors.New("not alert sql")
+	}
+
+	waitGroup := sync.WaitGroup{}
+	waitGroup.Add(len(g.GetAllShard()))
+	ch := make(chan AlterErrDetail, len(g.GetAllShard()))
+
+	for i, conn := range g.GetAllShard() {
+		innerConn := conn
+		innerShardIndex := i + 1
+
+		go func() {
+			defer waitGroup.Done()
+			if err := innerConn.ExecAuto(query, args...); err != nil {
+				ch <- AlterErrDetail{Err: err, Conn: innerConn, ShardIndex: innerShardIndex}
+			}
+		}()
+	}
+	waitGroup.Wait()
+	close(ch)
+	var errs []AlterErrDetail
+	for item := range ch {
+		errs = append(errs, item)
+	}
+	sort.Slice(errs, func(i, j int) bool {
+		return errs[i].ShardIndex < errs[j].ShardIndex
+	})
+	return errs, nil
+}
 
 func (g *dbGroup) ExecAuto(query string, hashIdx int, args [][]interface{}) error {
 	if len(args) == 0 || len(args[0]) == 0 || hashIdx >= len(args[0]) {
