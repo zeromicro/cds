@@ -47,18 +47,25 @@ func (g *dbGroup) ExecParallelAll(query string, args ...interface{}) ([]ExecErrD
 	var errDetail []ExecErrDetail
 	waitGroup := sync.WaitGroup{}
 	waitGroup.Add(len(g.GetAllNodes()))
-
+	ch := make(chan ExecErrDetail, len(g.GetAllNodes()))
 	for _, conn := range g.GetAllNodes() {
 		innerConn := conn
 		go func() {
 			defer waitGroup.Done()
 			if err := innerConn.Exec(query, args...); err != nil {
-				errDetail = append(errDetail, ExecErrDetail{Err: err, Conn: innerConn})
+				ch <- ExecErrDetail{Err: err, Conn: innerConn}
 			}
 		}()
 	}
 	waitGroup.Wait()
 	return errDetail, nil
+
+	close(ch)
+	var errs []ExecErrDetail
+	for execErrDetail := range ch {
+		errs = append(errs, execErrDetail)
+	}
+	return errs
 }
 
 func isAlterSQL(sql string) bool {
@@ -72,6 +79,7 @@ func (g *dbGroup) AlterAuto(query string, args ...interface{}) ([]AlterErrDetail
 	var errDetail []AlterErrDetail
 	waitGroup := sync.WaitGroup{}
 	waitGroup.Add(len(g.GetAllShard()))
+	ch := make(chan AlterErrDetail, len(g.GetAllShard()))
 
 	for i, conn := range g.GetAllShard() {
 		innerConn := conn
@@ -80,13 +88,18 @@ func (g *dbGroup) AlterAuto(query string, args ...interface{}) ([]AlterErrDetail
 		go func() {
 			defer waitGroup.Done()
 			if err := innerConn.ExecAuto(query, args...); err != nil {
-				errDetail = append(errDetail, AlterErrDetail{Err: err, Conn: innerConn, ShardIndex: innerShardIndex})
+				ch <- AlterErrDetail{Err: err, Conn: innerConn, ShardIndex: innerShardIndex}
 			}
 		}()
 	}
 	waitGroup.Wait()
-	sort.Slice(errDetail, func(i, j int) bool {
-		return errDetail[i].ShardIndex < errDetail[j].ShardIndex
+	close(ch)
+	var errs []AlterErrDetail
+	for item := range ch {
+		errs = append(errs, item)
+	}
+	sort.Slice(errs, func(i, j int) bool {
+		return errs[i].ShardIndex < errs[j].ShardIndex
 	})
 	return errDetail, nil
 }
