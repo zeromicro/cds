@@ -51,8 +51,8 @@ func Test_dbGroup_ExecSerialAll(t *testing.T) {
 }
 
 type fakeCKConn struct {
-	fail bool
-	host string
+	isFail bool
+	host   string
 }
 
 func (conn *fakeCKConn) GetHost() string {
@@ -68,7 +68,7 @@ func (conn *fakeCKConn) GetRawConn() *sql.DB {
 }
 
 func (conn *fakeCKConn) Exec(query string, args ...interface{}) error {
-	if conn.fail {
+	if conn.isFail {
 		return errors.New("fake error")
 	}
 	return nil
@@ -95,7 +95,10 @@ func (conn *fakeCKConn) QueryStream(chanData interface{}, query string, args ...
 }
 
 func (conn *fakeCKConn) Insert(query string, sliceData interface{}) error {
-	panic("implement me")
+	if conn.isFail {
+		return errors.New("fake error")
+	}
+	return nil
 }
 
 func Test_dbGroup_ExecParallelAll(t *testing.T) {
