@@ -19,17 +19,25 @@ const (
 )
 
 var (
-	insertDuHis       *prometheus.HistogramVec
-	insertBatchSizeGa *prometheus.GaugeVec
-	hostName          = hostname()
+	insertDuHis        *prometheus.HistogramVec
+	insertBatchSizeGa  *prometheus.GaugeVec
+	insertBatchSizeHis *prometheus.HistogramVec
+	hostName           = hostname()
 )
 
 func init() {
-	insertBatchSizeOps := prometheus.GaugeOpts{
+	insertBatchSizeGaOpts := prometheus.GaugeOpts{
 		Namespace:   namespace,
-		Name:        "insert_batch_size",
+		Name:        "insert_batch_size_ga",
 		Help:        `插入数量统计`,
 		ConstLabels: map[string]string{hostNameLabel: hostName},
+	}
+	insertBatchSizeHisOpts := prometheus.HistogramOpts{
+		Namespace:   namespace,
+		Name:        "insert_batch_size_his",
+		Help:        `插入数量统计`,
+		ConstLabels: map[string]string{hostNameLabel: hostName},
+		Buckets:     []float64{500, 2000, 5000, 10000, 25000, 50000, 70000, 100000},
 	}
 	insertDurationHisOps := prometheus.HistogramOpts{
 		Namespace:   namespace,
@@ -38,9 +46,10 @@ func init() {
 		ConstLabels: map[string]string{hostNameLabel: hostName},
 		Buckets:     []float64{10, 20, 50, 100, 300, 600, 1000, 1500, 3000},
 	}
-	insertBatchSizeGa = prometheus.NewGaugeVec(insertBatchSizeOps, []string{insertDBLab, insertTableLab, insertHostLab, insertSuccessLab})
+	insertBatchSizeGa = prometheus.NewGaugeVec(insertBatchSizeGaOpts, []string{insertDBLab, insertTableLab, insertHostLab, insertSuccessLab})
+	insertBatchSizeHis = prometheus.NewHistogramVec(insertBatchSizeHisOpts, []string{insertDBLab, insertTableLab, insertHostLab, insertSuccessLab})
 	insertDuHis = prometheus.NewHistogramVec(insertDurationHisOps, []string{insertDBLab, insertTableLab, insertHostLab, insertSuccessLab})
-	prometheus.MustRegister(insertBatchSizeGa, insertDuHis)
+	prometheus.MustRegister(insertBatchSizeGa, insertDuHis, insertBatchSizeHis)
 
 }
 
