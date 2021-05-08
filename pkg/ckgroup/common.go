@@ -4,12 +4,15 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/blastrain/vitess-sqlparser/sqlparser"
+	"math/rand"
 	"net/url"
 	"reflect"
 	"regexp"
 	"strings"
+	"time"
 	"unsafe"
+
+	"github.com/blastrain/vitess-sqlparser/sqlparser"
 
 	"github.com/dchest/siphash"
 	"github.com/tal-tech/go-zero/core/logx"
@@ -30,6 +33,10 @@ var (
 	insertTypeErr    = errors.New("data type must be  []*sturct or []struct ")
 	ckDnsErr         = errors.New("parse clickhosue connect string fail . ")
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func panicIfErr(err error) {
 	if err != nil {

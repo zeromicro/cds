@@ -299,8 +299,10 @@ func (client *ckConn) Insert(query string, sliceData interface{}) error {
 	} else {
 		isSuccess = "0"
 	}
-	insertCntHis.With(getInsertLabel(db, table, client.Host, isSuccess)).Observe(float64(len(argss)))
-	insertDuHis.With(getInsertLabel(db, table, client.Host, isSuccess)).Observe(float64(time.Since(now).Milliseconds()))
+	label := getInsertLabel(db, table, client.Host, isSuccess)
+	insertDuHis.With(label).Observe(float64(time.Since(now).Milliseconds()))
+	insertBatchSizeGa.With(label).Set(float64(len(argss)))
+	insertBatchSizeHis.With(label).Observe(float64(len(argss)))
 	return err
 }
 

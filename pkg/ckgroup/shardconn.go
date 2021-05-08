@@ -3,6 +3,7 @@ package ckgroup
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 
 	"github.com/tal-tech/go-zero/core/logx"
 
@@ -13,14 +14,16 @@ type ShardConn interface {
 	GetAllConn() []CKConn
 	GetReplicaConn() []CKConn
 	GetShardConn() CKConn
-	// 所有节点执行
+
+	// Exec 所有节点执行
 	Exec(ignoreErr bool, query string, args ...interface{}) []hostErr
-	// 所有副本节点执行
-	ExecReplica(ignoreErr bool, query string, args ...interface{}) []hostErr
-	// 在主节点上执行,如果失败在副本节点上执行
-	ExecAuto(query string, args ...interface{}) error
-	// 在主节点上插入,如果失败在副本节点上插入
+
+	// AlterAuto 随机在一个节点上执行，如果出错自动在下个节点尝试
+	AlterAuto(query string, args ...interface{}) error
+
+	// InsertAuto 随机在一个节点上插入，如果出错会自动在下个节点插入
 	InsertAuto(query string, sliceData interface{}) error
+
 	Close()
 }
 
@@ -108,55 +111,40 @@ func (shardClient *shardConn) Exec(ignoreErr bool, query string, args ...interfa
 	return errs
 }
 
-func (shardClient *shardConn) ExecReplica(ignoreErr bool, query string, args ...interface{}) []hostErr {
-	var errs []hostErr
-	for i, conn := range shardClient.ReplicaConns {
-		if err := conn.Exec(query, args...); err != nil {
-			hostErr := hostErr{
-				Host:       conn.GetHost(),
-				Err:        err,
-				NodeIndex:  i + 2,
-				ShardIndex: shardClient.ShardIndex,
-			}
-			errs = append(errs, hostErr)
-			if !ignoreErr {
-				return errs
-			}
-		}
-	}
-	return errs
-}
-
 func (shardClient *shardConn) InsertAuto(query string, sliceData interface{}) error {
-	err := shardClient.GetShardConn().Insert(query, sliceData)
-	if err == nil {
-		return nil
-	}
-	logx.Infof("shard[%d] primary node insert error:%v, will switch to replica node", shardClient.ShardIndex, err)
-	for i, replicaConn := range shardClient.GetReplicaConn() {
-		index := i + 1
-		err = replicaConn.Insert(query, sliceData)
+	conns := shardClient.GetAllConn()
+	execOrder := rand.Perm(len(conns))
+
+	var err error
+	for _, order := range execOrder {
+		err = conns[order].Insert(query, sliceData)
 		if err == nil {
 			return nil
 		}
-		logx.Infof("shard[%d] replica[%d] insert error:%v, will switch to next replica node", shardClient.ShardIndex, index, err)
+		logx.Errorf("shard[%d] node[%d] insert error:%s, will switch to next node", shardClient.ShardIndex, order+1, err.Error())
+		continue
+	}
+	if err != nil {
+		logx.Errorf("shard[%d] all node insert fail,last error: %s", shardClient.ShardIndex, err.Error())
 	}
 	return err
 }
 
-func (shardClient *shardConn) ExecAuto(query string, args ...interface{}) error {
-	err := shardClient.GetShardConn().Exec(query, args...)
-	if err == nil {
-		return nil
-	}
-	logx.Infof("shard[%d] primary node execute error:%v, will switch to replica node", shardClient.ShardIndex, err)
-	for i, replicaConn := range shardClient.GetReplicaConn() {
-		index := i + 1
-		err = replicaConn.Exec(query, args...)
+func (shardClient *shardConn) AlterAuto(query string, args ...interface{}) error {
+	conns := shardClient.GetAllConn()
+	execOrder := rand.Perm(len(conns))
+
+	var err error
+	for _, order := range execOrder {
+		err = conns[order].Exec(query, args...)
 		if err == nil {
 			return nil
 		}
-		logx.Infof("shard[%d] replica[%d] execute error:%v, will switch to next replica node", shardClient.ShardIndex, index, err)
+		logx.Errorf("shard[%d] node[%d] exec error:%s, will switch to next node", shardClient.ShardIndex, order+1, err.Error())
+		continue
+	}
+	if err != nil {
+		logx.Errorf("shard[%d] all node exec fail,last error: %s", shardClient.ShardIndex, err.Error())
 	}
 	return err
 }
