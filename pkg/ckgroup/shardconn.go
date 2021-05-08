@@ -14,14 +14,16 @@ type ShardConn interface {
 	GetAllConn() []CKConn
 	GetReplicaConn() []CKConn
 	GetShardConn() CKConn
+
 	// Exec 所有节点执行
 	Exec(ignoreErr bool, query string, args ...interface{}) []hostErr
-	// ExecReplica 所有副本节点执行
-	ExecReplica(ignoreErr bool, query string, args ...interface{}) []hostErr
+
 	// AlterAuto 随机在一个节点上执行，如果出错自动在下个节点尝试
 	AlterAuto(query string, args ...interface{}) error
+
 	// InsertAuto 随机在一个节点上插入，如果出错会自动在下个节点插入
 	InsertAuto(query string, sliceData interface{}) error
+
 	Close()
 }
 
@@ -93,25 +95,6 @@ func (shardClient *shardConn) GetShardConn() CKConn {
 func (shardClient *shardConn) Exec(ignoreErr bool, query string, args ...interface{}) []hostErr {
 	var errs []hostErr
 	for i, conn := range shardClient.AllConn {
-		if err := conn.Exec(query, args...); err != nil {
-			hostErr := hostErr{
-				Host:       conn.GetHost(),
-				Err:        err,
-				NodeIndex:  i + 2,
-				ShardIndex: shardClient.ShardIndex,
-			}
-			errs = append(errs, hostErr)
-			if !ignoreErr {
-				return errs
-			}
-		}
-	}
-	return errs
-}
-
-func (shardClient *shardConn) ExecReplica(ignoreErr bool, query string, args ...interface{}) []hostErr {
-	var errs []hostErr
-	for i, conn := range shardClient.ReplicaConns {
 		if err := conn.Exec(query, args...); err != nil {
 			hostErr := hostErr{
 				Host:       conn.GetHost(),
