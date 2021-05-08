@@ -79,7 +79,7 @@ func (i *fakeShardConn) ExecReplica(ignoreErr bool, query string, args ...interf
 	panic("implement me")
 }
 
-func (i *fakeShardConn) ExecAuto(query string, args ...interface{}) error {
+func (i *fakeShardConn) AlterAuto(query string, args ...interface{}) error {
 	if i.isFail {
 		return errors.New("fake exec auto error")
 	}

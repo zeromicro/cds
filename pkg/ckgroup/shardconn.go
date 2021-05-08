@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"time"
 
 	"github.com/tal-tech/go-zero/core/logx"
 
@@ -19,8 +18,8 @@ type ShardConn interface {
 	Exec(ignoreErr bool, query string, args ...interface{}) []hostErr
 	// ExecReplica 所有副本节点执行
 	ExecReplica(ignoreErr bool, query string, args ...interface{}) []hostErr
-	// ExecAuto 随机在一个节点上执行，如果出错自动在下个节点尝试
-	ExecAuto(query string, args ...interface{}) error
+	// AlterAuto 随机在一个节点上执行，如果出错自动在下个节点尝试
+	AlterAuto(query string, args ...interface{}) error
 	// InsertAuto 随机在一个节点上插入，如果出错会自动在下个节点插入
 	InsertAuto(query string, sliceData interface{}) error
 	Close()
@@ -131,7 +130,6 @@ func (shardClient *shardConn) ExecReplica(ignoreErr bool, query string, args ...
 
 func (shardClient *shardConn) InsertAuto(query string, sliceData interface{}) error {
 	conns := shardClient.GetAllConn()
-	rand.Seed(time.Now().UnixNano())
 	execOrder := rand.Perm(len(conns))
 
 	var err error
@@ -149,9 +147,8 @@ func (shardClient *shardConn) InsertAuto(query string, sliceData interface{}) er
 	return err
 }
 
-func (shardClient *shardConn) ExecAuto(query string, args ...interface{}) error {
+func (shardClient *shardConn) AlterAuto(query string, args ...interface{}) error {
 	conns := shardClient.GetAllConn()
-	rand.Seed(time.Now().UnixNano())
 	execOrder := rand.Perm(len(conns))
 
 	var err error

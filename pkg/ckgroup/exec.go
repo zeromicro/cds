@@ -86,7 +86,7 @@ func (g *dbGroup) AlterAuto(query string, args ...interface{}) ([]AlterErrDetail
 
 		go func() {
 			defer waitGroup.Done()
-			if err := innerConn.ExecAuto(query, args...); err != nil {
+			if err := innerConn.AlterAuto(query, args...); err != nil {
 				ch <- AlterErrDetail{Err: err, Conn: innerConn, ShardIndex: innerShardIndex}
 			}
 		}()

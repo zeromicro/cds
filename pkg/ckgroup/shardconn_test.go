@@ -12,7 +12,7 @@ func Test_shardConn_ExecAuto(t *testing.T) {
 		ck4 := &fakeCKConn{isFail: true, host: `4`}
 
 		shard := shardConn{AllConn: []CKConn{ck1, ck2, ck3, ck4}}
-		if shard.ExecAuto(``, nil) != nil {
+		if shard.AlterAuto(``, nil) != nil {
 			t.Fatal(`should not be error`)
 		}
 	}
@@ -24,7 +24,7 @@ func Test_shardConn_ExecAuto(t *testing.T) {
 		ck4 := &fakeCKConn{isFail: true, host: `4`}
 
 		shard := shardConn{AllConn: []CKConn{ck1, ck2, ck3, ck4}}
-		if shard.ExecAuto(``, nil) == nil {
+		if shard.AlterAuto(``, nil) == nil {
 			t.Fatal(`should go error`)
 		}
 	}
