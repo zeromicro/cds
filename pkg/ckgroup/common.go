@@ -12,8 +12,6 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/blastrain/vitess-sqlparser/sqlparser"
-
 	"github.com/dchest/siphash"
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -97,24 +95,33 @@ func generateInsertSQL(query string) (string, []string) {
 }
 
 func parseInsertSQLTableName(insertSQL string) (db string, table string) {
-	parser, err := sqlparser.Parse(insertSQL)
-	if err != nil {
-		return unknowDB, unknowTable
-	}
-	insertParser, isInsert := parser.(*sqlparser.Insert)
-	if !isInsert {
-		return unknowDB, unknowTable
-	}
+	tokens := regexp.MustCompile("\\s+").Split(strings.ToLower(insertSQL), -1)
+	var intoIdxs []int
 
-	db = insertParser.Table.Qualifier.String()
-	table = insertParser.Table.Name.String()
-	if db == "" {
-		db = unknowDB
+	for i, token := range tokens {
+		if token == "into" {
+			intoIdxs = append(intoIdxs, i)
+		}
 	}
-	if table == "" {
-		table = unknowTable
+	for _, intoIdx := range intoIdxs {
+		if intoIdx == 0 && intoIdx == len(tokens)-1 {
+			continue
+		}
+		if tokens[intoIdx-1] == "insert" {
+			if tokens[intoIdx+1] == "values" || strings.HasPrefix(tokens[intoIdx+1], "(") {
+				continue
+			}
+			splits := strings.Split(tokens[intoIdx+1], ".")
+			if len(strings.Split(tokens[intoIdx+1], ".")) == 2 {
+				return splits[0], splits[1]
+			} else {
+				return unknowDB, splits[0]
+			}
+		} else {
+			continue
+		}
 	}
-	return db, table
+	return unknowDB, unknowTable
 }
 
 // dest 是指针的 interface
