@@ -32,6 +32,11 @@ var (
 	ckDnsErr         = errors.New("parse clickhosue connect string fail . ")
 )
 
+var (
+	parseInsertSQLRe = regexp.MustCompile(`(?m)#{[0-9a-zA-Z_]+}`)
+	tokenRe          = regexp.MustCompile("\\s+")
+)
+
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
@@ -79,9 +84,8 @@ func findFieldIndexByTag(t reflect.Type, tag, tagValue string) (int, error) {
 }
 
 func generateInsertSQL(query string) (string, []string) {
-	var re = regexp.MustCompile(`(?m)#{[0-9a-zA-Z_]+}`)
 	trueSQL := query
-	find := re.FindAllString(query, -1)
+	find := parseInsertSQLRe.FindAllString(query, -1)
 	tags := make([]string, 0, len(find))
 	for _, match := range find {
 		trueSQL = strings.Replace(trueSQL, match, "?", 1)
@@ -95,7 +99,7 @@ func generateInsertSQL(query string) (string, []string) {
 }
 
 func parseInsertSQLTableName(insertSQL string) (db string, table string) {
-	tokens := regexp.MustCompile("\\s+").Split(strings.ToLower(insertSQL), -1)
+	tokens := tokenRe.Split(strings.ToLower(insertSQL), -1)
 	var intoIdxs []int
 
 	for i, token := range tokens {
