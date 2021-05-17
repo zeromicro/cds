@@ -98,6 +98,10 @@ func generateInsertSQL(query string) (string, []string) {
 	return trueSQL, tags
 }
 
+func containsComment(query string) bool {
+	return strings.Contains(query, `--`) || strings.Contains(query, `/*`)
+}
+
 func parseInsertSQLTableName(insertSQL string) (db string, table string) {
 	tokens := tokenRe.Split(strings.ToLower(insertSQL), -1)
 	var intoIdxs []int
