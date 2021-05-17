@@ -259,6 +259,9 @@ func (client *ckConn) QueryStream(dataChan interface{}, query string, args ...in
 }
 
 func (client *ckConn) Insert(query string, sliceData interface{}) error {
+	if containsComment(query) {
+		return errors.New("comments are not allowed")
+	}
 	now := time.Now()
 	outerType := reflect.TypeOf(sliceData)
 	if outerType.Kind() != reflect.Slice {

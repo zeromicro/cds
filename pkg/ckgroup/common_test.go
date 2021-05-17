@@ -258,3 +258,27 @@ func Test_parseInsertSQLTableName(t *testing.T) {
 		})
 	}
 }
+
+func Test_containsComment(t *testing.T) {
+	type args struct {
+		query string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{args: args{`insert into /* 注释*/
+tb (a,b) values (1,2)`}, want: true},
+		{args: args{`insert into -- aaa
+tb (a,b) values (1,2)`}, want: true},
+		{args: args{`insert into tb (a,b) values (1,2)`}, want: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := containsComment(tt.args.query); got != tt.want {
+				t.Errorf("containsComment() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
