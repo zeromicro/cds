@@ -34,7 +34,7 @@ func init() {
 	}
 	insertBatchSizeHisOpts := prometheus.HistogramOpts{
 		Namespace:   namespace,
-		Name:        "insert_batch_size_his",
+		Name:        "insert_batch_size",
 		Help:        `插入数量统计`,
 		ConstLabels: map[string]string{hostNameLabel: hostName},
 		Buckets:     []float64{500, 2000, 5000, 10000, 25000, 50000, 70000, 100000},
@@ -44,7 +44,7 @@ func init() {
 		Name:        "insert_duration",
 		Help:        `插入耗时,单位毫秒`,
 		ConstLabels: map[string]string{hostNameLabel: hostName},
-		Buckets:     []float64{10, 20, 50, 100, 300, 600, 1000, 1500, 3000},
+		Buckets:     []float64{10, 20, 50, 100, 300, 600, 1000, 1500, 3000, 6000, 10000},
 	}
 	insertBatchSizeGa = prometheus.NewGaugeVec(insertBatchSizeGaOpts, []string{insertDBLab, insertTableLab, insertHostLab, insertSuccessLab})
 	insertBatchSizeHis = prometheus.NewHistogramVec(insertBatchSizeHisOpts, []string{insertDBLab, insertTableLab, insertHostLab, insertSuccessLab})
