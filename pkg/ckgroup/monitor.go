@@ -34,7 +34,7 @@ func init() {
 	}
 	insertBatchSizeHisOpts := prometheus.HistogramOpts{
 		Namespace:   namespace,
-		Name:        "insert_batch_size",
+		Name:        "insert_batch_size_his",
 		Help:        `插入数量统计`,
 		ConstLabels: map[string]string{hostNameLabel: hostName},
 		Buckets:     []float64{500, 2000, 5000, 10000, 25000, 50000, 70000, 100000},
