@@ -262,7 +262,6 @@ func (client *ckConn) Insert(query string, sliceData interface{}) error {
 	if containsComment(query) {
 		return errors.New("comments are not allowed")
 	}
-	now := time.Now()
 	outerType := reflect.TypeOf(sliceData)
 	if outerType.Kind() != reflect.Slice {
 		return insertTypeErr
@@ -293,7 +292,7 @@ func (client *ckConn) Insert(query string, sliceData interface{}) error {
 		}
 		argss = append(argss, args)
 	}
-
+	now := time.Now()
 	err := saveData(client.Conn, insertSQL, argss)
 	db, table := parseInsertSQLTableName(insertSQL)
 	isSuccess := ""
