@@ -20,8 +20,8 @@ type (
 
 		// InsertAuto 自动把数组内的数据根据 siphash 分片插入到各个 clickhouse 节点
 		// query  形如 insert into user (id,real_name,city) values (#{id},#{real_name},#{city}) . #{}内的字符只能是大小写字母,数字和下划线
-		// hashTag  struct 分片字段 `db` tag 的值
-		// sliceData  要输入的数组 , 类型只能是 []*sturct 或 []struct
+		// hashTag  struct sipHash字段 `db` tag 的值
+		// sliceData  要输入的数组 , 类型只能是 []*struct 或 []struct
 		InsertAuto(query string, hashTag string, sliceData interface{}) error
 
 		// InsertAutoDetail 第一个返回值是详细的错误，第二返回值是参数校验的错误
