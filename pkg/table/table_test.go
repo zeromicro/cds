@@ -7,11 +7,11 @@ import (
 
 func TestTable(t *testing.T) {
 	mt := "CREATE TABLE IF NOT EXISTS `aa`.`bb` ON CLUSTER bip_ck_cluster\n(\n`insert_id` UInt64 COMMENT '插入id unix timestamp nano second',\n        \n        `aa` int ,\n        `ck_is_delete` UInt8 \tCOMMENT '用于记录删除状态 0为正常状态 1为删除状态'\n        ) ENGINE=ReplicatedMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_aa.bb',\n\t\t\t '{replica}') PARTITION BY toYYYYMM(updateTime) ORDER BY(_id) SETTINGS index_granularity = 8192"
-	mv := "CREATEMATERIALIZEDVIEWIFNOTEXISTS`aa`.`bb_mv`ONCLUSTERbip_ck_clusterTO`aa`.`.inner.bb_mv`ASSELECT*fromaa.bb"
+	mv := "CREATEMATERIALIZEDVIEWIFNOTEXISTS`aa`.`bb_mv`ONCLUSTERbip_ck_clusterTO`aa`.`.rtu_inner.bb_mv`ASSELECT*fromaa.bb"
 	mvNow := "CREATEVIEWIFNOTEXISTS`aa`.`bb_now`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ASSELECT*FROMaa.bb_allFINALWHEREck_is_delete=0\n"
 	mvAll := "CREATETABLEIFNOTEXISTS`aa`.`bb_all`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ENGINE=Distributed('bip_ck_cluster','aa','bb_mv',sipHash64(_id))\n"
 	all := "CREATETABLEIFNOTEXISTS`aa`.`bb_full_all`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ENGINE=Distributed('bip_ck_cluster','aa','bb',sipHash64(_id))\n"
-	mvInner := "CREATETABLEIFNOTEXISTS`aa`.`.inner.bb_mv`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ENGINE=ReplicatedReplacingMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_aa.bb_mv','{replica}')PARTITIONBYtoYYYYMM(updateTime)ORDERBY_idSETTINGSindex_granularity=8192"
+	mvInner := "CREATETABLEIFNOTEXISTS`aa`.`.rtu_inner.bb_mv`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ENGINE=ReplicatedReplacingMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_aa.bb_mv','{replica}')PARTITIONBYtoYYYYMM(updateTime)ORDERBY_idSETTINGSindex_granularity=8192"
 	Columns := []Column{{"aa", "int", ""}}
 
 	d := &TableMeta{
@@ -48,11 +48,11 @@ func TestTable(t *testing.T) {
 
 func TestTableWithTime(t *testing.T) {
 	mt := "CREATE TABLE IF NOT EXISTS `aa`.`bb` ON CLUSTER bip_ck_cluster\n(\n`insert_id` UInt64 COMMENT '插入id unix timestamp nano second',\n        \n        `aa` int ,`__time`DateTimeCOMMENT'第三方时间戳',\n        `ck_is_delete` UInt8 \tCOMMENT '用于记录删除状态 0为正常状态 1为删除状态'\n        ) ENGINE=ReplicatedMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_aa.bb',\n\t\t\t '{replica}') PARTITION BY toYYYYMM(updateTime) ORDER BY(_id) SETTINGS index_granularity = 8192"
-	mv := "CREATEMATERIALIZEDVIEWIFNOTEXISTS`aa`.`bb_mv`ONCLUSTERbip_ck_clusterTO`aa`.`.inner.bb_mv`ASSELECT*fromaa.bb"
+	mv := "CREATEMATERIALIZEDVIEWIFNOTEXISTS`aa`.`bb_mv`ONCLUSTERbip_ck_clusterTO`aa`.`.rtu_inner.bb_mv`ASSELECT*fromaa.bb"
 	mvNow := "CREATEVIEWIFNOTEXISTS`aa`.`bb_now`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`__time`DateTimeCOMMENT'第三方时间戳',`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ASSELECT*FROMaa.bb_allFINALWHEREck_is_delete=0\n"
 	mvAll := "CREATETABLEIFNOTEXISTS`aa`.`bb_all`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`__time`DateTimeCOMMENT'第三方时间戳',`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ENGINE=Distributed('bip_ck_cluster','aa','bb_mv',sipHash64(_id))\n"
 	all := "CREATETABLEIFNOTEXISTS`aa`.`bb_full_all`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`__time`DateTimeCOMMENT'第三方时间戳',`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ENGINE=Distributed('bip_ck_cluster','aa','bb',sipHash64(_id))\n"
-	mvInner := "CREATETABLEIFNOTEXISTS`aa`.`.inner.bb_mv`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`__time`DateTimeCOMMENT'第三方时间戳',`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ENGINE=ReplicatedReplacingMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_aa.bb_mv','{replica}',`__time`)PARTITIONBYtoYYYYMM(updateTime)ORDERBY_idSETTINGSindex_granularity=8192\n"
+	mvInner := "CREATETABLEIFNOTEXISTS`aa`.`.rtu_inner.bb_mv`ONCLUSTERbip_ck_cluster(`insert_id`UInt64COMMENT'插入idunixtimestampnanosecond',`aa`int,`__time`DateTimeCOMMENT'第三方时间戳',`ck_is_delete`UInt8COMMENT'用于记录删除状态0为正常状态1为删除状态')ENGINE=ReplicatedReplacingMergeTree('/clickhouse/tables/{layer}-{shard}/blackhole_aa.bb_mv','{replica}',`__time`)PARTITIONBYtoYYYYMM(updateTime)ORDERBY_idSETTINGSindex_granularity=8192\n"
 
 	Columns := []Column{{"aa", "int", ""}}
 

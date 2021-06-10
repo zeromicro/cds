@@ -85,7 +85,7 @@ func (meta *TableMeta) buildHead(category int, buf *strings.Builder) {
 		buf.WriteString(dbTable + "_full_all` ")
 	case MvInner:
 		buf.WriteString("TABLE IF NOT EXISTS ")
-		buf.WriteString(" `" + meta.DB + "`.`.inner." + meta.Table + "_mv` ")
+		buf.WriteString(" `" + meta.DB + "`.`.rtu_inner." + meta.Table + "_mv` ")
 	case MvDistribute:
 		buf.WriteString("TABLE IF NOT EXISTS ")
 		buf.WriteString(dbTable + "_all` ")
@@ -139,7 +139,7 @@ func (meta *TableMeta) buildEnd(category int, buf *strings.Builder) {
 		buf.WriteString("\nSETTINGS index_granularity = 8192")
 		//buf.WriteString(" AS SELECT * FROM " + dbTable)
 	case MvLocal:
-		buf.WriteString("TO " + " `" + meta.DB + "`.`.inner." + meta.Table + "_mv` AS SELECT * from " + dbTable)
+		buf.WriteString("TO " + " `" + meta.DB + "`.`.rtu_inner." + meta.Table + "_mv` AS SELECT * from " + dbTable)
 	case MvNow:
 		buf.WriteString(" AS \n")
 		buf.WriteString("SELECT * FROM " + dbTable)
