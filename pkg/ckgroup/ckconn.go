@@ -292,6 +292,9 @@ func (client *ckConn) Insert(query string, sliceData interface{}) error {
 		}
 		argss = append(argss, args)
 	}
+	if len(argss) == 0 {
+		return nil
+	}
 	now := time.Now()
 	err := saveData(client.Conn, insertSQL, argss)
 	db, table := parseInsertSQLTableName(insertSQL)
