@@ -1,39 +1,39 @@
 info(
-    title:galaxy
-    desc: galaxy
-    author: Michael
-    email: 1214534601@qq.com
+	title:galaxy
+	desc: galaxy
+	author: Michael
+	email: 1214534601@qq.com
 )
 
-type UserLoginRequest struct {
+type UserLoginRequest {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-type TokenResponse struct {
+type TokenResponse {
 	Auth string `json:"auth"`
 }
 
 // user-add
-type UserAddRequest struct {
+type UserAddRequest {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	GroupID  int    `json:"groupID"`
 }
 
-type UserGetResponse struct {
+type UserGetResponse {
 	Name    string `json:"name"`
 	GroupId int    `json:"groupId"`
 	Email   string `json:"email"`
 }
 
-type InstancesRequest struct {
+type InstancesRequest {
 	Page int `json:"page"`
 	Size int `json:"size"`
 }
 
-type Dm struct {
+type Dm {
 	ID              int        `json:"id"`
 	Name            string     `json:"name"`
 	SourceType      string     `json:"sourceType"`
@@ -53,18 +53,18 @@ type Dm struct {
 	CreateTime      string     `json:"createTime"`
 	UpdateTime      string     `json:"updateTime"`
 }
-type DmListResponse struct {
+type DmListResponse {
 	DmList      []Dm        `json:"dmList"`
 	PageAndSize PageAndSize `json:"pageAndSize"`
 }
-type DefaultConfigResponse struct {
+type DefaultConfigResponse {
 	QueryNode string     `json:"queryNode"`
 	Shards    [][]string `json:"shards"`
 	Cluster   string     `json:"cluster"`
 }
 
 // dm-add
-type Source struct {
+type Source {
 	Dsn            string   `json:"dsn"`
 	Tables         []string `json:"tables"`
 	Suffix         string   `json:"suffix"`
@@ -73,44 +73,45 @@ type Source struct {
 	QueryKey       []string `json:"queryKey"`
 }
 
-type DeleteConnectorRequest struct {
+type DeleteConnectorRequest {
 	Type     string `json:"type"`
 	SourceId string `json:"sourceId"`
 }
-type Target struct {
+type Target {
 	Databases        []string `json:"databases"`
 	SelectedDatabase string   `json:"selectedDatabase"`
 }
-type DmModel struct {
+type DmModel {
 	Source          Source `json:"source"`
 	Target          Target `json:"target"`
 	WindowStartHour string `json:"windowStartHour"`
 	WindowEndHour   string `json:"windowEndHour"`
 }
-type PageAndSize struct {
+type PageAndSize {
 	Page int `json:"page"`
 	Size int `json:"size"`
 }
-type ListRequest struct {
+type ListRequest {
 	DbName string `json:"dbName"`
 	PageAndSize
 }
 
 // list-tables
-type String struct {
+type String {
 	String string `json:"string"`
 }
-type StringList struct {
+type StringList {
 	StringList []string `json:"stringList"`
 }
 
 // generate-create-sql
-type GenerateCreateSqlRequest struct {
+type GenerateCreateSqlRequest {
 	Dsn      string   `json:"dsn"`
 	Table    []string `json:"table"`
 	Database string   `json:"database"`
+	WithTime string   `json:"withTime,optional"`
 }
-type GenerateCreateSqlResponse struct {
+type GenerateCreateSqlResponse {
 	Sql           []string `json:"sql"`
 	QueryKey      []string `json:"queryKey"`
 	FailedTables  []string `json:"failedTables"`
@@ -118,12 +119,12 @@ type GenerateCreateSqlResponse struct {
 }
 
 // exec-sql
-type ExecSqlRequest struct {
+type ExecSqlRequest {
 	Sql []string `json:"sql"`
 }
 
 // rtu-list
-type Rtu struct {
+type Rtu {
 	ID             int        `json:"id"`
 	Name           string     `json:"name"`
 	SourceType     string     `json:"sourceType"`
@@ -142,22 +143,22 @@ type Rtu struct {
 	CreateTime     string     `json:"createTime"`
 	UpdateTime     string     `json:"updateTime"`
 }
-type RtuList struct {
+type RtuList {
 	RtuList     []Rtu       `json:"rtuList"`
 	PageAndSize PageAndSize `json:"pageAndSize"`
 }
 
 // rtu-add
-type RtuModel struct {
+type RtuModel {
 	Source Source `json:"source"`
 	Target Target `json:"target"`
 }
 
 // connector-add
-type ConnectorModel struct {
+type ConnectorModel {
 	Source Source `json:"source"`
 }
-type Connector struct {
+type Connector {
 	SourceType  string `json:"sourceType"`
 	SourceTable string `json:"sourceTable"`
 	SourceDB    string `json:"sourceDb"`
@@ -165,19 +166,19 @@ type Connector struct {
 	CreateTime  string `json:"createTime"`
 	UpdateTime  string `json:"updateTime"`
 }
-type ConnectorListResponse struct {
+type ConnectorListResponse {
 	ConnectorList []*Connector `json:"connectorList"`
 	PageAndSize   PageAndSize  `json:"pageAndSize"`
 }
-type ExecSqlResponse struct {
+type ExecSqlResponse {
 	FailedTables  []string `json:"failedTables"`
 	FailedReasons []string `json:"failedReasons"`
 }
-type GetUserInfoRequest struct {
+type GetUserInfoRequest {
 	Email string `json:"email"`
 }
 
-type GetUserInfoResponse struct {
+type GetUserInfoResponse {
 	Roles        []string `json:"roles"`
 	Name         string   `json:"name"`
 	Avatar       string   `json:"avatar"`
@@ -193,121 +194,121 @@ service galaxy-api {
 		summary: user-add
 	)
 	@handler addHandler
-	post /galaxy/user/add(UserAddRequest)
+	post /galaxy/user/add (UserAddRequest)
 	
 	@doc(
 		summary: dm-list
 	)
 	@handler dmListHandler
-	post /galaxy/html/dm-list() returns(DmListResponse)
+	post /galaxy/html/dm-list () returns (DmListResponse)
 	
 	@doc(
 		summary: dm-add
 	)
 	@handler dmAddHandler
-	post /galaxy/html/dm-add(DmModel) returns(DmModel)
+	post /galaxy/html/dm-add (DmModel) returns (DmModel)
 	
 	@doc(
 		summary: list-tables
 	)
 	@handler listTableHandler
-	post /galaxy/html/list-tables(String) returns(StringList)
+	post /galaxy/html/list-tables (String) returns (StringList)
 	
 	@doc(
 		summary: list-databases
 	)
 	@handler listDatabasesHandler
-	post /galaxy/html/list-databases(String) returns(StringList)
+	post /galaxy/html/list-databases (String) returns (StringList)
 	
 	@doc(
 		summary: list-databases
 	)
 	@handler databaseListHandler
-	post /galaxy/html/database-list(String) returns(StringList)
+	post /galaxy/html/database-list (String) returns (StringList)
 	
 	@doc(
 		summary: config-default
 	)
 	@handler defaultConfigHandler
-	get /galaxy/html/default-config() returns(DefaultConfigResponse)
+	get /galaxy/html/default-config () returns (DefaultConfigResponse)
 	
 	@doc(
 		summary: generate-create-sql
 	)
 	@handler generateCreateSqlHandler
-	post /galaxy/html/generate-create-sql(GenerateCreateSqlRequest) returns(GenerateCreateSqlResponse)
+	post /galaxy/html/generate-create-sql (GenerateCreateSqlRequest) returns (GenerateCreateSqlResponse)
 	
 	@doc(
 		summary: exec-sql
 	)
 	@handler execSqlHandler
-	post /galaxy/html/exec-sql(ExecSqlRequest)
+	post /galaxy/html/exec-sql (ExecSqlRequest)
 	
 	@doc(
 		summary: dm-stop
 	)
 	@handler dmStopHandler
-	post /galaxy/html/dm-stop(String)
+	post /galaxy/html/dm-stop (String)
 	
 	@doc(
 		summary: dm-delete
 	)
 	@handler dmDeleteHandler
-	post /galaxy/html/dm-delete(String)
+	post /galaxy/html/dm-delete (String)
 	
 	@doc(
 		summary: dm-redo
 	)
 	@handler dmRedoHandler
-	post /galaxy/html/dm-redo(String)
+	post /galaxy/html/dm-redo (String)
 	
 	@doc(
 		summary: rtu-list
 	)
 	@handler rtuListHandler
-	post /galaxy/html/rtu-list() returns(RtuList)
+	post /galaxy/html/rtu-list () returns (RtuList)
 	
 	@doc(
 		summary: rtu-add
 	)
 	@handler rtuAddHandler
-	post /galaxy/html/rtu-add(RtuModel) returns(RtuModel)
+	post /galaxy/html/rtu-add (RtuModel) returns (RtuModel)
 	
 	@doc(
 		summary: rtu-stop
 	)
 	@handler rtuStopHandler
-	post /galaxy/html/rtu-stop(String)
+	post /galaxy/html/rtu-stop (String)
 	
 	@doc(
 		summary: rtu-delete
 	)
 	@handler rtuDeleteHandler
-	post /galaxy/html/rtu-delete(String)
+	post /galaxy/html/rtu-delete (String)
 	
 	@doc(
 		summary: rtu-redo
 	)
 	@handler rtuRedoHandler
-	post /galaxy/html/rtu-redo(String)
+	post /galaxy/html/rtu-redo (String)
 	
 	@doc(
 		summary: connector-list
 	)
 	@handler connectorListHandler
-	post /galaxy/html/connector-list() returns(StringList)
+	post /galaxy/html/connector-list () returns (StringList)
 	
 	@doc(
 		summary: connector-add
 	)
 	@handler connectorAddHandler
-	post /galaxy/html/connector-add(ConnectorModel)
+	post /galaxy/html/connector-add (ConnectorModel)
 	
 	@doc(
 		summary: connector-delete
 	)
 	@handler connectorDeleteHandler
-	post /galaxy/html/connector-delete(String)
+	post /galaxy/html/connector-delete (String)
 }
 
 service galaxy-api {
@@ -315,10 +316,9 @@ service galaxy-api {
 		summary: user-login
 	)
 	@handler loginHandler
-	post /galaxy/user/login(UserLoginRequest) returns(TokenResponse)
-	    @server(
-            handler: getUserInfoHandler
-        )
-        post /accesscenter/get-user-info(GetUserInfoRequest) returns(GetUserInfoResponse)
+	post /galaxy/user/login (UserLoginRequest) returns (TokenResponse)
+	@server(
+		handler: getUserInfoHandler
+	)
+	post /accesscenter/get-user-info (GetUserInfoRequest) returns (GetUserInfoResponse)
 }
-

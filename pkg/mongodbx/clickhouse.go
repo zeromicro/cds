@@ -16,7 +16,7 @@ import (
 	table2 "github.com/tal-tech/cds/pkg/table"
 )
 
-func ToClickhouseTable(dsn string, db, tablename, indexes string) ([]string, string, error) {
+func ToClickhouseTable(dsn string, db, tablename, indexes string, withTime bool) ([]string, string, error) {
 	info, e := connstring.Parse(dsn)
 	if e != nil {
 		logx.Error(e)
@@ -36,10 +36,11 @@ func ToClickhouseTable(dsn string, db, tablename, indexes string) ([]string, str
 		return nil, "", errors.New("没有数据，无法生成建表语句")
 	}
 	data := &table2.TableMeta{
-		DB:      db,
-		Table:   tablename,
-		Indexes: indexes,
-		M:       make(map[string]int),
+		DB:       db,
+		Table:    tablename,
+		Indexes:  indexes,
+		M:        make(map[string]int),
+		WithTime: withTime,
 	}
 
 	err := getColumns(cli, info.Database, tablename, data, true)
@@ -75,6 +76,10 @@ func ToClickhouseTable(dsn string, db, tablename, indexes string) ([]string, str
 	// distributed table for data node
 	out = append(out, data.CreateTable(table2.Distribute, true))
 
+	// mv inner table
+	out = append(out, data.CreateTable(table2.MvInner, true))
+
+	//
 	out = append(out, data.CreateTable(table2.MvLocal, true))
 	out = append(out, data.CreateTable(table2.MvDistribute, true))
 	out = append(out, data.CreateTable(table2.MvDistribute, false))

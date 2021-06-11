@@ -10,7 +10,7 @@ import (
 	table2 "github.com/tal-tech/cds/pkg/table"
 )
 
-func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string, error) {
+func ToClickhouseTable(dsn string, db, table, indexes string, withTime bool) ([]string, string, error) {
 	columns, e := DescribeMysqlTable(TakeMySQLConnx(dsn), table)
 	if e != nil {
 		logx.Error(e)
@@ -51,6 +51,7 @@ func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string,
 		CreateTime: createTime,
 		Indexes:    indexes,
 		UpdateTime: updateTime,
+		WithTime:   withTime,
 	}
 
 	out := make([]string, 0, 8)
@@ -62,6 +63,10 @@ func ToClickhouseTable(dsn string, db, table, indexes string) ([]string, string,
 	// distributed table for data node
 	out = append(out, data.CreateTable(table2.Distribute, true))
 
+	// mv inner table
+	out = append(out, data.CreateTable(table2.MvInner, true))
+
+	//
 	out = append(out, data.CreateTable(table2.MvLocal, true))
 	out = append(out, data.CreateTable(table2.MvDistribute, true))
 	out = append(out, data.CreateTable(table2.MvDistribute, false))
