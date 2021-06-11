@@ -156,14 +156,14 @@ func (g *dbGroup) ExecAll(query string, args [][]interface{}) error {
 func (g *dbGroup) exec(idx int, query string, rows []rowValue) error {
 	var err error
 	for attempt := 1; attempt <= g.opt.RetryNum; attempt++ {
-		err = execOnNode(g.ShardNodes[idx].GetShardConn().GetRawConn(), query, rows)
+		err = saveData(g.ShardNodes[idx].GetShardConn().GetRawConn(), query, rows)
 		if err != nil {
 			logx.Infof("[attempt %d/%d] Node[%d] primary node execute error:%v, will switch to replica node", attempt, g.opt.RetryNum, idx, err)
 		} else {
 			return nil
 		}
 		for i, replicaNode := range g.ShardNodes[idx].GetReplicaConn() {
-			err = execOnNode(replicaNode.GetRawConn(), query, rows)
+			err = saveData(replicaNode.GetRawConn(), query, rows)
 			if err != nil {
 				logx.Infof("[attempt %d/%d] Node[%d] replica[%d] execute error:%v, will switch to next replica node", attempt, g.opt.RetryNum, idx, i, err)
 			} else {

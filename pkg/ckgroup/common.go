@@ -161,29 +161,6 @@ func getDataBatch(hashIdx int, shardNum int, args []rowValue) ([][]rowValue, err
 	return dataBatch, nil
 }
 
-func execOnNode(dbNode *sql.DB, query string, rows []rowValue) error {
-	tx, err := dbNode.Begin()
-	if err != nil {
-		return err
-	}
-	stmt, err := tx.Prepare(query)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-	for _, row := range rows {
-		_, err := stmt.Exec(row...)
-		if err != nil {
-			return err
-		}
-	}
-	err = tx.Commit()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func saveData(db *sql.DB, insertSql string, values []rowValue) error {
 	tx, err := db.Begin()
 	if err != nil {
