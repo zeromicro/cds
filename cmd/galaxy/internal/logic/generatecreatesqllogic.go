@@ -28,19 +28,23 @@ func (l *GenerateCreateSqlLogic) GenerateCreateSql(req types.GenerateCreateSqlRe
 	var failedtables, reasons []string
 	sqls := make([]string, 0, len(req.Table))
 	qks := make([]string, 0, len(req.Table))
+	withTime := false
+	if req.WithTime != "" {
+		withTime = true
+	}
 	for _, v := range req.Table {
 		var qk string
 		var sql []string
 		var e error
 		if strings.HasPrefix(req.Dsn, "mongodb://") {
-			sql, qk, e = mongodbx.ToClickhouseTable(req.Dsn, req.Database, v, "")
+			sql, qk, e = mongodbx.ToClickhouseTable(req.Dsn, req.Database, v, "", withTime)
 			if e != nil {
 				failedtables = append(failedtables, v)
 				reasons = append(reasons, e.Error())
 				continue
 			}
 		} else {
-			sql, qk, e = mysqlx.ToClickhouseTable(req.Dsn, req.Database, v, "")
+			sql, qk, e = mysqlx.ToClickhouseTable(req.Dsn, req.Database, v, "", withTime)
 			if e != nil {
 				failedtables = append(failedtables, v)
 				reasons = append(reasons, e.Error())

@@ -44,8 +44,3 @@ make up
 
 if you like this project and want to support it，please `star` 🤝
 
-wechat
-
-
-
-<img src="https://gitee.com/zyz01/cds/raw/master/doc/weichat.JPG" alt="cds" width="310" />
