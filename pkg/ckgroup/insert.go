@@ -1,6 +1,7 @@
 package ckgroup
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -18,6 +19,11 @@ func (g *dbGroup) InsertAuto(query string, hashTag string, sliceData interface{}
 	shardDatas, err := cutData2ShardData(sliceData, len(g.ShardNodes), hashTag)
 	if err != nil {
 		return err
+	}
+
+	err = g.opt.GroupInsertLimiter.Wait(context.Background())
+	if err != nil {
+		logx.Error(err)
 	}
 
 	var eg errgroup.Group
@@ -54,6 +60,12 @@ func (g *dbGroup) InsertAutoDetail(query string, hashTag string, sliceData inter
 	if err != nil {
 		return nil, err
 	}
+
+	err = g.opt.GroupInsertLimiter.Wait(context.Background())
+	if err != nil {
+		logx.Error(err)
+	}
+
 	waitGroup := sync.WaitGroup{}
 	waitGroup.Add(len(g.ShardNodes))
 	ch := make(chan InsertErrDetail, len(g.GetAllShard()))
