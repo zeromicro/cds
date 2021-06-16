@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/tal-tech/cds/pkg/ckgroup/dbtesttool/dbtool"
+	"golang.org/x/time/rate"
 )
 
 func Test_dbGroup_InsertAutoDetail(t *testing.T) {
@@ -13,7 +14,7 @@ func Test_dbGroup_InsertAutoDetail(t *testing.T) {
 
 	c1 := dbGroup{
 		ShardNodes: []ShardConn{&fakeShardConn{true}, &fakeShardConn{true}, &fakeShardConn{true}},
-		opt:        option{RetryNum: 3},
+		opt:        option{RetryNum: 3, GroupInsertLimiter: rate.NewLimiter(rate.Inf, 0)},
 	}
 	errDetail1, err := c1.InsertAutoDetail(``, "pk", dataSet)
 	if err != nil {
@@ -29,7 +30,7 @@ func Test_dbGroup_InsertAutoDetail(t *testing.T) {
 	}
 	c2 := dbGroup{
 		ShardNodes: []ShardConn{&fakeShardConn{false}, &fakeShardConn{false}, &fakeShardConn{false}},
-		opt:        option{RetryNum: 3},
+		opt:        option{RetryNum: 3, GroupInsertLimiter: rate.NewLimiter(rate.Inf, 0)},
 	}
 	errDetail2, err := c2.InsertAutoDetail(``, "pk", dataSet)
 	if err != nil {
@@ -41,7 +42,7 @@ func Test_dbGroup_InsertAutoDetail(t *testing.T) {
 
 	c3 := dbGroup{
 		ShardNodes: []ShardConn{&fakeShardConn{false}, &fakeShardConn{true}, &fakeShardConn{false}},
-		opt:        option{RetryNum: 3},
+		opt:        option{RetryNum: 3, GroupInsertLimiter: rate.NewLimiter(rate.Inf, 0)},
 	}
 	errDetail3, err := c3.InsertAutoDetail(``, "pk", dataSet)
 	if err != nil {
