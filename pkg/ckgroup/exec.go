@@ -2,6 +2,7 @@ package ckgroup
 
 import (
 	"errors"
+	"math/rand"
 	"sort"
 	"strings"
 	"sync"
@@ -154,25 +155,21 @@ func (g *dbGroup) ExecAll(query string, args [][]interface{}) error {
 }
 
 func (g *dbGroup) exec(idx int, query string, rows []rowValue) error {
+	shardConns := g.GetAllShard()[idx].GetAllConn()
+	execOrder := rand.Perm(len(shardConns))
 	var err error
 	for attempt := 1; attempt <= g.opt.RetryNum; attempt++ {
-		err = saveData(g.ShardNodes[idx].GetShardConn().GetRawConn(), query, rows)
-		if err != nil {
-			logx.Infof("[attempt %d/%d] Node[%d] primary node execute error:%v, will switch to replica node", attempt, g.opt.RetryNum, idx, err)
-		} else {
-			return nil
-		}
-		for i, replicaNode := range g.ShardNodes[idx].GetReplicaConn() {
-			err = saveData(replicaNode.GetRawConn(), query, rows)
-			if err != nil {
-				logx.Infof("[attempt %d/%d] Node[%d] replica[%d] execute error:%v, will switch to next replica node", attempt, g.opt.RetryNum, idx, i, err)
-			} else {
+		for _, order := range execOrder {
+			err = saveData(shardConns[order].GetRawConn(), query, rows)
+			if err == nil {
 				return nil
 			}
+			logx.Errorf("[attempt %d/%d] shard[%d] node[%d] insert error:%s, will switch to next node", attempt, g.opt.RetryNum, idx+1, order+1, err.Error())
+			continue
 		}
 	}
 	if err != nil {
-		logx.Errorf("All node exec failed. Retry num:%d. Last fail reason: %v, query: %s", g.opt.RetryNum, err, query)
+		logx.Errorf("shard[%d] all node exec failed. Retry num:%d. Last fail reason: %v, query: %s", idx+1, g.opt.RetryNum, err, query)
 	}
 	return err
 }
