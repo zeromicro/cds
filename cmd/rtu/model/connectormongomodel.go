@@ -5,7 +5,6 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/prometheus/common/log"
 	"github.com/tal-tech/go-zero/core/logx"
 )
 
@@ -172,7 +171,7 @@ func (mongo *ConnectorMongo) setValueMap(vm ValueMap, table *SQLTable) {
 		default:
 			tmp, err := json.Marshal(v)
 			if err != nil {
-				log.Error(err)
+				logx.Error(err)
 				delete(vm, k)
 				continue
 			}
@@ -215,7 +214,7 @@ func (mongo *ConnectorMongo) setValueMap(vm ValueMap, table *SQLTable) {
 				if val, ok := vm[k].(map[string]interface{}); ok {
 					tmp, err := json.Marshal(val)
 					if err != nil {
-						log.Error(err)
+						logx.Error(err)
 						delete(vm, k)
 						continue
 					}
@@ -234,7 +233,7 @@ func (mongo *ConnectorMongo) setValueMap(vm ValueMap, table *SQLTable) {
 				if val, ok := vm[k].(string); ok {
 					tmp, err := strconv.Atoi(val)
 					if err != nil {
-						log.Error(err)
+						logx.Error(err)
 					}
 					vm[k] = tmp
 				}
