@@ -8,11 +8,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coreos/etcd/clientv3"
-	"github.com/coreos/etcd/clientv3/concurrency"
 	"github.com/tal-tech/cds/cmd/rtu/cmd/sync/config"
 	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
+	clientv3 "go.etcd.io/etcd/client/v3"
+	"go.etcd.io/etcd/client/v3/concurrency"
 )
 
 var (

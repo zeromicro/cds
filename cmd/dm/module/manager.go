@@ -10,7 +10,7 @@ import (
 
 	"github.com/tal-tech/cds/cmd/dm/cmd/sync/config"
 	"github.com/tal-tech/go-zero/core/logx"
-	"go.etcd.io/etcd/clientv3/concurrency"
+	"go.etcd.io/etcd/client/v3/concurrency"
 )
 
 type Manager struct {

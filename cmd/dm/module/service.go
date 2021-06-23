@@ -7,7 +7,7 @@ import (
 	"regexp"
 
 	"github.com/tal-tech/go-zero/core/logx"
-	"go.etcd.io/etcd/clientv3/concurrency"
+	"go.etcd.io/etcd/client/v3/concurrency"
 	"gopkg.in/mgo.v2/bson"
 
 	"github.com/tal-tech/cds/cmd/dm/choperator"

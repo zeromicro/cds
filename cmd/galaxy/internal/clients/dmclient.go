@@ -9,7 +9,7 @@ import (
 	"github.com/tal-tech/cds/cmd/dm/cmd/sync/config"
 	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
-	"go.etcd.io/etcd/clientv3"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 type DmClient struct {
