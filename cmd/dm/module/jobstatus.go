@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/coreos/etcd/clientv3"
 	"github.com/tal-tech/cds/cmd/dm/cmd/sync/config"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 const (
