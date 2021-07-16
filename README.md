@@ -135,8 +135,6 @@ make docker_clean
 ```
 
 
-[demo by docker](doc/quickstart.md)
-
 ### data model in clickhouse
 [CDS中ClickHouse使用的建表方案](doc/CDS中ClickHouse使用的建表方案.md)
 
