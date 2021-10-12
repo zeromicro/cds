@@ -16,7 +16,7 @@ Data workflow of a typical data warehouse architecture
 
 ### Design of Data Sync
 
-Automatically synchronizing data from MySQL/MongoDB data source to ClickHouse cluster in real time.
+Automatically synchronizing data from MySQL/MongoDB data source to ClickHouse cluster in real time(< 2min).
 
 ![同步drawio](https://github.com/tal-tech/cds/raw/master/doc/%E5%90%8C%E6%AD%A5drawio.png)
 
