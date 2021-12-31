@@ -363,7 +363,7 @@ export const asyncRoutes = [
     component: Layout,
     children: [
       {
-        path: 'https://github.com/tal-tech/cds',
+        path: 'https://github.com/zeromicro/cds',
         meta: { title: 'Star Us', icon: 'link' }
       }
     ]

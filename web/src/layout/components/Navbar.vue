@@ -30,10 +30,10 @@
           <!-- <router-link to="/">
             <el-dropdown-item>Dashboard</el-dropdown-item>
           </router-link> -->
-          <a target="_blank" href="https://github.com/tal-tech/cds">
+          <a target="_blank" href="https://github.com/zeromicro/cds">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
-          <a target="_blank" href="https://github.com/tal-tech/cds/blob/master/doc/quickstart.md">
+          <a target="_blank" href="https://github.com/zeromicro/cds/blob/master/doc/quickstart.md">
             <el-dropdown-item>Docs</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">

@@ -1,7 +1,7 @@
 # start up
 
 ```bash
-git clone https://github.com/tal-tech/cds.git
+git clone https://github.com/zeromicro/cds.git
 cd cds
 make up
 ```

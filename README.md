@@ -1,5 +1,5 @@
 <p align="left">
-  <img width ="200px" src="https://github.com/tal-tech/cds/raw/master/doc/logo.png">
+  <img width ="200px" src="https://github.com/zeromicro/cds/raw/master/doc/logo.png">
 </p>
 
 # ClickHouse Data Synchromesh
@@ -12,19 +12,19 @@ based on [go-zero](https://github.com/tal-tech/go-zero)
 
 Data workflow of a typical data warehouse architecture 
 
-![avatar](https://github.com/tal-tech/cds/raw/master/doc/clickhouse_arch.png)
+![avatar](https://github.com/zeromicro/cds/raw/master/doc/clickhouse_arch.png)
 
 ### Design of Data Sync
 
 Automatically synchronizing data from MySQL/MongoDB data source to ClickHouse cluster in real time(< 2min).
 
-![同步drawio](https://github.com/tal-tech/cds/raw/master/doc/%E5%90%8C%E6%AD%A5drawio.png)
+![同步drawio](https://github.com/zeromicro/cds/raw/master/doc/%E5%90%8C%E6%AD%A5drawio.png)
 
 
 # start up
 
 ```bash
-git clone https://github.com/tal-tech/cds.git
+git clone https://github.com/zeromicro/cds.git
 cd cds
 make up
 ```
