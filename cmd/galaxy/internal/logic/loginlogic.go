@@ -5,12 +5,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
-
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/types"
+	"github.com/golang-jwt/jwt"
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
 )
 
 type LoginLogic struct {
@@ -40,7 +39,7 @@ func (l *LoginLogic) Login(req types.UserLoginRequest) (*types.TokenResponse, er
 	if u.Password != req.Password {
 		return nil, errors.New("密码错误")
 	}
-	var info = map[string]interface{}{
+	info := map[string]interface{}{
 		"name":  u.Name,
 		"email": u.Email,
 		"id":    u.ID,

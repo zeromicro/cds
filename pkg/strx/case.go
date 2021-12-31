@@ -5,8 +5,10 @@ import (
 	"strings"
 )
 
-var numberSequence = regexp.MustCompile(`([a-zA-Z])(\d+)([a-zA-Z]?)`)
-var numberReplacement = []byte(`$1 $2 $3`)
+var (
+	numberSequence    = regexp.MustCompile(`([a-zA-Z])(\d+)([a-zA-Z]?)`)
+	numberReplacement = []byte(`$1 $2 $3`)
+)
 
 var uppercaseAcronym = map[string]bool{
 	"ID": true,
@@ -70,11 +72,10 @@ func ToLowerCamel(s string) string {
 
 // ToSnakeCase converts a string to snake_case
 func ToSnakeCase(s string) string {
-
 	return ToDelimited(s, '_')
 }
-func ToSnakeWithIgnore(s string, ignore uint8) string {
 
+func ToSnakeWithIgnore(s string, ignore uint8) string {
 	return ToScreamingDelimited(s, '_', ignore, false)
 }
 
@@ -103,7 +104,7 @@ func ToDelimited(s string, delimiter uint8) string {
 // (in this case `delimiter = '.'; screaming = true`)
 // or delimited.snake.case
 // (in this case `delimiter = '.'; screaming = false`)
-func ToScreamingDelimited(s string, delimiter uint8, ignore uint8, screaming bool) string {
+func ToScreamingDelimited(s string, delimiter, ignore uint8, screaming bool) string {
 	s = addWordBoundariesToNumbers(s)
 	s = strings.Trim(s, " ")
 	n := ""

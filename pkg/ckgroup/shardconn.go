@@ -6,8 +6,7 @@ import (
 	"math/rand"
 
 	"github.com/tal-tech/go-zero/core/logx"
-
-	"github.com/tal-tech/cds/pkg/ckgroup/config"
+	"github.com/zeromicro/cds/pkg/ckgroup/config"
 )
 
 type ShardConn interface {

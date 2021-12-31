@@ -1,8 +1,9 @@
 package handler
 
 import (
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"net/http"
+
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 type response struct {

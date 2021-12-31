@@ -6,8 +6,7 @@ import (
 
 	_ "github.com/ClickHouse/clickhouse-go"
 	"github.com/tal-tech/go-zero/core/logx"
-
-	"github.com/tal-tech/cds/pkg/ckgroup/config"
+	"github.com/zeromicro/cds/pkg/ckgroup/config"
 )
 
 type (
@@ -22,10 +21,10 @@ type (
 		// query  形如 insert into user (id,real_name,city) values (#{id},#{real_name},#{city}) . #{}内的字符只能是大小写字母,数字和下划线
 		// hashTag  struct sipHash字段 `db` tag 的值
 		// sliceData  要输入的数组 , 类型只能是 []*struct 或 []struct
-		InsertAuto(query string, hashTag string, sliceData interface{}) error
+		InsertAuto(query, hashTag string, sliceData interface{}) error
 
 		// InsertAutoDetail 第一个返回值是详细的错误，第二返回值是参数校验的错误
-		InsertAutoDetail(query string, hashTag string, sliceData interface{}) ([]InsertErrDetail, error)
+		InsertAutoDetail(query, hashTag string, sliceData interface{}) ([]InsertErrDetail, error)
 
 		// ExecSerialAll 串行的在所有节点上执行create,drop,kill,detach 等语句
 		// onErrContinue 遇到错误后是否继续
@@ -107,6 +106,7 @@ func (g *dbGroup) GetAllNodes() []CKConn {
 	}
 	return all
 }
+
 func (g *dbGroup) GetAllShard() []ShardConn {
 	return g.ShardNodes
 }

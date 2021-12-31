@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tal-tech/cds/pkg/mysqlx"
-	"github.com/tal-tech/cds/pkg/strx"
+	"github.com/zeromicro/cds/pkg/mysqlx"
+	"github.com/zeromicro/cds/pkg/strx"
 )
 
 type (

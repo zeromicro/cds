@@ -4,10 +4,9 @@ import (
 	json1 "encoding/json"
 	"testing"
 
-	"github.com/tal-tech/cds/cmd/rtu/cmd/sync/config"
-	"github.com/tal-tech/cds/cmd/rtu/model"
-
 	jsoniter "github.com/json-iterator/go"
+	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
+	"github.com/zeromicro/cds/cmd/rtu/model"
 )
 
 var mysql1 = []byte(`{"schema":{"type":"struct","fields":[{"type":"struct","fields":
@@ -53,13 +52,14 @@ func TestGetSchema(t *testing.T) {
 		},
 	}
 	for _, c := range cases {
-		p := newParseEngine(c.category, newRunEngine(&config.Job{Target: struct {
-			Type    string
-			Shards  [][]string
-			ChProxy string
-			Table   string
-			Db      string
-		}{Table: "1", Db: "2"},
+		p := newParseEngine(c.category, newRunEngine(&config.Job{
+			Target: struct {
+				Type    string
+				Shards  [][]string
+				ChProxy string
+				Table   string
+				Db      string
+			}{Table: "1", Db: "2"},
 			Source: struct {
 				Type     string
 				Topic    string
@@ -73,7 +73,6 @@ func TestGetSchema(t *testing.T) {
 			t.Fail()
 		}
 	}
-
 }
 
 func BenchmarkGetSchema(b *testing.B) {
@@ -95,13 +94,14 @@ func BenchmarkGetSchema(b *testing.B) {
 }
 
 func TestMerge(t *testing.T) {
-	p := newParseEngine(model.CANALMYSQL, newRunEngine(&config.Job{Target: struct {
-		Type    string
-		Shards  [][]string
-		ChProxy string
-		Table   string
-		Db      string
-	}{Table: "1", Db: "2"},
+	p := newParseEngine(model.CANALMYSQL, newRunEngine(&config.Job{
+		Target: struct {
+			Type    string
+			Shards  [][]string
+			ChProxy string
+			Table   string
+			Db      string
+		}{Table: "1", Db: "2"},
 		Source: struct {
 			Type     string
 			Topic    string

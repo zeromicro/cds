@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/tal-tech/cds/pkg/ckgroup"
 	"time"
+
+	"github.com/zeromicro/cds/pkg/ckgroup"
 )
 
 func main() {
 	group := ckgroup.MustCKGroup(ckgroupConfig, ckgroup.WithRetryNum(3))
-	//queryRowNoType(group)
-	//queryRowsNoType(group)
-	//query(group)
-	//querySteram(group)
+	// queryRowNoType(group)
+	// queryRowsNoType(group)
+	// query(group)
+	// querySteram(group)
 	demo(group)
 }
 

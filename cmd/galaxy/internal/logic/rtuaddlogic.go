@@ -7,13 +7,13 @@ import (
 	"strings"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/tal-tech/cds/cmd/dm/cmd/sync/config"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/model"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/types"
-	"github.com/tal-tech/cds/pkg/mongodbx"
-	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/model"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
+	"github.com/zeromicro/cds/pkg/mongodbx"
+	"github.com/zeromicro/cds/pkg/strx"
 )
 
 type RtuAddLogic struct {

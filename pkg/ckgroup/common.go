@@ -102,7 +102,7 @@ func containsComment(query string) bool {
 	return strings.Contains(query, `--`) || strings.Contains(query, `/*`)
 }
 
-func parseInsertSQLTableName(insertSQL string) (db string, table string) {
+func parseInsertSQLTableName(insertSQL string) (db, table string) {
 	tokens := tokenRe.Split(strings.ToLower(insertSQL), -1)
 	var intoIdxs []int
 
@@ -150,7 +150,7 @@ func span(dest interface{}, idx []int) rowValue {
 	return result
 }
 
-func getDataBatch(hashIdx int, shardNum int, args []rowValue) ([][]rowValue, error) {
+func getDataBatch(hashIdx, shardNum int, args []rowValue) ([][]rowValue, error) {
 	dataBatch := make([][]rowValue, shardNum)
 	for _, item := range args {
 		rowValue := item

@@ -9,9 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var (
-	mongoPool = sync.Map{}
-)
+var mongoPool = sync.Map{}
 
 func TakeMongoClient(dsn string) (*mongo.Client, error) {
 	client, ok := mongoPool.Load(dsn)

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/tal-tech/cds/cmd/dm/cmd/sync/config"
+	"github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
@@ -27,7 +27,7 @@ type StatusHelper struct {
 	Client *clientv3.Client
 }
 
-func NewStatus(id string, status string, info string, updateTime time.Time) *config.Status {
+func NewStatus(id, status, info string, updateTime time.Time) *config.Status {
 	return &config.Status{ID: id, Status: status, Information: info, UpdateTime: updateTime}
 }
 
@@ -35,7 +35,7 @@ func NewStatusHelper(cli *clientv3.Client) *StatusHelper {
 	return &StatusHelper{Client: cli}
 }
 
-func (sh *StatusHelper) WriteStatus(id string, status string, info string) error {
+func (sh *StatusHelper) WriteStatus(id, status, info string) error {
 	recordInPrometheus(status)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()

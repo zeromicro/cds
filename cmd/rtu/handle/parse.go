@@ -6,10 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tal-tech/cds/cmd/rtu/model"
-	util "github.com/tal-tech/cds/cmd/rtu/utils"
-
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/rtu/model"
+	util "github.com/zeromicro/cds/cmd/rtu/utils"
 )
 
 var (
@@ -179,7 +178,6 @@ func (pe *parseEngine) checkAndAddNewColumnKeysToCached(keys map[string]interfac
 
 // 添加列
 func (pe *parseEngine) addNewColumn() error {
-
 	if len(pe.newKeyCached) == 0 {
 		return nil
 	}

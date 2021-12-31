@@ -4,9 +4,8 @@ package handler
 import (
 	"net/http"
 
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-
 	"github.com/tal-tech/go-zero/rest"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
 )
 
 func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {

@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/tal-tech/cds/pkg/mysqlx"
+	"github.com/zeromicro/cds/pkg/mysqlx"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

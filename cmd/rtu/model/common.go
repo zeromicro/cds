@@ -6,9 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tal-tech/cds/cmd/rtu/monitor"
-
 	jsoniter "github.com/json-iterator/go"
+	"github.com/zeromicro/cds/cmd/rtu/monitor"
 )
 
 const (
@@ -150,5 +149,4 @@ func formatTimeWithLayout(dt string) (*time.Time, error) {
 	} else {
 		return nil, err
 	}
-
 }

@@ -1,5 +1,5 @@
 package debeziumx
 
-func GenerateTopic(db string, table string) string {
+func GenerateTopic(db, table string) string {
 	return db + "." + table
 }

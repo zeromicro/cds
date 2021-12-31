@@ -8,15 +8,14 @@ import (
 	"time"
 
 	"github.com/tal-tech/go-zero/core/logx"
+	table2 "github.com/zeromicro/cds/pkg/table"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
-
-	table2 "github.com/tal-tech/cds/pkg/table"
 )
 
-func ToClickhouseTable(dsn string, db, tablename, indexes string, withTime bool) ([]string, string, error) {
+func ToClickhouseTable(dsn, db, tablename, indexes string, withTime bool) ([]string, string, error) {
 	info, e := connstring.Parse(dsn)
 	if e != nil {
 		logx.Error(e)

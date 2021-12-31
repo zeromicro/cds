@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tal-tech/cds/pkg/ckgroup/dbtesttool/dbtool"
+	"github.com/zeromicro/cds/pkg/ckgroup/dbtesttool/dbtool"
 	"golang.org/x/time/rate"
 )
 

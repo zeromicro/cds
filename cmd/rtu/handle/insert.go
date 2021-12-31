@@ -5,16 +5,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tal-tech/cds/cmd/rtu/model"
-	util "github.com/tal-tech/cds/cmd/rtu/utils"
-
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/rtu/model"
+	util "github.com/zeromicro/cds/cmd/rtu/utils"
 )
 
-var (
-	// ErrPrimarykeyMiss 主键不存在
-	ErrPrimarykeyMiss = errors.New("primarikey is required, but not found")
-)
+// ErrPrimarykeyMiss 主键不存在
+var ErrPrimarykeyMiss = errors.New("primarikey is required, but not found")
 
 const (
 	maxErrCnt = 30
@@ -140,7 +137,6 @@ retry:
 		ie.manager.clickhouseTable.PrimaryKeyIndex,
 		res,
 	)
-
 	if err != nil {
 		ie.manager.monitorVec.db.Inc(ie.manager.labels.insertFailedLabel)
 

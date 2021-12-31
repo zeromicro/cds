@@ -1,11 +1,14 @@
+//go:build integration
 // +build integration
 
 package dbtool
 
 import "testing"
 
-var mysqlDataSource = "root:example@tcp(localhost:3306)/?parseTime=1&loc=Local&charset=utf8mb4&collation=utf8mb4_unicode_ci&multiStatements=true"
-var ckDataSource = "tcp://localhost:9000"
+var (
+	mysqlDataSource = "root:example@tcp(localhost:3306)/?parseTime=1&loc=Local&charset=utf8mb4&collation=utf8mb4_unicode_ci&multiStatements=true"
+	ckDataSource    = "tcp://localhost:9000"
+)
 
 func TestDBTestTool_SetUp(t *testing.T) {
 	mysqlTool := NewDBTestToolOnMySQL(mysqlDataSource)

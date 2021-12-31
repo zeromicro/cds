@@ -7,10 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tal-tech/cds/pkg/strx"
-
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/cds/pkg/strx"
 )
 
 type (
@@ -36,7 +35,7 @@ type (
 )
 
 // MustNewMySQLModel 按照data结构体来建表，如果已存在则删掉他重新建
-func MustNewMySQLModel(appName string, dsn string, data interface{}) (*MySQLModel, bool, error) {
+func MustNewMySQLModel(appName, dsn string, data interface{}) (*MySQLModel, bool, error) {
 	b := &MySQLModel{
 		AppName: appName,
 	}
@@ -78,7 +77,7 @@ func MustNewMySQLModel(appName string, dsn string, data interface{}) (*MySQLMode
 }
 
 // NewMySQLModel 新建基础Model，按照data结构体来建表，如果已存在则不建表，但是会检测每一列是否和结构体字段对得上
-func NewMySQLModel(appName string, dsn string, data interface{}) (*MySQLModel, bool, error) {
+func NewMySQLModel(appName, dsn string, data interface{}) (*MySQLModel, bool, error) {
 	b := &MySQLModel{
 		AppName: appName,
 	}
@@ -390,7 +389,7 @@ func (b *MySQLModel) Update(id interface{}, sets string, args ...interface{}) (i
 	return result.RowsAffected()
 }
 
-func (m *MySQLModel) UpdateWhere(sets string, where string, args ...interface{}) (int64, error) {
+func (m *MySQLModel) UpdateWhere(sets, where string, args ...interface{}) (int64, error) {
 	sqlWhere := ""
 	if where != "" {
 		sqlWhere = " where " + where

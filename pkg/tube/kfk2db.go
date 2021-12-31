@@ -63,5 +63,4 @@ func prepareDb(db *sql.DB, query string) (*sql.Tx, *sql.Stmt, error) {
 
 // todo
 func backUp() {
-
 }

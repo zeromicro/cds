@@ -3,9 +3,9 @@ package choperator
 import (
 	"time"
 
-	"github.com/tal-tech/cds/cmd/dm/util"
-	"github.com/tal-tech/cds/pkg/ckgroup"
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/dm/util"
+	"github.com/zeromicro/cds/pkg/ckgroup"
 )
 
 type (
@@ -23,7 +23,7 @@ type (
 	}
 )
 
-func (cgo *CkGroupOperator) MysqlBatchInsert(insertData [][]interface{}, insertQuery string, arr []util.DataType, indexOfFlag, indexOfInsertID int, indexOfPrimKey int) error {
+func (cgo *CkGroupOperator) MysqlBatchInsert(insertData [][]interface{}, insertQuery string, arr []util.DataType, indexOfFlag, indexOfInsertID, indexOfPrimKey int) error {
 	data := make([][]interface{}, len(insertData))
 	for k, v := range insertData {
 		var tempData []interface{}

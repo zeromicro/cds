@@ -20,7 +20,7 @@ type (
 			ServerID             string `json:"database.server.id,omitempty"`
 			ServerName           string `json:"database.server.name,omitempty"`
 			WhiteList            string `json:"table.whitelist,omitempty"`
-			KafkaSerevrs         string `json:"database.history.kafka.bootstrap.servers,omitempty"` //kafka:9092
+			KafkaSerevrs         string `json:"database.history.kafka.bootstrap.servers,omitempty"` // kafka:9092
 			KafkaTopic           string `json:"database.history.kafka.topic,omitempty"`
 			IncludeSchemaChanges bool   `json:"include.schema.changes,omitempty"`
 		} `json:"config,omitempty"`

@@ -14,6 +14,7 @@ type subscriberConf struct {
 	TimerPeriod  int
 	ThrottleSize int `json:",default=209715200"`
 }
+
 type Config struct {
 	Log  logx.LogConf
 	Etcd struct {

@@ -3,9 +3,8 @@ package handle
 import (
 	"database/sql"
 
-	"github.com/tal-tech/cds/cmd/rtu/model"
-
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/rtu/model"
 )
 
 // QueryRows 关系型数据库多行查询

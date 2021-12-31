@@ -16,8 +16,10 @@ const (
 	benchmarkThreadNum = 100
 )
 
-const insertMySQL = "insert into test.test_data (pk,int_value,float_value,double_value,char_value,varchar_value,time_value) values(?,?,?,?,?,?,?)"
-const insertCK = "insert into test.test_data_all (pk,int_value,float_value,double_value,char_value,varchar_value,time_value) values(?,?,?,?,?,?,?)"
+const (
+	insertMySQL = "insert into test.test_data (pk,int_value,float_value,double_value,char_value,varchar_value,time_value) values(?,?,?,?,?,?,?)"
+	insertCK    = "insert into test.test_data_all (pk,int_value,float_value,double_value,char_value,varchar_value,time_value) values(?,?,?,?,?,?,?)"
+)
 
 func (s *DBTestToolSqlConn) Insert() ([]*DataInstance, error) {
 	var query string

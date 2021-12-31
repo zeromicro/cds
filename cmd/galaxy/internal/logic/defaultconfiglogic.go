@@ -4,10 +4,10 @@ import (
 	"context"
 	"strings"
 
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/types"
-	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
+	"github.com/zeromicro/cds/pkg/strx"
 )
 
 type DefaultConfigLogic struct {

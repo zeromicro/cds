@@ -2,14 +2,13 @@ package choperator
 
 import (
 	"github.com/tal-tech/go-zero/core/logx"
-
-	"github.com/tal-tech/cds/cmd/dm/util"
-	"github.com/tal-tech/cds/pkg/ckgroup"
-	ckcfg "github.com/tal-tech/cds/pkg/ckgroup/config"
+	"github.com/zeromicro/cds/cmd/dm/util"
+	"github.com/zeromicro/cds/pkg/ckgroup"
+	ckcfg "github.com/zeromicro/cds/pkg/ckgroup/config"
 )
 
 type ChOperator interface {
-	MysqlBatchInsert(insertData [][]interface{}, insertQuery string, arr []util.DataType, indexOfFlag, indexOfInsertID int, indexOfPrimKeys int) error
+	MysqlBatchInsert(insertData [][]interface{}, insertQuery string, arr []util.DataType, indexOfFlag, indexOfInsertID, indexOfPrimKeys int) error
 	ObtainClickHouseKV(targetDB, targetTable string) (map[string]string, error)
 	BatchInsert(insertData [][]interface{}, insertQuery string, indexOfPrimKey int) error
 }

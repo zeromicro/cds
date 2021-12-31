@@ -7,13 +7,12 @@ import (
 	"regexp"
 
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/dm/choperator"
+	"github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
+	"github.com/zeromicro/cds/cmd/dm/data"
+	"github.com/zeromicro/cds/pkg/mongodbx"
 	"go.etcd.io/etcd/client/v3/concurrency"
 	"gopkg.in/mgo.v2/bson"
-
-	"github.com/tal-tech/cds/cmd/dm/choperator"
-	"github.com/tal-tech/cds/cmd/dm/cmd/sync/config"
-	"github.com/tal-tech/cds/cmd/dm/data"
-	"github.com/tal-tech/cds/pkg/mongodbx"
 )
 
 type Service struct {
@@ -96,5 +95,4 @@ func (s *Service) Run() (string, error) {
 	default:
 		return "", errors.New("db type not support")
 	}
-
 }

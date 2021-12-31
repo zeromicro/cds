@@ -57,7 +57,6 @@ func TestCanalCreate(t *testing.T) {
 func TestCanalUpdate(t *testing.T) {
 	obj := &CanalMysql{}
 	err := obj.UnmarshalFromByte(updateData, pool)
-
 	if err != nil {
 		t.Error(err)
 	}
@@ -75,7 +74,6 @@ func TestCanalUpdate(t *testing.T) {
 func TestCanalDelete(t *testing.T) {
 	obj := &CanalMysql{}
 	err := obj.UnmarshalFromByte(deleteData, pool)
-
 	if err != nil {
 		t.Error(err)
 	}
@@ -91,7 +89,6 @@ func TestCanalDelete(t *testing.T) {
 func TestCanalBadCase(t *testing.T) {
 	obj := &CanalMysql{}
 	err := obj.UnmarshalFromByte(badCase, pool)
-
 	if err != nil {
 		t.Error(err)
 	}

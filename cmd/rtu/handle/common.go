@@ -7,12 +7,11 @@ import (
 	"time"
 
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
+	"github.com/zeromicro/cds/cmd/rtu/monitor"
+	"github.com/zeromicro/cds/pkg/ckgroup"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"go.uber.org/atomic"
-
-	"github.com/tal-tech/cds/cmd/rtu/cmd/sync/config"
-	"github.com/tal-tech/cds/cmd/rtu/monitor"
-	"github.com/tal-tech/cds/pkg/ckgroup"
 )
 
 // prometheus vec

@@ -4,10 +4,10 @@ import (
 	"context"
 	"sort"
 
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/types"
-	"github.com/tal-tech/cds/pkg/clickhousex"
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
+	"github.com/zeromicro/cds/pkg/clickhousex"
 )
 
 type ListDatabasesLogic struct {

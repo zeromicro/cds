@@ -50,7 +50,6 @@ func init() {
 	insertBatchSizeHis = prometheus.NewHistogramVec(insertBatchSizeHisOpts, []string{insertDBLab, insertTableLab, insertHostLab, insertSuccessLab})
 	insertDuHis = prometheus.NewHistogramVec(insertDurationHisOps, []string{insertDBLab, insertTableLab, insertHostLab, insertSuccessLab})
 	prometheus.MustRegister(insertBatchSizeGa, insertDuHis, insertBatchSizeHis)
-
 }
 
 func hostname() string {

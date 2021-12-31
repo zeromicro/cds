@@ -5,9 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tal-tech/cds/cmd/rtu/cmd/sync/config"
-
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
@@ -31,6 +30,7 @@ func (t *taskRecords) cleanDeadJob() {
 		}
 	}
 }
+
 func (t *taskRecords) removeLast() {
 	t.Lock()
 	defer t.Unlock()

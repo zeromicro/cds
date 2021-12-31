@@ -76,7 +76,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDatetime(t *testing.T) {
 	pool = NewMapPool()
- 	b := `"{\"_id\": {\"_id\": {\"$oid\": \"1\"}, \"copyingData\": true}, \"operationType\": \"insert\", \"ns\": {\"db\": \"oralcalculation\", \"coll\": \"questionBank\"}, \"documentKey\": {\"_id\": {\"$oid\": \"1\"}}, \"fullDocument\": {\"_id\": {\"$oid\": \"1\"}, \"createTime\": {\"$date\": 1597045624579}, \"updateTime\": {\"$date\": 1597045624579}, \"weight\": 401017.0}}"`
+	b := `"{\"_id\": {\"_id\": {\"$oid\": \"1\"}, \"copyingData\": true}, \"operationType\": \"insert\", \"ns\": {\"db\": \"oralcalculation\", \"coll\": \"questionBank\"}, \"documentKey\": {\"_id\": {\"$oid\": \"1\"}}, \"fullDocument\": {\"_id\": {\"$oid\": \"1\"}, \"createTime\": {\"$date\": 1597045624579}, \"updateTime\": {\"$date\": 1597045624579}, \"weight\": 401017.0}}"`
 
 	obj := &ConnectorMongo{}
 	err := obj.UnmarshalFromStr(b, pool)

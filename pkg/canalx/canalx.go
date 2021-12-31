@@ -227,7 +227,7 @@ func (c *Canalx) GetInstancesList(page, size int) (*Data, error) {
 	return &resp.Data, nil
 }
 
-func (c *Canalx) post(url string, mp map[string]string, header map[string]string) ([]byte, error) {
+func (c *Canalx) post(url string, mp, header map[string]string) ([]byte, error) {
 	data, err := json.Marshal(mp)
 	if err != nil {
 		logx.Error(err)
@@ -257,7 +257,7 @@ func (c *Canalx) post(url string, mp map[string]string, header map[string]string
 	return respBytes, nil
 }
 
-func (c *Canalx) get(url string, params map[string]string, header map[string]string) ([]byte, error) {
+func (c *Canalx) get(url string, params, header map[string]string) ([]byte, error) {
 	url += "?"
 	for k, v := range params {
 		url = url + k + "=" + v + "&"

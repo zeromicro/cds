@@ -67,7 +67,6 @@ func (mongo *ConnectorMongo) GetExistsKeys() []int8 {
 
 // ParseToMap 将json解析成map
 func (mongo *ConnectorMongo) ParseToMap(table *SQLTable) (ValueMap, error) {
-
 	if mongo.Payload == nil && mongo.DocumentKey == nil {
 		logx.Error("has no mongo.Payload && mongo.DocumentKey")
 		return nil, nil

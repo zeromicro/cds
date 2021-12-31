@@ -34,8 +34,10 @@ func generateData() *DataInstance {
 	varCharValue := randStringRunes(rand.Intn(17))
 	now := time.Now()
 	timeValue := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), 0, time.Local)
-	return &DataInstance{PK: pk, IntValue: intValue, FloatValue: floatValue, DoubleValue: doubleValue,
-		CharValue: charValue, VarCharValue: varCharValue, TimeValue: timeValue}
+	return &DataInstance{
+		PK: pk, IntValue: intValue, FloatValue: floatValue, DoubleValue: doubleValue,
+		CharValue: charValue, VarCharValue: varCharValue, TimeValue: timeValue,
+	}
 }
 
 func GenerateDataSet(num int) []*DataInstance {

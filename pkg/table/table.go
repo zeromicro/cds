@@ -137,7 +137,7 @@ func (meta *TableMeta) buildEnd(category int, buf *strings.Builder) {
 		buf.WriteString("\nORDER BY ")
 		buf.WriteString(meta.QueryKey)
 		buf.WriteString("\nSETTINGS index_granularity = 8192")
-		//buf.WriteString(" AS SELECT * FROM " + dbTable)
+		// buf.WriteString(" AS SELECT * FROM " + dbTable)
 	case MvLocal:
 		buf.WriteString("TO " + " `" + meta.DB + "`.`.rtu_inner." + meta.Table + "_mv` AS SELECT * from " + dbTable)
 	case MvNow:

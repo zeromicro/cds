@@ -86,7 +86,6 @@ func (mongo *DebeziumMongo) GetExistsKeys() []int8 {
 
 // ParseToMap 将json解析成map
 func (mysql *DebeziumMySQL) ParseToMap(table *SQLTable) (ValueMap, error) {
-
 	if mysql.Payload == nil {
 		return nil, nil
 	}

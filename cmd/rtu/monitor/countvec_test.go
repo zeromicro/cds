@@ -1,4 +1,5 @@
-//+build integration
+//go:build integration
+// +build integration
 
 package monitor
 
@@ -25,7 +26,7 @@ func TestExample(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	//t.Log(string(b))
+	// t.Log(string(b))
 	reg, err := regexp.Compile("a_b_c{action=\"cc\",host=\".*\",status=\"bb\"} 5")
 	if err != nil {
 		t.Error(err)

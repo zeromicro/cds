@@ -1,12 +1,14 @@
+//go:build integration
 // +build integration
 
 package ckgroup
 
 import (
-	"github.com/tal-tech/cds/pkg/ckgroup/dbtesttool/dbtool"
-	"github.com/tal-tech/go-zero/core/stores/sqlx"
 	"testing"
 	"time"
+
+	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/cds/pkg/ckgroup/dbtesttool/dbtool"
 )
 
 func Test_dbGroup_InsertAuto(t *testing.T) {

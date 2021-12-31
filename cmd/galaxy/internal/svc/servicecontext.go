@@ -3,10 +3,10 @@ package svc
 import (
 	"log"
 
-	"github.com/tal-tech/cds/cmd/galaxy/internal/config"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/model"
-	"github.com/tal-tech/cds/pkg/canalx"
-	"github.com/tal-tech/cds/pkg/debeziumx"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/config"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/model"
+	"github.com/zeromicro/cds/pkg/canalx"
+	"github.com/zeromicro/cds/pkg/debeziumx"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 

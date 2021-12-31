@@ -8,11 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tal-tech/cds/pkg/strx"
-
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/stores/clickhouse"
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/cds/pkg/strx"
 )
 
 type (
@@ -32,7 +31,7 @@ func GetLengthTag(field reflect.StructField) (int, error) {
 	return strconv.Atoi(length)
 }
 
-func CreateDbClusterIne(dsn string, cluster string) error {
+func CreateDbClusterIne(dsn, cluster string) error {
 	url, e := url.Parse(dsn)
 	if e != nil {
 		return e

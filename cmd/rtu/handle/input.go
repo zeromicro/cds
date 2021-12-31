@@ -5,10 +5,9 @@ import (
 	"sync"
 	"time"
 
-	util "github.com/tal-tech/cds/cmd/rtu/utils"
-	"github.com/tal-tech/cds/pkg/tube"
-
 	"github.com/tal-tech/go-zero/core/logx"
+	util "github.com/zeromicro/cds/cmd/rtu/utils"
+	"github.com/zeromicro/cds/pkg/tube"
 )
 
 type inputEngine struct {

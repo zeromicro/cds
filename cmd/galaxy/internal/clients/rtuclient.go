@@ -6,9 +6,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tal-tech/cds/cmd/rtu/cmd/sync/config"
-	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
+	"github.com/zeromicro/cds/pkg/strx"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 

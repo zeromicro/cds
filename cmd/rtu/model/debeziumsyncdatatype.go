@@ -19,15 +19,13 @@ const (
 	DataTypeTime
 )
 
-var (
-	// NullValMap 记录该类型的默认值
-	NullValMap = map[DataType]interface{}{
-		DataTypeString: "",
-		DataTypeInt:    0,
-		DataTypeFloat:  0.0,
-		DataTypeTime:   time.Unix(0, 0),
-	}
-)
+// NullValMap 记录该类型的默认值
+var NullValMap = map[DataType]interface{}{
+	DataTypeString: "",
+	DataTypeInt:    0,
+	DataTypeFloat:  0.0,
+	DataTypeTime:   time.Unix(0, 0),
+}
 
 // ParseTypeByMysqlType 将MySQL的数据类型转换为Go语言内部转换用的DataType
 func ParseTypeByMysqlType(sqlType string) DataType {

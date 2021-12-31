@@ -174,7 +174,6 @@ func Test_dbGroup_AlterAuto(t *testing.T) {
 			t.Fatal("length error")
 		}
 	}
-
 }
 
 func Test_isAlterSQL(t *testing.T) {

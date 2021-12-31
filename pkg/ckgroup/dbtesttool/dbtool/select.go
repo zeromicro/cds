@@ -58,7 +58,7 @@ func (s *DBTestToolSqlConn) Select(dataSet []*DataInstance) (map[int64]int, erro
 	return result, nil
 }
 
-func Compare(a *DataInstance, b *DataInstance, showDiff bool) bool {
+func Compare(a, b *DataInstance, showDiff bool) bool {
 	if (a == nil && b != nil) || (a != nil && b == nil) {
 		return false
 	}
@@ -110,7 +110,7 @@ func Compare(a *DataInstance, b *DataInstance, showDiff bool) bool {
 	return true
 }
 
-func CompareDataSet(base []*DataInstance, current []*DataInstance, showSummary bool) bool {
+func CompareDataSet(base, current []*DataInstance, showSummary bool) bool {
 	originMap := make(map[int64]*DataInstance)
 	statMap := make(map[int64]int)
 	for _, item := range base {

@@ -7,9 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tal-tech/cds/cmd/rtu/model"
-
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/rtu/model"
 )
 
 // GetClickhouseTableColumn 获取 clickhouse 列信息
@@ -81,6 +80,7 @@ func GetClickhouseTableColumn(db *sql.DB, dbName, table, pk, dbType string) (*mo
 	sqlTable.QuerySQL = generateQuerySQLTpl(sqlTable)
 	return sqlTable, nil
 }
+
 func initInsertSQL(table *model.SQLTable) string {
 	tmpQ := make([]string, 1, len(table.Columns))
 	tmpQ[0] = "?"

@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"strings"
 
-	"github.com/tal-tech/cds/pkg/cryptox"
+	"github.com/zeromicro/cds/pkg/cryptox"
 )
 
 const (

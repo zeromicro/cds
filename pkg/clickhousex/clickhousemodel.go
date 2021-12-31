@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tal-tech/cds/pkg/numx"
-	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/stores/clickhouse"
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/cds/pkg/numx"
+	"github.com/zeromicro/cds/pkg/strx"
 )
 
 type ClickHouseClusterModel struct {

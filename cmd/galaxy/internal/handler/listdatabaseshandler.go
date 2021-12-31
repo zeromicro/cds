@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 
-	logic2 "github.com/tal-tech/cds/cmd/galaxy/internal/logic"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
+	logic2 "github.com/zeromicro/cds/cmd/galaxy/internal/logic"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
 )
 
 func listDatabasesHandler(ctx *svc.ServiceContext) http.HandlerFunc {

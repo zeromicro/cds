@@ -9,15 +9,14 @@ import (
 	"time"
 
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/dm/choperator"
+	"github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
+	"github.com/zeromicro/cds/cmd/dm/util"
+	"github.com/zeromicro/cds/pkg/mongodbx"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
-
-	"github.com/tal-tech/cds/cmd/dm/choperator"
-	"github.com/tal-tech/cds/cmd/dm/cmd/sync/config"
-	"github.com/tal-tech/cds/cmd/dm/util"
-	"github.com/tal-tech/cds/pkg/mongodbx"
 )
 
 type (
@@ -70,7 +69,7 @@ func (mg *Mongo2ClickHouseModel) MongoInertIntoClickHouse(job *config.Job, table
 		return "", err
 	}
 	insertQuery := combineQuery(name2Type, job.Target.DB, job.Target.Table)
-	var insertData = make([][]interface{}, 0, 5e4)
+	insertData := make([][]interface{}, 0, 5e4)
 	var indexOfID, totalSize int
 	for cursor.Next(context.TODO()) {
 		// 创建一个值，将单个文档解码为该值

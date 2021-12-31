@@ -53,7 +53,7 @@ func ListCollections(client *mongo.Client, dsn string) ([]string, error) {
 	return names, nil
 }
 
-func CountDocuments(client *mongo.Client, dsn string, coll string) (int64, error) {
+func CountDocuments(client *mongo.Client, dsn, coll string) (int64, error) {
 	info, e := connstring.Parse(dsn)
 	if e != nil {
 		return 0, e

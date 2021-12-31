@@ -15,7 +15,7 @@ import (
 
 var typeErr = errors.New("sliceData type must be []*sturct or []struct ")
 
-func (g *dbGroup) InsertAuto(query string, hashTag string, sliceData interface{}) error {
+func (g *dbGroup) InsertAuto(query, hashTag string, sliceData interface{}) error {
 	shardDatas, err := cutData2ShardData(sliceData, len(g.ShardNodes), hashTag)
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ type InsertErrDetail struct {
 	Datas      interface{}
 }
 
-func (g *dbGroup) InsertAutoDetail(query string, hashTag string, sliceData interface{}) ([]InsertErrDetail, error) {
+func (g *dbGroup) InsertAutoDetail(query, hashTag string, sliceData interface{}) ([]InsertErrDetail, error) {
 	shardDatas, err := cutData2ShardData(sliceData, len(g.ShardNodes), hashTag)
 	if err != nil {
 		return nil, err

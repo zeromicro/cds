@@ -55,12 +55,14 @@ func (s *DBTestToolMongo) Update() ([]*DataInstance, error) {
 	dataSet = UpdateDataSet(dataSet)
 	for _, item := range dataSet {
 		filter := bson.M{"pk": item.PK}
-		updater := bson.M{"$set": bson.M{"int_value": item.IntValue,
+		updater := bson.M{"$set": bson.M{
+			"int_value":     item.IntValue,
 			"float_value":   item.FloatValue,
 			"double_value":  item.DoubleValue,
 			"char_value":    item.CharValue,
 			"varchar_value": item.VarCharValue,
-			"time_value":    item.TimeValue}}
+			"time_value":    item.TimeValue,
+		}}
 		if err := collection.Update(filter, updater); err != nil {
 			return nil, err
 		}

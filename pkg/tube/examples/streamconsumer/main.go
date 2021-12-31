@@ -7,10 +7,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/tal-tech/cds/pkg/tube"
-
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/pkg/tube"
 )
 
 var configFile = flag.String("f", "service/hera/base/tube/examples/config.yml", "The configure file")
@@ -39,17 +38,17 @@ func main() {
 	}
 
 	// ==================================================================================================================
-	//1
+	// 1
 	sc := tube.MustNewKfkStreamConsumer(config.Topic, config.Group, config.WorkerNum, config.Brokers)
 	if sc == nil {
 		return
 	}
 	defer sc.Close()
 
-	//2
+	// 2
 	stream := sc.Subscribe(context.Background(), handler)
 
-	//3
+	// 3
 	i := 0
 	for data := range stream {
 		if data, ok := data.(error); ok {
@@ -65,5 +64,4 @@ func main() {
 			fmt.Println("sleep 300ms")
 		}
 	}
-
 }

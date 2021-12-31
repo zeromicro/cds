@@ -3,11 +3,10 @@ package handler
 import (
 	"net/http"
 
-	"github.com/tal-tech/cds/cmd/galaxy/internal/logic"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/types"
-
 	"github.com/tal-tech/go-zero/rest/httpx"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/logic"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
 )
 
 func getUserInfoHandler(ctx *svc.ServiceContext) http.HandlerFunc {
@@ -20,6 +19,6 @@ func getUserInfoHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 
 		l := logic.NewGetUserInfoLogic(r.Context(), ctx)
 		resp, err := l.GetUserInfo(req)
-		formatFullResponse(resp,err,w,r)
+		formatFullResponse(resp, err, w, r)
 	}
 }

@@ -95,12 +95,18 @@ func Test_parseInsertSQL(t *testing.T) {
 		want  string
 		want1 []string
 	}{
-		{args: args{`insert into user (id,real_name,city) values (#{id},#{real_name},#{city})`},
-			want: `insert into user (id,real_name,city) values (?,?,?)`, want1: []string{`id`, `real_name`, `city`}},
-		{args: args{`insert into user (id,real_name,city) values (#{id},#{real-name},#{city})`},
-			want: `insert into user (id,real_name,city) values (?,#{real-name},?)`, want1: []string{`id`, `city`}},
-		{args: args{`insert into user (id,real_name,city) values (#{real-name})`},
-			want: `insert into user (id,real_name,city) values (#{real-name})`, want1: []string{}},
+		{
+			args: args{`insert into user (id,real_name,city) values (#{id},#{real_name},#{city})`},
+			want: `insert into user (id,real_name,city) values (?,?,?)`, want1: []string{`id`, `real_name`, `city`},
+		},
+		{
+			args: args{`insert into user (id,real_name,city) values (#{id},#{real-name},#{city})`},
+			want: `insert into user (id,real_name,city) values (?,#{real-name},?)`, want1: []string{`id`, `city`},
+		},
+		{
+			args: args{`insert into user (id,real_name,city) values (#{real-name})`},
+			want: `insert into user (id,real_name,city) values (#{real-name})`, want1: []string{},
+		},
 	}
 	for _, tt := range tests {
 		v := tt

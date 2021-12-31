@@ -11,13 +11,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tal-tech/cds/cmd/rtu/cmd/sync/config"
-	"github.com/tal-tech/cds/cmd/rtu/handle"
-
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/core/logx"
 	_ "github.com/tal-tech/go-zero/core/proc"
 	"github.com/tal-tech/go-zero/core/prometheus"
+	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
+	"github.com/zeromicro/cds/cmd/rtu/handle"
 )
 
 func showVersion() {
@@ -59,7 +58,7 @@ func main() {
 		}
 	}()
 	handle.SetConfig(&configFile)
-	var exit = make(chan struct{})
+	exit := make(chan struct{})
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go pprof(exit, &wg)
@@ -79,7 +78,6 @@ func pprof(exit chan struct{}, wg *sync.WaitGroup) {
 }
 
 func await(exit chan struct{}, wg *sync.WaitGroup) {
-
 	// wait signal to shutdown gracefully
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP, syscall.SIGQUIT)

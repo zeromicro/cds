@@ -6,8 +6,8 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/pkg/strx"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -164,7 +164,7 @@ func (m *MongoModel) BatchInsert(vs interface{}) error {
 	return e
 }
 
-func (m *MongoModel) UpdateSets(where bson.M, sets bson.M) (int64, error) {
+func (m *MongoModel) UpdateSets(where, sets bson.M) (int64, error) {
 	result, e := m.Client.Database(m.Database).Collection(m.Collection).UpdateMany(context.TODO(), where, bson.M{
 		"$set": sets,
 	})

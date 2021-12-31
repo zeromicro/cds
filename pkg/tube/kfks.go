@@ -81,7 +81,6 @@ func checkConnect(topic string, brokers []string) bool {
 			logx.Error(err)
 			return true
 		}
-
 	}
 	return false
 }

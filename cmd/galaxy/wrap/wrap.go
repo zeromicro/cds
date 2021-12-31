@@ -3,13 +3,12 @@ package wrap
 import (
 	"flag"
 
-	"github.com/tal-tech/cds/pkg/strx"
-
-	"github.com/tal-tech/cds/cmd/galaxy/internal/config"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/handler"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/rest"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/config"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/handler"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
+	"github.com/zeromicro/cds/pkg/strx"
 )
 
 var configFile = flag.String("f", "etc/galaxy-api.yaml", "the config file")

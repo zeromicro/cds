@@ -8,9 +8,11 @@ import (
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
 )
 
-const updateMySQL = "update test.test_data set int_value=?, float_value=?, double_value=?, char_value=?, varchar_value=?, time_value=? where pk=?"
-const updateCK = "alter table test.test_data on cluster bip_ck_cluster update int_value=?, float_value=?, double_value=?, char_value=?, varchar_value=?, time_value=? where pk=?"
-const updateBenchmarkNum = 100
+const (
+	updateMySQL        = "update test.test_data set int_value=?, float_value=?, double_value=?, char_value=?, varchar_value=?, time_value=? where pk=?"
+	updateCK           = "alter table test.test_data on cluster bip_ck_cluster update int_value=?, float_value=?, double_value=?, char_value=?, varchar_value=?, time_value=? where pk=?"
+	updateBenchmarkNum = 100
+)
 
 func (s *DBTestToolSqlConn) Update() ([]*DataInstance, error) {
 	var query string

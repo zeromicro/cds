@@ -2,12 +2,11 @@ package logic
 
 import (
 	"context"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/model"
-
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/types"
 
 	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/model"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
 )
 
 type GetUserInfoLogic struct {
@@ -19,16 +18,16 @@ type GetUserInfoLogic struct {
 
 func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) GetUserInfoLogic {
 	return GetUserInfoLogic{
-		Logger: logx.WithContext(ctx),
-		ctx:    ctx,
-		svcCtx: svcCtx,
-		UserModel:svcCtx.UserModel,
+		Logger:    logx.WithContext(ctx),
+		ctx:       ctx,
+		svcCtx:    svcCtx,
+		UserModel: svcCtx.UserModel,
 	}
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(req types.GetUserInfoRequest) (*types.GetUserInfoResponse, error) {
-	u,e:=l.FindByEmail(req.Email)
-	if e!=nil {
+	u, e := l.FindByEmail(req.Email)
+	if e != nil {
 		logx.Error(e)
 		return nil, e
 	}

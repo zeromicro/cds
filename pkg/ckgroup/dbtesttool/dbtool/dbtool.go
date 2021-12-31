@@ -37,7 +37,7 @@ func NewDBTestToolOnMySQL(dataSource string) DBTestTool {
 	return &DBTestToolSqlConn{db: sqlx.NewMysql(dataSource), dbType: dbTypeMySQL}
 }
 
-func NewDBTestToolOnMongo(dataSource string, collection string) DBTestTool {
+func NewDBTestToolOnMongo(dataSource, collection string) DBTestTool {
 	return &DBTestToolMongo{db: mongo.MustNewModel(dataSource, collection)}
 }
 

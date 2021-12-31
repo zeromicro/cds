@@ -1,15 +1,17 @@
+//go:build integration
 // +build integration
 
 package ckgroup
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/tal-tech/cds/pkg/ckgroup/dbtesttool/dbtool"
-	"github.com/tal-tech/go-zero/core/logx"
-	"github.com/tal-tech/go-zero/core/stores/sqlx"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/cds/pkg/ckgroup/dbtesttool/dbtool"
 )
 
 const (
@@ -20,6 +22,7 @@ func TestMain(m *testing.M) {
 	logx.Disable()
 	m.Run()
 }
+
 func Test_ckConn_GetHost(t *testing.T) {
 	c1, err := NewCKConn(queryNodeDNS)
 	if err != nil {

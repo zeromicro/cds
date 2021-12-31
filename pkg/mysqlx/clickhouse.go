@@ -4,13 +4,12 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/tal-tech/cds/pkg/strx"
 	"github.com/tal-tech/go-zero/core/logx"
-
-	table2 "github.com/tal-tech/cds/pkg/table"
+	"github.com/zeromicro/cds/pkg/strx"
+	table2 "github.com/zeromicro/cds/pkg/table"
 )
 
-func ToClickhouseTable(dsn string, db, table, indexes string, withTime bool) ([]string, string, error) {
+func ToClickhouseTable(dsn, db, table, indexes string, withTime bool) ([]string, string, error) {
 	columns, e := DescribeMysqlTable(TakeMySQLConnx(dsn), table)
 	if e != nil {
 		logx.Error(e)

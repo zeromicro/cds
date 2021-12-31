@@ -2,7 +2,7 @@ package strx
 
 import "strings"
 
-func SubBefore(s string, sep, def string) string {
+func SubBefore(s, sep, def string) string {
 	for i := 0; i < len(s)-len(sep); i++ {
 		if s[i:i+len(sep)] == sep {
 			return s[:i]
@@ -10,6 +10,7 @@ func SubBefore(s string, sep, def string) string {
 	}
 	return def
 }
+
 func SubBeforeLast(s, sep, def string) string {
 	for i := len(s) - len(sep); i > -1; i-- {
 		if s[i:i+len(sep)] == sep {

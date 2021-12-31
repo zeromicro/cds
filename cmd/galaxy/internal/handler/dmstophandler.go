@@ -3,11 +3,11 @@ package handler
 import (
 	"net/http"
 
-	logic2 "github.com/tal-tech/cds/cmd/galaxy/internal/logic"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/svc"
-	"github.com/tal-tech/cds/cmd/galaxy/internal/types"
 	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/rest/httpx"
+	logic2 "github.com/zeromicro/cds/cmd/galaxy/internal/logic"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
+	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
 )
 
 func dmStopHandler(ctx *svc.ServiceContext) http.HandlerFunc {

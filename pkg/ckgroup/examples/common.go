@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/tal-tech/cds/pkg/ckgroup/config"
+
+	"github.com/zeromicro/cds/pkg/ckgroup/config"
 )
 
-var (
-	ckgroupConfig = config.Config{
-		ShardGroups: []config.ShardGroupConfig{
-			{ShardNode: "tcp://localhost:9000", ReplicaNodes: []string{"tcp://localhost:9001"}},
-			{ShardNode: "tcp://localhost:9002", ReplicaNodes: []string{"tcp://localhost:9003"}},
-		}, QueryNode: "tcp://localhost:9000"}
-)
+var ckgroupConfig = config.Config{
+	ShardGroups: []config.ShardGroupConfig{
+		{ShardNode: "tcp://localhost:9000", ReplicaNodes: []string{"tcp://localhost:9001"}},
+		{ShardNode: "tcp://localhost:9002", ReplicaNodes: []string{"tcp://localhost:9003"}},
+	}, QueryNode: "tcp://localhost:9000",
+}
 
 type user struct {
 	Id       int    `db:"id"`

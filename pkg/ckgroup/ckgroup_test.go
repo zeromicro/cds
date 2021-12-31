@@ -1,11 +1,13 @@
+//go:build integration
 // +build integration
 
 package ckgroup
 
 import (
-	_ "github.com/ClickHouse/clickhouse-go"
-	"github.com/tal-tech/cds/pkg/ckgroup/config"
 	"testing"
+
+	_ "github.com/ClickHouse/clickhouse-go"
+	"github.com/zeromicro/cds/pkg/ckgroup/config"
 )
 
 const (

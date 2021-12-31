@@ -5,8 +5,7 @@ import (
 	"time"
 
 	"github.com/tal-tech/go-zero/core/logx"
-
-	"github.com/tal-tech/cds/cmd/dm/util"
+	"github.com/zeromicro/cds/cmd/dm/util"
 )
 
 type (
@@ -17,7 +16,7 @@ type (
 
 var ShangHaiLocation = time.FixedZone("Asia/Shanghai", int((time.Hour * 8).Seconds()))
 
-func (cpo *ChProxyOperator) BatchInsert(insertData [][]interface{}, insertQuery string, arr []util.DataType, indexOfFlag int, indexOfInsertID int) error {
+func (cpo *ChProxyOperator) BatchInsert(insertData [][]interface{}, insertQuery string, arr []util.DataType, indexOfFlag, indexOfInsertID int) error {
 	tx, err := cpo.chProxy.Begin()
 	if err != nil {
 		return err
