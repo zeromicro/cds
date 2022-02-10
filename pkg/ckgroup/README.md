@@ -13,26 +13,6 @@
 * 插入失败时有重试机制
 
 
-## 安装
-
-* Golang 1.13+
-* ClicHouse 19.16+
-
-```go
-go get -u github.com/tal-tech/ckgroup
-```
-
-
-## 快速体验 ckgroup
-该命令依赖 `docker` , `docker-compose` , `golang` 
-```shell
-./demo.sh
-```
-
-运行效果 : 
-
-![demo.gif](demo.gif)
-
 ## 例子
 
 具体参考 `examples` 目录下的代码
