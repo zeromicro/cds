@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
+	"github.com/zeromicro/go-zero/core/logx"
 	"go.etcd.io/etcd/client/v3/concurrency"
 )
 

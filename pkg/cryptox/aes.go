@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 func createHash(key string) string {

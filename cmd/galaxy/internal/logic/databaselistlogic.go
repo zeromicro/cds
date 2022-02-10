@@ -4,11 +4,11 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	dmConfig "github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/clients"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type DatabaseListLogic struct {

@@ -1,10 +1,10 @@
 package choperator
 
 import (
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/dm/util"
 	"github.com/zeromicro/cds/pkg/ckgroup"
 	ckcfg "github.com/zeromicro/cds/pkg/ckgroup/config"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ChOperator interface {

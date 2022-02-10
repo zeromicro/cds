@@ -4,9 +4,9 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/pkg/strx"
 	table2 "github.com/zeromicro/cds/pkg/table"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 func ToClickhouseTable(dsn, db, table, indexes string, withTime bool) ([]string, string, error) {

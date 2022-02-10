@@ -8,11 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/dm/choperator"
 	"github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
 	"github.com/zeromicro/cds/cmd/dm/util"
 	"github.com/zeromicro/cds/pkg/mongodbx"
+	"github.com/zeromicro/go-zero/core/logx"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

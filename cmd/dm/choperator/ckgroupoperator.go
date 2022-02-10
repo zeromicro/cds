@@ -3,9 +3,9 @@ package choperator
 import (
 	"time"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/dm/util"
 	"github.com/zeromicro/cds/pkg/ckgroup"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type (

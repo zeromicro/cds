@@ -5,12 +5,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	config2 "github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/model"
 	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
 	"github.com/zeromicro/cds/pkg/mysqlx"
 	"github.com/zeromicro/cds/pkg/strx"
+	"github.com/zeromicro/go-zero/core/logx"
 	"go.mongodb.org/mongo-driver/x/mongo/driver/connstring"
 )
 

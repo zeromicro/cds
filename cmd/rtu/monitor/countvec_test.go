@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/tal-tech/go-zero/core/prometheus"
+	"github.com/zeromicro/go-zero/core/prometheus"
 )
 
 func TestExample(t *testing.T) {

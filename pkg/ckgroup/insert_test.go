@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tal-tech/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/cds/pkg/ckgroup/dbtesttool/dbtool"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 func Test_dbGroup_InsertAuto(t *testing.T) {

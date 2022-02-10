@@ -12,9 +12,9 @@ import (
 	"strings"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/pkg/numx"
 	"github.com/zeromicro/cds/pkg/strx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type Debeziumx struct {

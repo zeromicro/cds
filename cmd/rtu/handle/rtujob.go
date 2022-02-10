@@ -6,12 +6,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
 	"github.com/zeromicro/cds/cmd/rtu/model"
 	"github.com/zeromicro/cds/cmd/rtu/monitor"
 	"github.com/zeromicro/cds/pkg/ckgroup"
 	groupcfg "github.com/zeromicro/cds/pkg/ckgroup/config"
+	"github.com/zeromicro/go-zero/core/logx"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 

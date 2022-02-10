@@ -6,7 +6,7 @@
 Data syncing in golang for ClickHouse.
 
 
-based on [go-zero](https://github.com/tal-tech/go-zero) 
+based on [go-zero](https://github.com/zeromicro/go-zero) 
 
 ### ARCH
 

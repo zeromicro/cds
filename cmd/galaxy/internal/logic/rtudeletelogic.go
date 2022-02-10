@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/clients"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
 	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
 	"github.com/zeromicro/cds/pkg/strx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type RtuDeleteLogic struct {

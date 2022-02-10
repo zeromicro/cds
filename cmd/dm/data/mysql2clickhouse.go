@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/dm/choperator"
 	"github.com/zeromicro/cds/cmd/dm/cmd/sync/config"
 	"github.com/zeromicro/cds/cmd/dm/util"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type (

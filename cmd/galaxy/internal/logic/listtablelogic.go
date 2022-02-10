@@ -6,11 +6,11 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
 	"github.com/zeromicro/cds/pkg/mongodbx"
 	"github.com/zeromicro/cds/pkg/mysqlx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ListTableLogic struct {

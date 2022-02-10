@@ -11,12 +11,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tal-tech/go-zero/core/conf"
-	"github.com/tal-tech/go-zero/core/logx"
-	_ "github.com/tal-tech/go-zero/core/proc"
-	"github.com/tal-tech/go-zero/core/prometheus"
 	"github.com/zeromicro/cds/cmd/rtu/cmd/sync/config"
 	"github.com/zeromicro/cds/cmd/rtu/handle"
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/core/logx"
+	_ "github.com/zeromicro/go-zero/core/proc"
+	"github.com/zeromicro/go-zero/core/prometheus"
 )
 
 func showVersion() {

@@ -1,6 +1,6 @@
 # Galaxy控制台简介
 
-本模块基于[go-zero](https://github.com/tal-tech/go-zero)构建，是一个简洁的数据同步后台管理系统。
+本模块基于[go-zero](https://github.com/zeromicro/go-zero)构建，是一个简洁的数据同步后台管理系统。
 
 简单来说，它可以很方便的在Clickhouse建表、全量同步数据和增量同步数据。
 

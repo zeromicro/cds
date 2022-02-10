@@ -4,9 +4,9 @@ import (
 	"context"
 	"unsafe"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ConnectorListLogic struct {

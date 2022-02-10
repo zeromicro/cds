@@ -3,11 +3,11 @@ package handler
 import (
 	"net/http"
 
-	"github.com/tal-tech/go-zero/core/logx"
-	"github.com/tal-tech/go-zero/rest/httpx"
 	logic2 "github.com/zeromicro/cds/cmd/galaxy/internal/logic"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/svc"
 	"github.com/zeromicro/cds/cmd/galaxy/internal/types"
+	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func loginHandler(ctx *svc.ServiceContext) http.HandlerFunc {

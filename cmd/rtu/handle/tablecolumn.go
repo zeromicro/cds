@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/zeromicro/cds/cmd/rtu/model"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 // GetClickhouseTableColumn 获取 clickhouse 列信息

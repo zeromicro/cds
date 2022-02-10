@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 func RepairData(mp map[string]interface{}, name2Type map[string]string) ([]interface{}, string, int, error) {
