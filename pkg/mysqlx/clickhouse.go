@@ -29,6 +29,10 @@ func ToClickhouseTable(dsn, db, table, indexes string, withTime bool) ([]string,
 		}
 		// type converter
 		columns[i].Type = toClickhouseType(c.Type)
+		// 如果字段类型可以为null 则添加 Nullable,否则同步mysql回报nil异常
+		if c.Null == "YES" {
+			columns[i].Type = "Nullable(" + columns[i].Type + ")"
+		}
 		newColumns = append(newColumns, table2.Column{
 			Name:    columns[i].Field,
 			Type:    columns[i].Type,
