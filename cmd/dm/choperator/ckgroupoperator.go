@@ -36,7 +36,16 @@ func (cgo *CkGroupOperator) MysqlBatchInsert(insertData [][]interface{}, insertQ
 				if uar, ok := val.(time.Time); ok {
 					return uar.In(ShangHaiLocation).Format("2006-01-02 15:04:05")
 				} else if uar, ok := val.([]uint8); ok {
-					return string(uar)
+					// 当Mysql字段类型是bit时，添加转换
+					sv := string(uar)
+					switch sv {
+					case "\x00":
+						return 0
+					case "\x01":
+						return 1
+					default:
+						return sv
+					}
 				}
 
 				return val

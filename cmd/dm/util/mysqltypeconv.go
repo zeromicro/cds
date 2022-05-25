@@ -128,6 +128,9 @@ func ParseValueByType(vv interface{}, t DataType) (interface{}, error) {
 // ParseTypeByMysqlType 将MySQL的数据类型转换为Go语言内部转换用的DataType
 func ParseTypeByMysqlType(sqlType string) DataType {
 	sqlType = strings.ToLower(sqlType)
+	if strings.Contains(sqlType, "bit") {
+		return DataTypeInt
+	}
 	if strings.Contains(sqlType, "int") {
 		return DataTypeInt
 	}
