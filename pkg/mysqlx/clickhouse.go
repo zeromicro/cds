@@ -2,11 +2,10 @@ package mysqlx
 
 import (
 	"errors"
-	"strings"
-
 	"github.com/zeromicro/cds/pkg/strx"
 	table2 "github.com/zeromicro/cds/pkg/table"
 	"github.com/zeromicro/go-zero/core/logx"
+	"strings"
 )
 
 func ToClickhouseTable(dsn, db, table, indexes string, withTime bool) ([]string, string, error) {
@@ -80,9 +79,15 @@ func ToClickhouseTable(dsn, db, table, indexes string, withTime bool) ([]string,
 }
 
 func toClickhouseType(typ string) string {
-	after := strx.SubAfterLast(typ, ")", "")
-	typ = strx.SubBeforeLast(typ, "(", typ)
 	typ = strings.ToLower(typ)
+	var after string
+	if strings.Contains(typ, "(") {
+		after = strx.SubAfterLast(typ, ")", "")
+		typ = strx.SubBeforeLast(typ, "(", typ)
+	} else {
+		after = strx.SubAfterLast(typ, " ", "")
+		typ = strx.SubBeforeLast(typ, " ", typ)
+	}
 	switch typ {
 	case "bool", "boolean", "tinyint":
 		return withUnsigned("Int8", after)
