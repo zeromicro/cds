@@ -1,6 +1,6 @@
 module github.com/zeromicro/cds
 
-go 1.14
+go 1.18
 
 require (
 	github.com/ClickHouse/clickhouse-go v1.5.4
