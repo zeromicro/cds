@@ -24,18 +24,10 @@ require (
 
 require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.2.0 // indirect
-	github.com/aws/aws-sdk-go v1.44.45 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
-	github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96 // indirect
-	github.com/go-openapi/spec v0.19.3 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
-	github.com/gobuffalo/genny v0.1.1 // indirect
-	github.com/gobuffalo/gogen v0.1.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
-	github.com/karrick/godirwalk v1.10.3 // indirect
 	github.com/klauspost/compress v1.15.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
-	github.com/pelletier/go-toml v1.7.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.2 // indirect
 	github.com/prometheus/common v0.35.0 // indirect
 	github.com/xdg-go/scram v1.1.1 // indirect
