@@ -85,7 +85,7 @@ services:
       # - ZOO_ADMINSERVER_ENABLED
 
   ch-server-1:
-      image: yandex/clickhouse-server
+      image: clickhouse/clickhouse-server
       container_name: ch-server-1
       volumes:
         - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
@@ -105,7 +105,7 @@ services:
         zookeeper:
           condition: service_healthy
   ch-server-2:
-    image: yandex/clickhouse-server
+    image: clickhouse/clickhouse-server
     container_name: ch-server-2
     volumes:
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
@@ -125,7 +125,7 @@ services:
       zookeeper:
         condition: service_healthy
   ch-server-3:
-    image: yandex/clickhouse-server
+    image: clickhouse/clickhouse-server
     container_name: ch-server-3
     volumes:
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
@@ -145,7 +145,7 @@ services:
       zookeeper:
         condition: service_healthy
   ch-server-4:
-    image: yandex/clickhouse-server
+    image: clickhouse/clickhouse-server
     container_name: ch-server-4
     volumes:
       - ./clickhouse/config.xml:/etc/clickhouse-server/config.d/local.xml
