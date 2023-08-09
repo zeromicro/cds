@@ -2,11 +2,10 @@ package mysqlx
 
 import (
 	"errors"
-	"strings"
-
 	"github.com/zeromicro/cds/pkg/strx"
 	table2 "github.com/zeromicro/cds/pkg/table"
 	"github.com/zeromicro/go-zero/core/logx"
+	"strings"
 )
 
 func ToClickhouseTable(dsn, db, table, indexes string, withTime bool) ([]string, string, error) {
@@ -29,6 +28,10 @@ func ToClickhouseTable(dsn, db, table, indexes string, withTime bool) ([]string,
 		}
 		// type converter
 		columns[i].Type = toClickhouseType(c.Type)
+		// 如果字段类型可以为null 则添加 Nullable,否则同步mysql回报nil异常
+		if c.Null == "YES" {
+			columns[i].Type = "Nullable(" + columns[i].Type + ")"
+		}
 		newColumns = append(newColumns, table2.Column{
 			Name:    columns[i].Field,
 			Type:    columns[i].Type,
@@ -76,9 +79,15 @@ func ToClickhouseTable(dsn, db, table, indexes string, withTime bool) ([]string,
 }
 
 func toClickhouseType(typ string) string {
-	after := strx.SubAfterLast(typ, ")", "")
-	typ = strx.SubBeforeLast(typ, "(", typ)
 	typ = strings.ToLower(typ)
+	var after string
+	if strings.Contains(typ, "(") {
+		after = strx.SubAfterLast(typ, ")", "")
+		typ = strx.SubBeforeLast(typ, "(", typ)
+	} else {
+		after = strx.SubAfterLast(typ, " ", "")
+		typ = strx.SubBeforeLast(typ, " ", typ)
+	}
 	switch typ {
 	case "bool", "boolean", "tinyint":
 		return withUnsigned("Int8", after)

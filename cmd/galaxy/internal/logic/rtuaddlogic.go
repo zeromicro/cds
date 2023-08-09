@@ -35,11 +35,15 @@ func (l *RtuAddLogic) RtuAdd(req types.RtuModel) (*types.RtuModel, error) {
 	sourceType := "canal-" + config.TYPE_MYSQL
 	if strings.HasPrefix(req.Source.Dsn, "mongodb://") {
 		req.Source.QueryKey = []string{"_id"}
-
 		sourceType = "connector-" + config.TYPE_MONGODB
-	} else {
-		req.Source.QueryKey = []string{""}
 	}
+	// 修复当选择多个表时出错的情况，用SelectedTable数组个数赋值给QueryKey
+	if len(req.Source.QueryKey) == 0 {
+		req.Source.QueryKey = req.Source.SelectedTable
+	}
+	//else {
+	//	req.Source.QueryKey = []string{""}
+	//}
 	shards, e := json.Marshal(l.svcCtx.Config.CkDataNodes[1:])
 	if e != nil {
 		logx.Error(e)
