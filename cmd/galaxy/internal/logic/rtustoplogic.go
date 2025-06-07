@@ -48,8 +48,8 @@ func (l *RtuStopLogic) RtuStop(req types.String) error {
 	}
 	exists, err := l.svcCtx.RtuModel.GetExist()
 	if err != nil {
-		logx.Error(e)
-		return e
+		logx.Error(err)
+		return err
 	}
 	jobs := make([]config.Job, 0, len(exists))
 	for _, i := range exists {
